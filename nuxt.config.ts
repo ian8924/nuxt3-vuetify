@@ -4,26 +4,28 @@ import { defineNuxtConfig } from 'nuxt/config';
 const path = require('path')
 
 // 获取当前环境
-const nodeEnv = process.env.NODE_ENV || 'local'
-const isLocal = nodeEnv === 'local'
-const isDev = nodeEnv === 'dev'
-const isProd = nodeEnv === 'prod'
+
+
+const env = require('./env')
+
+const nodeEnv = process.env.MODE || 'local'
+const mode: any = process.env.MODE ? process.env.MODE : 'dev'
 
 export default defineNuxtConfig({
-  compatibilityDate: '2025-07-15',
-  devtools: { enabled: isLocal || isDev },
+  devtools: { enabled: true },
   
   // 环境变量配置
   runtimeConfig: {
+
     // 私有键（仅在服务端可用）
     apiSecret: process.env.API_SECRET_KEY,
     databaseUrl: process.env.DATABASE_URL,
-    
+
     // 公共键（暴露给客户端）
     public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE,
-      baseUrl: process.env.NUXT_PUBLIC_BASE_URL,
-      environment: process.env.NUXT_PUBLIC_ENVIRONMENT || 'local',
+      apiBase: env[mode].NUXT_PUBLIC_BASE_URL,
+      baseUrl: env[mode].NUXT_PUBLIC_BASE_URL,
+      environment: env[mode].NUXT_PUBLIC_ENVIRONMENT,
       nodeEnv: nodeEnv
     }
   },
@@ -36,7 +38,7 @@ export default defineNuxtConfig({
   
   // 构建配置
   nitro: {
-    preset: isProd ? 'vercel' : undefined,
+    preset: mode === 'prod' ? 'vercel' : undefined,
     prerender: {
       routes: ['/']
     }
