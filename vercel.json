@@ -1,0 +1,41 @@
+{
+  "builds": [
+    {
+      "src": "nuxt.config.ts",
+      "use": "@nuxtjs/vercel-builder",
+      "config": {
+        "serverFiles": ["package.json"]
+      }
+    }
+  ],
+  "functions": {
+    "app/**": {
+      "maxDuration": 30
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/.*",
+      "dest": "/api/index.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/app/$1"
+    }
+  ],
+  "env": {
+    "NUXT_PUBLIC_BASE_URL": "@nuxt_public_base_url",
+    "NUXT_PUBLIC_API_BASE": "@nuxt_public_api_base",
+    "NUXT_PUBLIC_ENVIRONMENT": "@nuxt_public_environment"
+  },
+  "buildCommand": "npm run build:prod",
+  "devCommand": "npm run dev:local",
+  "installCommand": "npm install",
+  "outputDirectory": ".output",
+  "git": {
+    "deploymentEnabled": {
+      "main": true,
+      "dev": true
+    }
+  }
+}

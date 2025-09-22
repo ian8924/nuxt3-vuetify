@@ -4,10 +4,20 @@
   "private": true,
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "build:local": "NODE_ENV=local nuxt build",
+    "build:dev": "NODE_ENV=dev nuxt build",
+    "build:prod": "NODE_ENV=prod nuxt build",
+    "dev": "NODE_ENV=local nuxt dev",
+    "dev:local": "NODE_ENV=local nuxt dev",
+    "dev:dev": "NODE_ENV=dev nuxt dev",
     "generate": "nuxt generate",
+    "generate:local": "NODE_ENV=local nuxt generate",
+    "generate:dev": "NODE_ENV=dev nuxt generate",
+    "generate:prod": "NODE_ENV=prod nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "deploy:dev": "vercel --target preview",
+    "deploy:prod": "vercel --prod"
   },
   "dependencies": {
     "@pinia/nuxt": "^0.11.2",
