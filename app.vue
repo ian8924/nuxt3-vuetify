@@ -14,7 +14,7 @@
       <p>当前环境: <strong>{{ environment }}</strong></p>
       <p>Node 环境: <strong>{{ nodeEnv }}</strong></p>
       <p>API 基础地址: {{ apiBase }}</p>
-      <p>网站基础 URL: {{ baseUrl }}</p>
+      <p>网站基础 URL: {{ sss }}</p>
       <div style="margin-top: 10px; padding: 8px; background-color: #f5f5f5; border-radius: 4px;">
         <small>
           <strong>环境说明:</strong><br>
@@ -39,6 +39,7 @@ const environment = config.public.environment
 const nodeEnv = config.public.nodeEnv
 const apiBase = config.public.apiBase
 const baseUrl = config.public.baseUrl
+const sss = config.public.sss
 
 // access the `store` variable anywhere in the component ✨
 const userStore = useUserStore()

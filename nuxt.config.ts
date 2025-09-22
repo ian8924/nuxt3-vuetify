@@ -26,7 +26,8 @@ export default defineNuxtConfig({
       apiBase: env[mode].NUXT_PUBLIC_BASE_URL,
       baseUrl: env[mode].NUXT_PUBLIC_BASE_URL,
       environment: env[mode].NUXT_PUBLIC_ENVIRONMENT,
-      nodeEnv: nodeEnv
+      nodeEnv: nodeEnv,
+      sss: env[mode]
     }
   },
   
