@@ -5,7 +5,7 @@
       append-icon="$vuetify"
       variant="outlined"
     > 
-     {{ name }}dev
+     {{ name }}
     </v-btn>
     
     <!-- 环境信息显示 -->
