@@ -37,12 +37,12 @@ export default defineNuxtConfig({
     '/@/': path.resolve('./app/')
   },
 
-  //  nitro: {
-  //   preset: mode === 'prod' ? 'vercel' : undefined,
-  //   prerender: {
-  //     routes: ['/']
-  //   }
-  // },
+  nitro: {
+    preset: mode === 'prod' ? 'vercel' : undefined,
+    prerender: {
+      routes: ['/login']
+    }
+  },
   
   // CSS 配置
   css: [],
