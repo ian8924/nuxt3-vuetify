@@ -31,21 +31,18 @@ export default defineNuxtConfig({
     }
   },
   
-  modules: ['vuetify-nuxt-module', '@pinia/nuxt', 
-    // '@nuxtjs/tailwindcss'
-  ],
+  modules: ['vuetify-nuxt-module', '@pinia/nuxt', '@nuxtjs/tailwindcss'],
   
   alias: {
     '/@/': path.resolve('./app/')
   },
-  
-  // 构建配置
-  nitro: {
-    preset: mode === 'prod' ? 'vercel' : undefined,
-    prerender: {
-      routes: ['/']
-    }
-  },
+
+  //  nitro: {
+  //   preset: mode === 'prod' ? 'vercel' : undefined,
+  //   prerender: {
+  //     routes: ['/']
+  //   }
+  // },
   
   // CSS 配置
   css: [],
