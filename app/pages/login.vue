@@ -4,8 +4,9 @@
       prepend-icon="$vuetify"
       append-icon="$vuetify"
       variant="outlined"
+      @click="handleLogin"
     > 
-     {{ name }}
+      login
     </v-btn>
 
     <div class="mt-4 mb-4 p-4 border text-red rounded mx-5">
@@ -31,8 +32,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
 import { useUserStore } from '@/stores/user'
+const userStore = useUserStore()
 
 // 获取运行时配置
 const config = useRuntimeConfig()
@@ -42,18 +43,8 @@ const apiBase = config.public.apiBase
 const baseUrl = config.public.baseUrl
 const sss = config.public.sss
 
-// access the `store` variable anywhere in the component ✨
-const userStore = useUserStore()
-const  { count, name, doubleCount } = storeToRefs(userStore)
+const handleLogin = () => {
+  userStore.GET_USER()
+}
 
-// useHead({
-//   title: 'My App',
-//   meta: [
-//     { name: 'description', content: 'My amazing site.' }
-//   ],
-//   bodyAttrs: {
-//     class: 'test'
-//   },
-//   script: [ { innerHTML: 'console.log(\'Hello world\')' } ]
-// })
 </script>
