@@ -32,6 +32,7 @@
   </div>
 </template>
 <script setup lang="ts">
+import {useFetchData} from '@/composables/fetch'
 import { useUserStore } from '@/stores/user'
 const userStore = useUserStore()
 
@@ -43,8 +44,18 @@ const apiBase = config.public.apiBase
 const baseUrl = config.public.baseUrl
 const sss = config.public.sss
 
-const handleLogin = () => {
-  userStore.GET_USER()
+interface User {
+  id: number
+  name: string
+  email: string
+}
+
+const handleLogin = async() => {
+  // userStore.GET_USER()
+  const  { data } = await useFetchData.get<User>('/api/v1/users', {
+    id: 1
+  })
+  data?.email
 }
 
 </script>
