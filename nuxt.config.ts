@@ -31,7 +31,7 @@ export default defineNuxtConfig({
     }
   },
   
-  modules: ['vuetify-nuxt-module', '@pinia/nuxt'],
+  modules: ['vuetify-nuxt-module', '@pinia/nuxt', '@nuxtjs/tailwindcss'],
   
   alias: {
     '/@/': path.resolve('./')

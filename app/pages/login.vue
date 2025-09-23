@@ -7,9 +7,13 @@
     > 
      {{ name }}
     </v-btn>
+
+    <div class="mt-4 mb-4 p-4 border text-red rounded mx-5">
+        123
+    </div>
     
     <!-- 环境信息显示 -->
-    <div style="margin: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 8px;">
+    <div class="mt-4 mb-4 p-4 border border-gray-300 rounded mx-5">
       <h3>环境信息</h3>
       <p>当前环境: <strong>{{ environment }}</strong></p>
       <p>Node 环境: <strong>{{ nodeEnv }}</strong></p>
@@ -24,9 +28,6 @@
         </small>
       </div>
     </div>
-    
-    <NuxtRouteAnnouncer />
-    <NuxtWelcome />
   </div>
 </template>
 <script setup lang="ts">
@@ -44,4 +45,15 @@ const sss = config.public.sss
 // access the `store` variable anywhere in the component ✨
 const userStore = useUserStore()
 const  { count, name, doubleCount } = storeToRefs(userStore)
+
+useHead({
+  title: 'My App',
+  meta: [
+    { name: 'description', content: 'My amazing site.' }
+  ],
+  bodyAttrs: {
+    class: 'test'
+  },
+  script: [ { innerHTML: 'console.log(\'Hello world\')' } ]
+})
 </script>
