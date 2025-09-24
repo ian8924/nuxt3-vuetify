@@ -9,7 +9,7 @@
           class="custom-btn"
           size="large"
         />
-        <span class="ml-2">
+        <span class="ml-2 tw-bg-secondary">
           {{ isDark ? '切换到浅色模式' : '切换到深色模式' }}
         </span>
       </v-col>
