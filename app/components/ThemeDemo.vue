@@ -1,0 +1,137 @@
+<template>
+  <v-container>
+    <!-- 主题切换按钮 -->
+    <v-row class="mb-4">
+      <v-col>
+        <v-btn
+          @click="toggleTheme"
+          :icon="isDark ? 'mdi-weather-sunny' : 'mdi-weather-night'"
+          class="custom-btn"
+          size="large"
+        />
+        <span class="ml-2">
+          {{ isDark ? '切换到浅色模式' : '切换到深色模式' }}
+        </span>
+      </v-col>
+    </v-row>
+
+    <!-- 自定义样式演示 -->
+    <v-row>
+      <!-- 按钮演示 -->
+      <v-col cols="12" md="6">
+        <v-card class="custom-card fade-in-up">
+          <v-card-title>自定义按钮样式</v-card-title>
+          <v-card-text>
+            <v-btn class="ma-2" color="primary">主要按钮</v-btn>
+            <v-btn class="ma-2" color="secondary">次要按钮</v-btn>
+            <v-btn class="ma-2" color="success">成功按钮</v-btn>
+            <v-btn class="ma-2" color="error">错误按钮</v-btn>
+          </v-card-text>
+        </v-card>
+      </v-col>
+
+      <!-- 输入框演示 -->
+      <v-col cols="12" md="6">
+        <v-card class="custom-card fade-in-up">
+          <v-card-title>自定义输入框样式</v-card-title>
+          <v-card-text>
+            <v-text-field
+              label="用户名"
+              prepend-inner-icon="mdi-account"
+              class="mb-3"
+            />
+            <v-text-field
+              label="密码"
+              type="password"
+              prepend-inner-icon="mdi-lock"
+            />
+          </v-card-text>
+        </v-card>
+      </v-col>
+
+      <!-- 芯片演示 -->
+      <v-col cols="12" md="6">
+        <v-card class="custom-card fade-in-up">
+          <v-card-title>自定义芯片样式</v-card-title>
+          <v-card-text>
+            <v-chip class="ma-1" color="primary">Vue.js</v-chip>
+            <v-chip class="ma-1" color="secondary">Nuxt.js</v-chip>
+            <v-chip class="ma-1" color="success">Vuetify</v-chip>
+            <v-chip class="ma-1" color="info">TypeScript</v-chip>
+          </v-card-text>
+        </v-card>
+      </v-col>
+
+      <!-- 数据表演示 -->
+      <v-col cols="12" md="6">
+        <v-card class="custom-card fade-in-up">
+          <v-card-title>自定义数据表样式</v-card-title>
+          <v-card-text>
+            <v-data-table
+              :headers="headers"
+              :items="items"
+              :items-per-page="3"
+              class="custom-table"
+            />
+          </v-card-text>
+        </v-card>
+      </v-col>
+
+      <!-- 颜色调色板 -->
+      <v-col cols="12">
+        <v-card class="custom-card fade-in-up">
+          <v-card-title>自定义主题色彩</v-card-title>
+          <v-card-text>
+            <v-row>
+              <v-col v-for="color in colors" :key="color.name" cols="6" sm="4" md="3">
+                <div class="text-center">
+                  <div
+                    :style="{ backgroundColor: color.value }"
+                    class="mx-auto mb-2 rounded-circle"
+                    style="width: 60px; height: 60px;"
+                  />
+                  <div class="text-caption">{{ color.name }}</div>
+                  <div class="text-caption text-medium-emphasis">{{ color.value }}</div>
+                </div>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
+
+<script setup>
+import { useTheme } from 'vuetify'
+
+const theme = useTheme()
+const isDark = computed(() => theme.global.name.value === 'dark')
+
+const toggleTheme = () => {
+  theme.global.name.value = isDark.value ? 'light' : 'dark'
+}
+
+const headers = [
+  { title: '名称', key: 'name' },
+  { title: '类型', key: 'type' },
+  { title: '状态', key: 'status' }
+]
+
+const items = [
+  { name: 'Vue.js', type: '框架', status: '活跃' },
+  { name: 'Nuxt.js', type: '元框架', status: '活跃' },
+  { name: 'Vuetify', type: 'UI库', status: '活跃' }
+]
+
+const colors = [
+  { name: 'Primary', value: '#1976d2' },
+  { name: 'Secondary', value: '#424242' },
+  { name: 'Accent', value: '#82b1ff' },
+  { name: 'Success', value: '#4caf50' },
+  { name: 'Error', value: '#ff5252' },
+  { name: 'Warning', value: '#ffc107' },
+  { name: 'Info', value: '#2196f3' },
+  { name: 'Background', value: isDark.value ? '#121212' : '#f5f5f5' }
+]
+</script>

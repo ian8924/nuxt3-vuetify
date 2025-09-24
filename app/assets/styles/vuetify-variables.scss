@@ -1,0 +1,77 @@
+// Vuetify SCSS 变量覆盖
+// 这些变量会在构建时被应用到 Vuetify 组件
+
+// 主题颜色
+$primary: #b8e131 !default;
+$secondary: #424242 !default;
+$accent: #82b1ff !default;
+$error: #ff5252 !default;
+$info: #2196f3 !default;
+$success: #4caf50 !default;
+$warning: #ffc107 !default;
+
+// 字体
+$body-font-family: "Roboto", sans-serif !default;
+$heading-font-family: "Roboto", sans-serif !default;
+
+// 边框半径
+$border-radius-root: 8px !default;
+$btn-border-radius: 8px !default;
+$card-border-radius: 30px !default;
+
+// 阴影
+$shadow-key-umbra: rgba(0, 0, 0, 0.2) !default;
+$shadow-key-penumbra: rgba(0, 0, 0, 0.14) !default;
+$shadow-key-ambient: rgba(0, 0, 0, 0.12) !default;
+
+// 间距
+$spacer: 8px !default;
+$spacers: (
+  0: 0,
+  1: $spacer * 0.5,
+  2: $spacer,
+  3: $spacer * 1.5,
+  4: $spacer * 2,
+  5: $spacer * 3,
+  6: $spacer * 4,
+  7: $spacer * 5,
+  8: $spacer * 6,
+  9: $spacer * 7,
+  10: $spacer * 8,
+  11: $spacer * 9,
+  12: $spacer * 10,
+  13: $spacer * 11,
+  14: $spacer * 12,
+  15: $spacer * 13,
+  16: $spacer * 14,
+) !default;
+
+// 断点
+$grid-breakpoints: (
+  xs: 0,
+  sm: 600px,
+  md: 960px,
+  lg: 1264px,
+  xl: 1904px,
+  xxl: 2560px,
+) !default;
+
+// 按钮
+$btn-font-weight: 600 !default;
+$btn-letter-spacing: normal !default;
+$btn-text-transform: none !default;
+
+// 卡片
+$card-elevation: 2 !default;
+$card-outlined-border-opacity: 0.12 !default;
+
+// 应用栏
+$app-bar-height: 64px !default;
+
+// 导航抽屉
+$navigation-drawer-border-width: 0 !default;
+
+// 深色主题变量
+$material-dark-background: #121212 !default;
+$material-dark-surface: #1e1e1e !default;
+$material-dark-cards: #1e1e1e !default;
