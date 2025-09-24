@@ -1,5 +1,5 @@
 import { callWithNuxt } from 'nuxt/app'
-import { useUserStore } from '@/stores/user'
+import { useUserStore } from '~~/stores/user'
 import type { NitroFetchRequest, NitroFetchOptions } from 'nitropack'
 
 export const ResponseStatusCode = {

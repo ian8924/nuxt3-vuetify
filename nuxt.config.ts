@@ -34,7 +34,7 @@ export default defineNuxtConfig({
   modules: ['vuetify-nuxt-module', '@pinia/nuxt', '@nuxtjs/tailwindcss'],
   
   alias: {
-    '/@/': path.resolve('./app/')
+    '/@/': path.resolve('./')
   },
 
   nitro: {
