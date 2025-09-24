@@ -36,6 +36,7 @@
           <v-card-title>自定义输入框样式</v-card-title>
           <v-card-text>
             <v-text-field
+              color="secondary"
               label="用户名"
               prepend-inner-icon="mdi-account"
               class="mb-3"
