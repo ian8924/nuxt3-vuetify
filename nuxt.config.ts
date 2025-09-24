@@ -46,9 +46,9 @@ export default defineNuxtConfig({
   },
   
   // CSS 配置
-  css: [
-    '@/assets/styles/custom-vuetify.css'
-  ],
+  // css: [
+  //   '@/assets/styles/custom-vuetify.css'
+  // ],
   
   // 头部配置
   app: {
