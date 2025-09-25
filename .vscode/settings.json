@@ -1,39 +1,66 @@
 {
-  // Required in vscode-eslint < v3.0.10 only
+  // ESLint 設定
   "eslint.useFlatConfig": true,
-  
+
   // 存檔時自動格式化設定
   "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.formatOnType": false,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
   },
-  
-  // 針對不同文件類型的設定
+
+  // 針對不同文件類型的設定 - 使用 ESLint 來格式化
   "[javascript]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    }
   },
   "[typescript]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    }
   },
   "[vue]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    }
   },
   "[json]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "editor.formatOnSave": true
   },
   "[jsonc]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "editor.formatOnSave": true
   },
-  
-  // ESLint 設定
+
+  // ESLint 進階設定
   "eslint.validate": [
     "javascript",
     "typescript",
-    "vue"
+    "vue",
+    "json",
+    "jsonc"
   ],
   "eslint.format.enable": true,
-  "eslint.run": "onType"
+  "eslint.run": "onType",
+  "eslint.codeAction.showDocumentation": {
+    "enable": true
+  },
+
+  // 其他編輯器設定
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "files.trimTrailingWhitespace": true,
+  "files.trimFinalNewlines": true,
+  "files.insertFinalNewline": true
 }

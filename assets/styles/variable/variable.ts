@@ -1,6 +1,6 @@
 export default {
   color: {
-    primary: '#565971',
+    'primary': '#565971',
     'primary-10': '#5659711a',
     'primary-30': '#5659714d',
     'primary-50': '#56597180',

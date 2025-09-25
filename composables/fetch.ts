@@ -1,6 +1,6 @@
 // import { callWithNuxt } from 'nuxt/app'
 // import { useUserStore } from '~~/stores/user'
-import type { NitroFetchRequest, NitroFetchOptions } from 'nitropack'
+import type { NitroFetchOptions, NitroFetchRequest } from 'nitropack'
 
 export const ResponseStatusCode = {
   // TOKEN 無法使用
@@ -53,14 +53,10 @@ export interface BaseApiResponse<TData = any> {
 // }
 
 // API 基礎設定
-const fetchData = async <TData = unknown>(
-  reqUrl: string,
-  method: AsyncApiMethod,
-  data?: any
-) => {
+async function fetchData<TData = unknown>(reqUrl: string, method: AsyncApiMethod, data?: any) {
   const runtimeConfig = useRuntimeConfig()
   console.log('Runtime Config:', runtimeConfig.public)
-  const options :NitroFetchOptions<NitroFetchRequest, 'get' | 'patch' | 'post' | 'put' | 'delete' > = {
+  const options: NitroFetchOptions<NitroFetchRequest, 'get' | 'patch' | 'post' | 'put' | 'delete'> = {
     baseURL: runtimeConfig.public.apiBase,
     method,
     headers: {
@@ -89,23 +85,23 @@ const fetchData = async <TData = unknown>(
 }
 
 export const useFetchData = new (class getData {
-  get<TData = any> (url: string, params?: any) {
+  get<TData = any>(url: string, params?: any) {
     return fetchData<TData>(url, AsyncApiMethod.get, params)
   }
 
-  post<TData = any> (url: string, body?: any) {
+  post<TData = any>(url: string, body?: any) {
     return fetchData<TData>(url, AsyncApiMethod.post, body)
   }
 
-  put<TData = any> (url: string, body?: any) {
+  put<TData = any>(url: string, body?: any) {
     return fetchData<TData>(url, AsyncApiMethod.put, body)
   }
 
-  patch<TData = any> (url: string, body?: any) {
+  patch<TData = any>(url: string, body?: any) {
     return fetchData<TData>(url, AsyncApiMethod.patch, body)
   }
 
-  delete<TData = any> (url: string, body?: any) {
+  delete<TData = any>(url: string, body?: any) {
     return fetchData<TData>(url, AsyncApiMethod.delete, body)
   }
 })()

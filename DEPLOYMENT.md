@@ -107,17 +107,17 @@ npm run deploy:prod
 
 ```typescript
 // 在组件中使用
-const config = useRuntimeConfig();
-const apiBase = config.public.apiBase;
-const environment = config.public.environment;
-const nodeEnv = config.public.nodeEnv;
+const config = useRuntimeConfig()
+const apiBase = config.public.apiBase
+const environment = config.public.environment
+const nodeEnv = config.public.nodeEnv
 
 // 根据环境执行不同逻辑
-if (environment === "local") {
+if (environment === 'local') {
   // 本地开发逻辑
-} else if (environment === "dev") {
+} else if (environment === 'dev') {
   // 开发环境逻辑
-} else if (environment === "prod") {
+} else if (environment === 'prod') {
   // 生产环境逻辑
 }
 ```

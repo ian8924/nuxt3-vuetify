@@ -1,11 +1,3 @@
-<template>
-  <div>
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
-  </div>
-</template>
-
 <script setup lang="ts">
 // useHead({
 //   title: 'My App',
@@ -18,3 +10,11 @@
 //   script: [ { innerHTML: 'console.log(\'Hello world\')' } ]
 // })
 </script>
+
+<template>
+  <div>
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
+  </div>
+</template>

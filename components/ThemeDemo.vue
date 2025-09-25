@@ -1,3 +1,42 @@
+<script setup>
+import { useTheme } from 'vuetify'
+
+const theme = useTheme()
+const isDark = computed(() => theme.global.name.value === 'dark')
+
+function toggleTheme() {
+  theme.global.name.value = isDark.value ? 'light' : 'dark'
+}
+
+const headers = [
+  { title: '名称', key: 'name' },
+  { title: '类型', key: 'type' },
+  { title: '状态', key: 'status' }
+]
+
+const items = [
+  { name: 'Vue.js', type: '框架', status: '活跃' },
+  { name: 'Nuxt.js', type: '元框架', status: '活跃' },
+  { name: 'Vuetify', type: 'UI库', status: '活跃' }
+]
+
+const colors = [
+  { name: 'primary', value: 'primary' },
+  { name: 'primary-10', value: 'primary-10' },
+  { name: 'primary-30', value: 'primary-30' },
+  { name: 'primary-50', value: 'primary-50' },
+  { name: 'primary-80', value: 'primary-80' },
+  { name: 'leis-primary-1', value: 'leis-primary-1' },
+  { name: 'leis-primary-2', value: 'leis-primary-2' },
+  { name: 'on-background', value: 'on-background' },
+  { name: 'surface', value: 'surface' },
+  { name: 'on-surface', value: 'on-surface' },
+  { name: 'on-surface-80', value: 'on-surface-80' },
+  { name: 'outline', value: 'outline' },
+  { name: 'outline-variant', value: 'outline-variant' }
+]
+</script>
+
 <template>
   <v-container>
     <!-- 主题切换按钮 -->
@@ -71,7 +110,6 @@
             <v-data-table
               v-if="false"
               :headers="headers"
-              
               :items="items"
               :items-per-page="3"
               class="custom-table"
@@ -97,7 +135,7 @@
                   <div
                     class="mx-auto mb-2 rounded-circle"
                     :class="`tw-bg-${color.value}`"
-                    style="width: 60px; height: 60px;"
+                    style="width: 60px; height: 60px"
                   />
                   <div class="text-caption">{{ color.name }}</div>
                 </div>
@@ -109,42 +147,3 @@
     </v-row>
   </v-container>
 </template>
-
-<script setup>
-import { useTheme } from 'vuetify';
-
-const theme = useTheme()
-const isDark = computed(() => theme.global.name.value === 'dark')
-
-const toggleTheme = () => {
-  theme.global.name.value = isDark.value ? 'light' : 'dark'
-}
-
-const headers = [
-  { title: '名称', key: 'name' },
-  { title: '类型', key: 'type' },
-  { title: '状态', key: 'status' }
-]
-
-const items = [
-  { name: 'Vue.js', type: '框架', status: '活跃' },
-  { name: 'Nuxt.js', type: '元框架', status: '活跃' },
-  { name: 'Vuetify', type: 'UI库', status: '活跃' }
-]
-
-const colors = [
-  { name: 'primary', value: 'primary' },
-  { name: 'primary-10', value: 'primary-10' },
-  { name: 'primary-30', value: 'primary-30' },
-  { name: 'primary-50', value: 'primary-50' },
-  { name: 'primary-80', value: 'primary-80' },
-  { name: 'leis-primary-1', value: 'leis-primary-1' },
-  { name: 'leis-primary-2', value: 'leis-primary-2' },
-  { name: 'on-background', value: 'on-background' },
-  { name: 'surface', value: 'surface' },
-  { name: 'on-surface', value: 'on-surface' },
-  { name: 'on-surface-80', value: 'on-surface-80' },
-  { name: 'outline', value: 'outline' },
-  { name: 'outline-variant', value: 'outline-variant' }
-]
-</script>

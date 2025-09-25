@@ -1,3 +1,72 @@
+<script setup lang="ts">
+import { useFetchData } from '@/composables/fetch'
+
+// 获取运行时配置
+const config = useRuntimeConfig()
+const environment = config.public.environment
+const nodeEnv = config.public.nodeEnv
+const apiBase = config.public.apiBase
+const baseUrl = config.public.baseUrl
+
+interface User {
+  id: number
+  name: string
+  email: string
+}
+
+async function handleLogin() {
+  try {
+    // userStore.GET_USER()
+    const { data } = await useFetchData.get<User>('/api/v1/users', {
+      id: 1
+    })
+    console.log('用户数据:', data?.email)
+
+    // 这里可以添加登录成功后的逻辑
+    // 比如重定向到主页
+    // await navigateTo('/dashboard')
+  } catch (error) {
+    console.error('登录失败:', error)
+  }
+}
+
+function goToThemeDemo() {
+  // 创建一个演示页面
+  navigateTo('/theme-demo')
+}
+
+function goToFonts() {
+  // 跳转到字体演示页面
+  navigateTo('/fonts')
+}
+
+function getEnvironmentColor(env: string) {
+  switch (env) {
+    case 'local':
+      return 'info'
+    case 'dev':
+      return 'warning'
+    case 'prod':
+      return 'success'
+    default:
+      return 'primary'
+  }
+}
+
+function getEnvironmentIcon(env: string) {
+  switch (env) {
+    case 'local':
+      return '🔧'
+    case 'dev':
+      return '🧪'
+    case 'prod':
+      return '🚀'
+    default:
+      return '⚙️'
+  }
+}
+</script>
+
 <template>
   <v-app>
     <!-- 自定义背景 -->
@@ -12,7 +81,7 @@
                 <v-icon size="large" class="mr-2">mdi-account-circle</v-icon>
                 用户登录
               </v-card-title>
-              
+
               <v-card-text class="px-6 pb-6">
                 <v-form>
                   <v-text-field
@@ -21,7 +90,7 @@
                     class="custom-input mb-4"
                     variant="outlined"
                   />
-                  
+
                   <v-text-field
                     label="密码"
                     type="password"
@@ -29,7 +98,7 @@
                     class="custom-input mb-4"
                     variant="outlined"
                   />
-                  
+
                   <v-btn
                     class="custom-btn w-100 mb-4"
                     color="primary"
@@ -39,7 +108,7 @@
                   >
                     登录
                   </v-btn>
-                  
+
                   <v-row dense class="mb-4">
                     <v-col cols="6">
                       <v-btn
@@ -79,34 +148,37 @@
           <v-icon class="mr-2">mdi-information</v-icon>
           环境信息
         </v-card-title>
-        
+
         <v-card-text>
           <v-row>
             <v-col cols="12" md="6">
               <v-list-item>
                 <v-list-item-title>当前环境</v-list-item-title>
                 <v-list-item-subtitle>
-                  <v-chip :color="getEnvironmentColor(environment)" class="custom-chip">
+                  <v-chip
+                    :color="getEnvironmentColor(environment)"
+                    class="custom-chip"
+                  >
                     {{ environment }} {{ getEnvironmentIcon(environment) }}
                   </v-chip>
                 </v-list-item-subtitle>
               </v-list-item>
             </v-col>
-            
+
             <v-col cols="12" md="6">
               <v-list-item>
                 <v-list-item-title>Node 环境</v-list-item-title>
                 <v-list-item-subtitle>{{ nodeEnv }}</v-list-item-subtitle>
               </v-list-item>
             </v-col>
-            
+
             <v-col cols="12">
               <v-list-item>
                 <v-list-item-title>API 基础地址</v-list-item-title>
                 <v-list-item-subtitle>{{ apiBase }}</v-list-item-subtitle>
               </v-list-item>
             </v-col>
-            
+
             <v-col cols="12">
               <v-list-item>
                 <v-list-item-title>网站基础 URL</v-list-item-title>
@@ -114,17 +186,13 @@
               </v-list-item>
             </v-col>
           </v-row>
-          
+
           <v-divider class="my-4" />
-          
-          <v-alert
-            type="info"
-            variant="tonal"
-            class="mb-0"
-          >
-            <strong>环境说明:</strong><br>
-            • Local: 本地开发环境 🔧<br>
-            • Dev: 远程开发环境 🧪<br>
+
+          <v-alert type="info" variant="tonal" class="mb-0">
+            <strong>环境说明:</strong><br />
+            • Local: 本地开发环境 🔧<br />
+            • Dev: 远程开发环境 🧪<br />
             • Prod: 生产环境 🚀
           </v-alert>
         </v-card-text>
@@ -132,70 +200,6 @@
     </v-container>
   </v-app>
 </template>
-
-<script setup lang="ts">
-import { useFetchData } from '@/composables/fetch'
-import { useUserStore } from '@/stores/user'
-
-const userStore = useUserStore()
-
-// 获取运行时配置
-const config = useRuntimeConfig()
-const environment = config.public.environment
-const nodeEnv = config.public.nodeEnv
-const apiBase = config.public.apiBase
-const baseUrl = config.public.baseUrl
-
-interface User {
-  id: number
-  name: string
-  email: string
-}
-
-const handleLogin = async() => {
-  try {
-    // userStore.GET_USER()
-    const { data } = await useFetchData.get<User>('/api/v1/users', {
-      id: 1
-    })
-    console.log('用户数据:', data?.email)
-    
-    // 这里可以添加登录成功后的逻辑
-    // 比如重定向到主页
-    // await navigateTo('/dashboard')
-  } catch (error) {
-    console.error('登录失败:', error)
-  }
-}
-
-const goToThemeDemo = () => {
-  // 创建一个演示页面
-  navigateTo('/theme-demo')
-}
-
-const goToFonts = () => {
-  // 跳转到字体演示页面
-  navigateTo('/fonts')
-}
-
-const getEnvironmentColor = (env: string) => {
-  switch (env) {
-    case 'local': return 'info'
-    case 'dev': return 'warning'
-    case 'prod': return 'success'
-    default: return 'primary'
-  }
-}
-
-const getEnvironmentIcon = (env: string) => {
-  switch (env) {
-    case 'local': return '🔧'
-    case 'dev': return '🧪'
-    case 'prod': return '🚀'
-    default: return '⚙️'
-  }
-}
-</script>
 
 <style lang="scss" scoped>
 .login-background {

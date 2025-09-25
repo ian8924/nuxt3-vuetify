@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { useRouter  } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 interface User {
   name: string

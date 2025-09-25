@@ -1,17 +1,15 @@
-import { defineNuxtConfig } from 'nuxt/config'
-import variableVuetify from './assets/styles/variable/variable.vuetify.js'
-
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import path from 'path'
+import { defineNuxtConfig } from 'nuxt/config'
+import variableVuetify from './assets/styles/variable/variable.vuetify'
+
+const path = require('path')
 
 // 获取当前环境
 
-import { env } from './env'
+const env = require('./env')
 
 const nodeEnv = process.env.MODE || 'local'
-const allowedModes = ['local', 'dev', 'prod'] as const
-type Mode = typeof allowedModes[number]
-const mode: Mode = allowedModes.includes(process.env.MODE as Mode) ? process.env.MODE as Mode : 'dev'
+const mode: any = process.env.MODE ? process.env.MODE : 'dev'
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
@@ -28,7 +26,7 @@ export default defineNuxtConfig({
       apiBase: env[mode].NUXT_PUBLIC_BASE_URL,
       baseUrl: env[mode].NUXT_PUBLIC_BASE_URL,
       environment: env[mode].NUXT_PUBLIC_ENVIRONMENT,
-      nodeEnv: nodeEnv,
+      nodeEnv,
       sss: env[mode]
     }
   },

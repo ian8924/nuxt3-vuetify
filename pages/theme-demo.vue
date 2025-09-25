@@ -1,3 +1,15 @@
+<script setup>
+import { useTheme } from 'vuetify'
+
+const theme = useTheme()
+const drawer = ref(false)
+const isDark = computed(() => theme.global.name.value === 'dark')
+
+function toggleTheme() {
+  theme.global.name.value = isDark.value ? 'light' : 'dark'
+}
+</script>
+
 <template>
   <v-app>
     <!-- 自定义应用栏 -->
@@ -23,15 +35,3 @@
     </v-main>
   </v-app>
 </template>
-
-<script setup>
-import { useTheme } from 'vuetify'
-
-const theme = useTheme()
-const drawer = ref(false)
-const isDark = computed(() => theme.global.name.value === 'dark')
-
-const toggleTheme = () => {
-  theme.global.name.value = isDark.value ? 'light' : 'dark'
-}
-</script>

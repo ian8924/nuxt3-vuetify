@@ -1,9 +1,23 @@
+<script setup lang="ts">
+// 页面元数据
+const aaa = ' 123'
+console.log(aaa)
+useHead({
+  title: '字体系统演示 - Nuxt App',
+  meta: [
+    { name: 'description', content: '展示项目中的字体配置，包括中英文字体、等宽字体等各种排版效果' }
+  ]
+})
+</script>
+
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
     <div class="container mx-auto px-4 max-w-6xl">
       <!-- 页面标题 -->
       <div class="text-center mb-12">
-        <h1 class="text-4xl font-bold mb-4 text-gray-800 dark:text-white">
+        <h1
+          class="text-4xl font-bold mb-4 text-gray-800 dark:text-white"
+        >
           字体系统演示
         </h1>
         <p class="text-gray-600 dark:text-gray-300 text-lg">
@@ -171,7 +185,7 @@
                 <p>font-serif - 衬线字体</p>
               </div>
             </div>
-            
+
             <div>
               <h3 class="text-lg font-semibold mb-4 text-gray-700 dark:text-gray-300">Vue 组件示例</h3>
               <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg font-mono text-sm space-y-2">
@@ -189,8 +203,8 @@
 
       <!-- 返回按钮 -->
       <div class="text-center">
-        <button 
-          class="bg-primary hover:bg-primary-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 inline-flex items-center gap-2" 
+        <button
+          class="bg-primary hover:bg-primary-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 inline-flex items-center gap-2"
           @click="$router.back()"
         >
           <svg
@@ -212,18 +226,6 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-// 页面元数据
-const aaa =' 123'
-console.log(aaa)
-useHead({
-  title: '字体系统演示 - Nuxt App',
-  meta: [
-    { name: 'description', content: '展示项目中的字体配置，包括中英文字体、等宽字体等各种排版效果' }
-  ]
-})
-</script>
 
 <style scoped>
 /* 确保字体正确显示 */
