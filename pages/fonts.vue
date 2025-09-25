@@ -190,11 +190,21 @@
       <!-- 返回按钮 -->
       <div class="text-center">
         <button 
-          @click="$router.back()" 
-          class="bg-primary hover:bg-primary-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 inline-flex items-center gap-2"
+          class="bg-primary hover:bg-primary-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 inline-flex items-center gap-2" 
+          @click="$router.back()"
         >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            />
           </svg>
           返回
         </button>
@@ -203,8 +213,10 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 // 页面元数据
+const aaa =' 123'
+console.log(aaa)
 useHead({
   title: '字体系统演示 - Nuxt App',
   meta: [

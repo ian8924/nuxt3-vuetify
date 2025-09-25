@@ -5,7 +5,7 @@
       <v-app-bar-nav-icon @click="drawer = !drawer" />
       <v-toolbar-title>Vuetify 自定义主题演示</v-toolbar-title>
       <v-spacer />
-      <v-btn @click="toggleTheme" :icon="isDark ? 'mdi-weather-sunny' : 'mdi-weather-night'" />
+      <v-btn :icon="isDark ? 'mdi-weather-sunny' : 'mdi-weather-night'" @click="toggleTheme" />
     </v-app-bar>
 
     <!-- 自定义导航抽屉 -->

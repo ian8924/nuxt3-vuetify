@@ -4,10 +4,10 @@
     <v-row class="mb-4">
       <v-col>
         <v-btn
-          @click="toggleTheme"
           :icon="isDark ? 'mdi-weather-sunny' : 'mdi-weather-night'"
           class="custom-btn"
           size="large"
+          @click="toggleTheme"
         />
         <span class="ml-2 tw-bg-secondary">
           {{ isDark ? '切换到浅色模式' : '切换到深色模式' }}
@@ -69,7 +69,9 @@
           <v-card-title>自定义数据表样式</v-card-title>
           <v-card-text>
             <v-data-table
+              v-if="false"
               :headers="headers"
+              
               :items="items"
               :items-per-page="3"
               class="custom-table"
@@ -84,7 +86,13 @@
           <v-card-title>自定义主题色彩</v-card-title>
           <v-card-text>
             <v-row>
-                <v-col v-for="color in colors" :key="color.name" cols="6" sm="4" md="3">
+              <v-col
+                v-for="color in colors"
+                :key="color.name"
+                cols="6"
+                sm="4"
+                md="3"
+              >
                 <div class="text-center">
                   <div
                     class="mx-auto mb-2 rounded-circle"
@@ -103,7 +111,7 @@
 </template>
 
 <script setup>
-import { useTheme } from 'vuetify'
+import { useTheme } from 'vuetify';
 
 const theme = useTheme()
 const isDark = computed(() => theme.global.name.value === 'dark')

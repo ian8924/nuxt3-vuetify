@@ -1,17 +1,17 @@
-import tailwindVariables from "./assets/styles/variable/variable.tailwind";
+import tailwindVariables from './assets/styles/variable/variable.tailwind'
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  prefix: "tw-",
+  prefix: 'tw-',
   content: [
-    "./components/**/*.{js,vue,ts}",
-    "./layouts/**/*.vue",
-    "./views/**/*.vue",
-    "./pages/**/*.vue",
-    "./plugins/**/*.{js,ts}",
-    "./nuxt.config.{js,ts}",
-    "./app.vue",
-    "./error.vue",
+    './components/**/*.{js,vue,ts}',
+    './layouts/**/*.vue',
+    './views/**/*.vue',
+    './pages/**/*.vue',
+    './plugins/**/*.{js,ts}',
+    './nuxt.config.{js,ts}',
+    './app.vue',
+    './error.vue'
   ],
   theme: tailwindVariables,
   safelist: [
@@ -31,6 +31,6 @@ export default {
     'tw-bg-on-surface',
     'tw-bg-on-surface-80',
     'tw-bg-outline',
-    'tw-bg-outline-variant',
-  ],
-};
+    'tw-bg-outline-variant'
+  ]
+}

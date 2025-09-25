@@ -1,5 +1,5 @@
-import { callWithNuxt } from 'nuxt/app'
-import { useUserStore } from '~~/stores/user'
+// import { callWithNuxt } from 'nuxt/app'
+// import { useUserStore } from '~~/stores/user'
 import type { NitroFetchRequest, NitroFetchOptions } from 'nitropack'
 
 export const ResponseStatusCode = {
@@ -27,7 +27,7 @@ export interface BaseApiResponse<TData = any> {
   message: string | null
 }
 
-export const handleTokenError = (msg: string) => {
+// export const handleTokenError = (msg: string) => {
 //   const { $toast } = useNuxtApp()
 //   const runtimeConfig = useRuntimeConfig()
 //   const token = useCookie('token', {
@@ -50,9 +50,7 @@ export const handleTokenError = (msg: string) => {
 //       router.push(localePath('/login'))
 //     }, 1500)
 //   }
-}
-
-
+// }
 
 // API 基礎設定
 const fetchData = async <TData = unknown>(
@@ -62,11 +60,11 @@ const fetchData = async <TData = unknown>(
 ) => {
   const runtimeConfig = useRuntimeConfig()
   console.log('Runtime Config:', runtimeConfig.public)
-  const options :NitroFetchOptions<NitroFetchRequest, "get" | "patch" | "post" | "put" | "delete" > = {
+  const options :NitroFetchOptions<NitroFetchRequest, 'get' | 'patch' | 'post' | 'put' | 'delete' > = {
     baseURL: runtimeConfig.public.apiBase,
     method,
     headers: {
-        'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     }
   }
   try {
@@ -75,9 +73,7 @@ const fetchData = async <TData = unknown>(
       ...(method === AsyncApiMethod.get ? { params: data } : { body: data })
     })
 
-    const { msg, code, data: resData } = res
-
-   
+    // const { msg, code, data: resData } = res
 
     // if (ResponseStatusCode.tokenError.includes(code as any)) {
     //   callWithNuxt(nuxtApp, handleTokenError, [msg])
@@ -85,6 +81,7 @@ const fetchData = async <TData = unknown>(
 
     return res
   } catch (error) {
+    console.log('Fetch Error:', error)
     // showServerError()
     // callWithNuxt(nuxtApp, showServerError)
     throw error

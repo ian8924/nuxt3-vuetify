@@ -1,20 +1,21 @@
-import { defineNuxtConfig } from 'nuxt/config';
+import { defineNuxtConfig } from 'nuxt/config'
 import variableVuetify from './assets/styles/variable/variable.vuetify.js'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
-const path = require('path')
+import path from 'path'
 
 // 获取当前环境
 
-
-const env = require('./env')
+import { env } from './env'
 
 const nodeEnv = process.env.MODE || 'local'
-const mode: any = process.env.MODE ? process.env.MODE : 'dev'
+const allowedModes = ['local', 'dev', 'prod'] as const
+type Mode = typeof allowedModes[number]
+const mode: Mode = allowedModes.includes(process.env.MODE as Mode) ? process.env.MODE as Mode : 'dev'
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  
+
   // 环境变量配置
   runtimeConfig: {
 
@@ -31,25 +32,28 @@ export default defineNuxtConfig({
       sss: env[mode]
     }
   },
-  
-  modules: ['vuetify-nuxt-module', '@pinia/nuxt', '@nuxtjs/tailwindcss'],
-  
+
+  modules: ['vuetify-nuxt-module', '@pinia/nuxt', '@nuxtjs/tailwindcss', '@nuxt/eslint'],
+  // eslint: {
+  //   checker: true // <---
+  // },
   alias: {
     '/@/': path.resolve('./')
   },
 
   nitro: {
     preset: mode === 'prod' ? 'vercel' : undefined,
+
     prerender: {
       routes: ['/login']
     }
   },
-  
+
   // CSS 配置
   // css: [
   //   '@/assets/styles/custom-vuetify.css'
   // ],
-  
+
   // 头部配置
   app: {
     head: {
@@ -61,7 +65,7 @@ export default defineNuxtConfig({
       ]
     }
   },
-  
+
   vuetify: {
     moduleOptions: {
       /* module specific options */
@@ -72,7 +76,7 @@ export default defineNuxtConfig({
     vuetifyOptions: {
       theme: {
         defaultTheme: 'light',
-        themes: variableVuetify,
+        themes: variableVuetify
       },
       defaults: {
         VBtn: {
@@ -83,6 +87,7 @@ export default defineNuxtConfig({
         VCard: {
           class: 'custom-card',
           variant: 'elevated'
+
         },
         VTextField: {
           class: 'custom-input',

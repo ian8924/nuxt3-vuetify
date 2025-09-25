@@ -1,14 +1,18 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter  } from 'vue-router'
+
+interface User {
+  name: string
+}
 
 export const useUserStore = defineStore('user', () => {
   const router = useRouter()
-  // TOKEN 
+  // TOKEN
   const TOKEN = useCookie('token')
   // USER 代表用户信息
-  const USER = ref({
-    name: '',  
+  const USER = ref<User>({
+    name: ''
   })
 
   const IS_LOGIN = computed(() => !!USER.value.name)
@@ -16,7 +20,7 @@ export const useUserStore = defineStore('user', () => {
   const GET_USER = () => {
     TOKEN.value = 'xxxxxx'
     USER.value = {
-      name: 'Ian',
+      name: 'Ian'
     }
     router.push('/dashboard')
   }
@@ -24,11 +28,10 @@ export const useUserStore = defineStore('user', () => {
   const LOGOUT = () => {
     TOKEN.value = ''
     USER.value = {
-      name: '',
+      name: ''
     }
     router.push('/login')
-
   }
 
-  return {TOKEN, USER, IS_LOGIN, GET_USER, LOGOUT}
+  return { TOKEN, USER, IS_LOGIN, GET_USER, LOGOUT }
 })
