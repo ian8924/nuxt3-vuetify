@@ -40,15 +40,30 @@
                     登录
                   </v-btn>
                   
-                  <v-btn
-                    @click="goToThemeDemo"
-                    class="custom-btn w-100"
-                    color="secondary"
-                    variant="outlined"
-                    prepend-icon="mdi-palette"
-                  >
-                    查看主题演示
-                  </v-btn>
+                  <v-row dense class="mb-4">
+                    <v-col cols="6">
+                      <v-btn
+                        @click="goToThemeDemo"
+                        class="custom-btn w-100"
+                        color="secondary"
+                        variant="outlined"
+                        prepend-icon="mdi-palette"
+                      >
+                        主题演示
+                      </v-btn>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-btn
+                        @click="goToFonts"
+                        class="custom-btn w-100"
+                        color="accent"
+                        variant="tonal"
+                        prepend-icon="mdi-format-font"
+                      >
+                        字体演示
+                      </v-btn>
+                    </v-col>
+                  </v-row>
                 </v-form>
               </v-card-text>
             </v-card>
@@ -156,6 +171,11 @@ const handleLogin = async() => {
 const goToThemeDemo = () => {
   // 创建一个演示页面
   navigateTo('/theme-demo')
+}
+
+const goToFonts = () => {
+  // 跳转到字体演示页面
+  navigateTo('/fonts')
 }
 
 const getEnvironmentColor = (env: string) => {

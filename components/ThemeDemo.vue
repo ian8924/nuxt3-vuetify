@@ -84,15 +84,14 @@
           <v-card-title>自定义主题色彩</v-card-title>
           <v-card-text>
             <v-row>
-              <v-col v-for="color in colors" :key="color.name" cols="6" sm="4" md="3">
+                <v-col v-for="color in colors" :key="color.name" cols="6" sm="4" md="3">
                 <div class="text-center">
                   <div
-                    :style="{ backgroundColor: color.value }"
                     class="mx-auto mb-2 rounded-circle"
+                    :class="`tw-bg-${color.value}`"
                     style="width: 60px; height: 60px;"
                   />
                   <div class="text-caption">{{ color.name }}</div>
-                  <div class="text-caption text-medium-emphasis">{{ color.value }}</div>
                 </div>
               </v-col>
             </v-row>
@@ -126,13 +125,18 @@ const items = [
 ]
 
 const colors = [
-  { name: 'Primary', value: '#1976d2' },
-  { name: 'Secondary', value: '#424242' },
-  { name: 'Accent', value: '#82b1ff' },
-  { name: 'Success', value: '#4caf50' },
-  { name: 'Error', value: '#ff5252' },
-  { name: 'Warning', value: '#ffc107' },
-  { name: 'Info', value: '#2196f3' },
-  { name: 'Background', value: isDark.value ? '#121212' : '#f5f5f5' }
+  { name: 'primary', value: 'primary' },
+  { name: 'primary-10', value: 'primary-10' },
+  { name: 'primary-30', value: 'primary-30' },
+  { name: 'primary-50', value: 'primary-50' },
+  { name: 'primary-80', value: 'primary-80' },
+  { name: 'leis-primary-1', value: 'leis-primary-1' },
+  { name: 'leis-primary-2', value: 'leis-primary-2' },
+  { name: 'on-background', value: 'on-background' },
+  { name: 'surface', value: 'surface' },
+  { name: 'on-surface', value: 'on-surface' },
+  { name: 'on-surface-80', value: 'on-surface-80' },
+  { name: 'outline', value: 'outline' },
+  { name: 'outline-variant', value: 'outline-variant' }
 ]
 </script>

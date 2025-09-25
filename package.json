@@ -17,6 +17,7 @@
     "generate:prod": "MODE=prod nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
+    "cleanup": "nuxt cleanup",
     "deploy:dev": "vercel --target preview",
     "deploy:prod": "vercel --prod"
   },
