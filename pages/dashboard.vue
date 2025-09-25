@@ -14,7 +14,9 @@ definePageMeta({
 
 <template>
   <div>
-    <h1>Dashboard</h1>
+    <h1>
+      Dashboard
+    </h1>
     <v-btn
       prepend-icon="$vuetify"
       append-icon="$vuetify"

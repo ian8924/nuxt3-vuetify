@@ -5,8 +5,7 @@ import variableVuetify from './assets/styles/variable/variable.vuetify'
 const path = require('path')
 
 // 获取当前环境
-
-const env = require('./env')
+const { env } = require('./env')
 
 const nodeEnv = process.env.MODE || 'local'
 const mode: any = process.env.MODE ? process.env.MODE : 'dev'
@@ -31,7 +30,7 @@ export default defineNuxtConfig({
     }
   },
 
-  modules: ['vuetify-nuxt-module', '@pinia/nuxt', '@nuxtjs/tailwindcss', '@nuxt/eslint'],
+  modules: ['vuetify-nuxt-module', '@pinia/nuxt', '@nuxtjs/tailwindcss'],
   // eslint: {
   //   checker: true // <---
   // },
