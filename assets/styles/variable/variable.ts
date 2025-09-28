@@ -16,6 +16,7 @@ export default {
     'on-surface': '#444444',
     'on-surface-80': '#444444cc',
     'outline': '#d9d9d9',
-    'outline-variant': '#c0c0c0'
+    'outline-variant': '#c0c0c0',
+    'white': '#ffffff'
   }
 }

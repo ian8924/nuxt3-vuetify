@@ -19,6 +19,7 @@ export default {
     'on-surface': styleVariables.color['on-surface'],
     'on-surface-80': styleVariables.color['on-surface-80'],
     'outline': styleVariables.color.outline,
-    'outline-variant': styleVariables.color['outline-variant']
+    'outline-variant': styleVariables.color['outline-variant'],
+    'white': styleVariables.color.white
   }
 }

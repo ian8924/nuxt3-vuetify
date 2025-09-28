@@ -26,7 +26,7 @@ export default defineNuxtConfig({
     }
   },
 
-  modules: ['vuetify-nuxt-module', '@pinia/nuxt', '@nuxtjs/tailwindcss'],
+  modules: ['vuetify-nuxt-module', '@pinia/nuxt', '@nuxtjs/tailwindcss', '@nuxt/image'],
   // eslint: {
   //   checker: true // <---
   // },
@@ -63,7 +63,7 @@ export default defineNuxtConfig({
     moduleOptions: {
       /* module specific options */
       // styles: {
-      //   configFile: 'assets/styles/vuetify-variables.scss'
+      // configFile: 'assets/styles/vuetify-variables.scss'
       // }
     },
     vuetifyOptions: {
