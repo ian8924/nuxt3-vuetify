@@ -75,5 +75,19 @@ const handleLogin = async () => {
     <div v-if="error" class="tw-flex tw-items-center tw-gap-1 tw-justify-center tw-font-medium tw-bg-warn-10 tw-text-warn tw-p-4 tw-rounded-md">
       <v-icon>mdi-close</v-icon> {{ error }}
     </div>
+    <div class="tw-mt-4">
+      <v-divider color="primary-10" thickness="2px">
+        <span class="tw-font-medium tw-text-primary">社群登入</span>
+      </v-divider>
+    </div>
+    <div class="tw-mt-4 tw-flex tw-justify-center tw-gap-10">
+      <v-btn size="medium" color="white" class="tw-min-w-[60px] tw-min-h-[60px]">
+        <NuxtImg src="/images/icons/google.svg" :width="24" />
+      </v-btn>
+      <!-- </div> -->
+      <v-btn size="medium" color="white" class="tw-min-w-[60px] tw-min-h-[60px]">
+        <NuxtImg src="/images/icons/apple.svg" :width="24" />
+      </v-btn>
+    </div>
   </v-form>
 </template>
