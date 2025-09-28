@@ -8,14 +8,14 @@ import HeaderDefault from '@/components/layouts/HeaderDefault.vue'
     <HeaderDefault />
     <div class="tw-bg-[#fafafa] tw-flex-1 tw-flex tw-flex-col tw-items-center tw-justify-center">
       <v-container class="tw-flex tw-justify-center tw-items-center tw-flex-1 tw-relative">
-        <div class="tw-flex tw-justify-center tw-items-center tw-w-[50%] tw-absolute tw-left-0 tw-top-[50% - 40vh] tw-h-[80vh] tw-pr-[100px]">
+        <div class="tw-hidden md:tw-flex tw-justify-center tw-items-center tw-w-[50%] tw-absolute tw-left-0 tw-top-[50% - 40vh] tw-h-[80vh] tw-pr-[100px]">
           <NuxtImg
             class="tw-w-[50%]"
             src="/images//web//loginLogo.png"
             width="10%"
           />
         </div>
-        <div class="tw-w-[50%] tw-px-6 max-w-[660px] tw-h-[85vh] tw-bg-white tw-bottom-0 tw-right-0 tw-absolute tw-rounded-xl">
+        <div class="tw-w-full md:tw-w-[50%] tw-px-6 max-w-[660px] md:tw-h-[85vh] tw-h-[90vh] tw-bg-white tw-bottom-0 tw-right-0 tw-absolute tw-rounded-xl">
           <NuxtPage />
         </div>
       </v-container>
@@ -24,7 +24,5 @@ import HeaderDefault from '@/components/layouts/HeaderDefault.vue'
 </template>
 
 <style>
-body {
- background-color: #2d9e64 !important;
-}
+
 </style>
