@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 // APIS
 import { signInAPI } from '@/api/auth.api'
-import type { ApiRequestSignIn } from '~/types/interface/auth.interface'
+import type { ApiRequestSignIn } from '@/types/interface/auth.interface'
 
 interface User {
   name: string

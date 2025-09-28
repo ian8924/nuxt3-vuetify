@@ -32,10 +32,7 @@ cp .env.example .env
 
 - `NODE_ENV` = `dev`
 - `NUXT_PUBLIC_API_BASE` = `https://your-dev-domain.vercel.app/api`
-- `NUXT_PUBLIC_BASE_URL` = `https://your-dev-domain.vercel.app`
 - `NUXT_PUBLIC_ENVIRONMENT` = `dev`
-- `DATABASE_URL` = `postgresql://dev-server:5432/myapp_dev`
-- `API_SECRET_KEY` = `your_dev_secret_key`
 
 #### Prod 环境 (main 分支)
 
@@ -43,10 +40,6 @@ cp .env.example .env
 
 - `NODE_ENV` = `prod`
 - `NUXT_PUBLIC_API_BASE` = `https://your-production-domain.vercel.app/api`
-- `NUXT_PUBLIC_BASE_URL` = `https://your-production-domain.vercel.app`
-- `NUXT_PUBLIC_ENVIRONMENT` = `prod`
-- `DATABASE_URL` = `postgresql://prod-server:5432/myapp_prod`
-- `API_SECRET_KEY` = `your_prod_secret_key`
 
 ## 开发工作流
 
@@ -107,17 +100,17 @@ npm run deploy:prod
 
 ```typescript
 // 在组件中使用
-const config = useRuntimeConfig()
-const apiBase = config.public.apiBase
-const environment = config.public.environment
-const nodeEnv = config.public.nodeEnv
+const config = useRuntimeConfig();
+const apiBase = config.public.apiBase;
+const environment = config.public.environment;
+const nodeEnv = config.public.nodeEnv;
 
 // 根据环境执行不同逻辑
-if (environment === 'local') {
+if (environment === "local") {
   // 本地开发逻辑
-} else if (environment === 'dev') {
+} else if (environment === "dev") {
   // 开发环境逻辑
-} else if (environment === 'prod') {
+} else if (environment === "prod") {
   // 生产环境逻辑
 }
 ```

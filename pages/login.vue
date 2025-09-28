@@ -1,12 +1,4 @@
 <script setup lang="ts">
-// 获取运行时配置
-// const userStore = useUserStore()
-const config = useRuntimeConfig()
-const environment = config.public.environment
-const nodeEnv = config.public.nodeEnv
-const apiBase = config.public.apiBase
-const baseUrl = config.public.baseUrl
-
 const inputLoginParams = ref({
   email: 'ianliao0915+01@gmail.com',
   password: '1234563'
@@ -54,32 +46,6 @@ function goToFonts() {
 function goToAPITest() {
   // 跳转到 API 測試頁面
   navigateTo('/api-test')
-}
-
-function getEnvironmentColor(env: string) {
-  switch (env) {
-    case 'local':
-      return 'info'
-    case 'dev':
-      return 'warning'
-    case 'prod':
-      return 'success'
-    default:
-      return 'primary'
-  }
-}
-
-function getEnvironmentIcon(env: string) {
-  switch (env) {
-    case 'local':
-      return '🔧'
-    case 'dev':
-      return '🧪'
-    case 'prod':
-      return '🚀'
-    default:
-      return '⚙️'
-  }
 }
 </script>
 
@@ -204,64 +170,6 @@ function getEnvironmentIcon(env: string) {
         </v-row>
       </v-container>
     </div>
-
-    <!-- 环境信息卡片 -->
-    <v-container class="mt-4">
-      <v-card class="custom-card fade-in-up">
-        <v-card-title class="d-flex align-center">
-          <v-icon class="mr-2">mdi-information</v-icon>
-          环境信息
-        </v-card-title>
-
-        <v-card-text>
-          <v-row>
-            <v-col cols="12" md="6">
-              <v-list-item>
-                <v-list-item-title>当前环境</v-list-item-title>
-                <v-list-item-subtitle>
-                  <v-chip
-                    :color="getEnvironmentColor(environment)"
-                    class="custom-chip"
-                  >
-                    {{ environment }} {{ getEnvironmentIcon(environment) }}
-                  </v-chip>
-                </v-list-item-subtitle>
-              </v-list-item>
-            </v-col>
-
-            <v-col cols="12" md="6">
-              <v-list-item>
-                <v-list-item-title>Node 环境</v-list-item-title>
-                <v-list-item-subtitle>{{ nodeEnv }}</v-list-item-subtitle>
-              </v-list-item>
-            </v-col>
-
-            <v-col cols="12">
-              <v-list-item>
-                <v-list-item-title>API 基础地址</v-list-item-title>
-                <v-list-item-subtitle>{{ apiBase }}</v-list-item-subtitle>
-              </v-list-item>
-            </v-col>
-
-            <v-col cols="12">
-              <v-list-item>
-                <v-list-item-title>网站基础 URL</v-list-item-title>
-                <v-list-item-subtitle>{{ baseUrl }}</v-list-item-subtitle>
-              </v-list-item>
-            </v-col>
-          </v-row>
-
-          <v-divider class="my-4" />
-
-          <v-alert type="info" variant="tonal" class="mb-0">
-            <strong>环境说明:</strong><br />
-            • Local: 本地开发环境 🔧<br />
-            • Dev: 远程开发环境 🧪<br />
-            • Prod: 生产环境 🚀
-          </v-alert>
-        </v-card-text>
-      </v-card>
-    </v-container>
   </v-app>
 </template>
 

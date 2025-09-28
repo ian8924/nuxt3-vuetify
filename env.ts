@@ -2,21 +2,17 @@ export const env = {
   local: {
     NODE_ENV: 'local',
     BASE_URL: 'http://localhost:3000',
-    API_BASE: 'https://user-api-dev.leis.studio/api/v1',
-    NUXT_PUBLIC_BASE_URL: 'http://localhost:3000',
-    NUXT_PUBLIC_ENVIRONMENT: 'local'
+    API_BASE: 'https://user-api-dev.leis.studio/api/v1'
   },
   dev: {
     NODE_ENV: 'dev',
-    API_BASE: 'https://user-api-dev.leis.studio/api/v1',
-    NUXT_PUBLIC_BASE_URL: 'http://localhost:3000',
-    NUXT_PUBLIC_ENVIRONMENT: 'dev'
+    BASE_URL: 'http://localhost:3000',
+    API_BASE: 'https://user-api-dev.leis.studio/api/v1'
 
   },
   prod: {
     NODE_ENV: 'prod',
-    API_BASE: 'https://user-api-dev.leis.studio/api/v1',
-    NUXT_PUBLIC_BASE_URL: 'https://your-production-domain.vercel.app',
-    NUXT_PUBLIC_ENVIRONMENT: 'prod'
+    BASE_URL: 'https://nuxt3-vuetify.vercel.app',
+    API_BASE: 'https://user-api-dev.leis.studio/api/v1'
   }
 }

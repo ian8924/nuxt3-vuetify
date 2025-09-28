@@ -17,14 +17,11 @@ export default defineNuxtConfig({
   runtimeConfig: {
 
     // 私有键（仅在服务端可用）
-    apiSecret: process.env.API_SECRET_KEY,
-    databaseUrl: process.env.DATABASE_URL,
 
     // 公共键（暴露给客户端）
     public: {
       baseURL: env[mode].BASE_URL,
       apiBase: env[mode].API_BASE,
-      environment: env[mode].NUXT_PUBLIC_ENVIRONMENT,
       nodeEnv
     }
   },

@@ -1,4 +1,4 @@
-import type { ApiRequestSignIn } from '~/types/interface/auth.interface'
+import type { ApiRequestSignIn } from '@/types/interface/auth.interface'
 /**
  * 用戶登入
  * @param params
