@@ -62,9 +62,12 @@ export default defineNuxtConfig({
   vuetify: {
     moduleOptions: {
       /* module specific options */
-      // styles: {
-      // configFile: 'assets/styles/vuetify-variables.scss'
-      // }
+      styles: {
+        configFile: 'assets/styles/custom-vuetify.scss'
+      },
+      ssrClientHints: {
+        reloadOnFirstRequest: false
+      }
     },
     vuetifyOptions: {
       theme: {

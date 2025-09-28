@@ -1,11 +1,23 @@
 <script setup lang="ts">
-import type { ApiRequestSignIn } from '@/types/interface/auth.interface'
+import FormLogin from '@/components/auth/FormLogin.vue'
+import FormRegister from '@/components/auth/FormRegister.vue'
 
 const tab: Ref<'login' | 'register'> = ref('login')
+const route = useRoute()
+const router = useRouter()
 
-const inputLoginParams: Ref<ApiRequestSignIn> = ref({
-  email: 'ianliao0915+01@gmail.com',
-  password: '1234563'
+if (route.query.type === 'register') {
+  tab.value = 'register'
+} else {
+  tab.value = 'login'
+}
+
+watch(tab, (newTab) => {
+  if (newTab === 'register') {
+    router.push({ query: { type: 'register' } })
+  } else {
+    router.push({ query: { type: 'login' } })
+  }
 })
 
 definePageMeta({
@@ -14,7 +26,7 @@ definePageMeta({
 </script>
 
 <template>
-  <div class="tw-flex tw-pt-[56px] tw-max-w-[400px] tw-mx-auto tw-flex-col tw-items-center">
+  <div class="tw-flex tw-pt-[56px] tw-max-w-[500px] tw-mx-auto tw-flex-col tw-items-center">
     <div class="tw-text-2xl tw-font-bold tw-mb-8 tw-text-primary">
       樂見會員
     </div>
@@ -25,44 +37,23 @@ definePageMeta({
       fixed-tabs
       color="primary"
     >
-      <v-tab value="login">登入</v-tab>
-      <v-tab value="register">註冊</v-tab>
+      <v-tab value="login">
+        <span class="tw-text-lg tw-font-medium">
+          登入
+        </span>
+      </v-tab>
+      <v-tab value="register">
+        <span class="tw-text-lg tw-font-medium">
+          註冊
+        </span>
+      </v-tab>
     </v-tabs>
-    <v-form class=" tw-w-full tw-mx-auto tw-flex tw-flex-col tw-gap-4" @submit.prevent>
-      <v-text-field
-        v-model="inputLoginParams.email"
-        :counter="10"
-        :rules="[
-          (v: string) => !!v || 'Name is required',
-          (v: string) => (v && v.length <= 10) || 'Name must be 10 characters or less',
-        ]"
-        required
-        placeholder="Email"
-        prepend-inner-icon="mdi-account"
-        variant="underlined"
-        color="primary"
-      />
-      <v-text-field
-        v-model="inputLoginParams.password"
-        :counter="10"
-        :rules="[
-          (v: string) => !!v || 'Password is required',
-          (v: string) => (v && v.length <= 10) || 'Password must be 10 characters or less',
-        ]"
-        label="Password"
-        type="password"
-        variant="underlined"
-        color="primary"
-        required
-      />
-      <v-btn
-        class="mt-2"
-        type="submit"
-        rounded
-        block
-      >
-        登入
-      </v-btn>
-    </v-form>
+
+    <template v-if="tab === 'login'">
+      <FormLogin />
+    </template>
+    <template v-else>
+      <FormRegister />
+    </template>
   </div>
 </template>

@@ -3,42 +3,45 @@ import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 // APIS
 import { signInAPI } from '@/api/auth.api'
-import type { ApiRequestSignIn } from '@/types/interface/auth.interface'
-
-interface User {
-  name: string
-}
+import type { ApiRequestSignIn, User } from '@/types/interface/auth.interface'
 
 export const useUserStore = defineStore('user', () => {
   const router = useRouter()
   // TOKEN
   const TOKEN = useCookie('token')
   // USER 代表用户信息
-  const USER = ref<User>({
-    name: ''
-  })
+  const USER = ref<User | null>(null)
 
-  const IS_LOGIN = computed(() => !!USER.value.name)
+  const IS_LOGIN = computed(() => !!USER.value?.name)
 
   const LOGIN = async (params: ApiRequestSignIn) => {
-    const data = await signInAPI(params)
-    console.log('Login API Response:', data)
-    // console.log('Login API Status:', status)
+    const { success, message, data } = await signInAPI(params)
+    if (success) {
+      TOKEN.value = data?.token || ''
+      USER.value = data?.user || null
+      return {
+        success: true,
+        errorMessage: ''
+      }
+    } else {
+      return {
+        success: false,
+        errorMessage: message
+      }
+    }
   }
 
   const GET_USER = () => {
     TOKEN.value = 'xxxxxx'
-    USER.value = {
-      name: 'Ian'
-    }
+    // USER.value = {
+    //   name: 'Ian'
+    // }
     router.push('/dashboard')
   }
 
   const LOGOUT = () => {
     TOKEN.value = ''
-    USER.value = {
-      name: ''
-    }
+    USER.value = null
     router.push('/login')
   }
 

@@ -20,6 +20,9 @@ export default {
     'on-surface-80': styleVariables.color['on-surface-80'],
     'outline': styleVariables.color.outline,
     'outline-variant': styleVariables.color['outline-variant'],
-    'white': styleVariables.color.white
+    'white': styleVariables.color.white,
+    'black': styleVariables.color.black,
+    'warn': styleVariables.color.warn,
+    'warn-10': styleVariables.color['warn-10']
   }
 }

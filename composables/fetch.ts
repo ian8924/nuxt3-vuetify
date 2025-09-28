@@ -2,14 +2,14 @@
 // import { useUserStore } from '~~/stores/user'
 import type { NitroFetchOptions, NitroFetchRequest } from 'nitropack'
 
-export const ResponseStatusCode = {
-  // TOKEN 無法使用
-  tokenError: ['10002', '106101'],
-  NoPermission: 4,
-  C2COrderNotFound: 2029,
-  UserIsNotC2CMerchant: 2085,
-  Maintenance: '999999'
-} as const
+// export const ResponseStatusCode = {
+//   // TOKEN 無法使用
+//   tokenError: ['10002', '106101'],
+//   NoPermission: 4,
+//   C2COrderNotFound: 2029,
+//   UserIsNotC2CMerchant: 2085,
+//   Maintenance: '999999'
+// } as const
 
 //  types
 enum AsyncApiMethod {
@@ -21,10 +21,12 @@ enum AsyncApiMethod {
 }
 
 export interface BaseApiResponse<TData = any> {
-  code: string | number
-  msg: string
-  data: TData | null
-  message: string | null
+  code: number
+  success?: boolean
+  message?: string
+  data?: TData
+  statusCode?: number
+  statusMessage?: string
 }
 
 // export const handleTokenError = (msg: string) => {
@@ -63,25 +65,28 @@ async function fetchData<TData = unknown>(reqUrl: string, method: AsyncApiMethod
       'Content-Type': 'application/json'
     }
   }
-  try {
-    const res = await $fetch<BaseApiResponse<TData>>(reqUrl, {
-      ...options,
-      ...(method === AsyncApiMethod.get ? { params: data } : { body: data })
-    })
 
-    // const { msg, code, data: resData } = res
+  return $fetch<BaseApiResponse<TData>>(reqUrl, {
+    ...options,
+    ...(method === AsyncApiMethod.get ? { params: data } : { body: data })
+  })
+  // try {
+  //   const res = await
 
-    // if (ResponseStatusCode.tokenError.includes(code as any)) {
-    //   callWithNuxt(nuxtApp, handleTokenError, [msg])
-    // }
+  //   const { data: resData } = res
+  //   console.log('Fetch Response Data:', resData)
 
-    return res
-  } catch (error) {
-    console.log('Fetch Error:', error)
-    // showServerError()
-    // callWithNuxt(nuxtApp, showServerError)
-    throw error
-  }
+  // if (ResponseStatusCode.tokenError.includes(code as any)) {
+  //   callWithNuxt(nuxtApp, handleTokenError, [msg])
+  // }
+
+  // return res
+  // } catch (error) {
+  //   console.log('Fetch Error:', error)
+  //   // showServerError()
+  //   // callWithNuxt(nuxtApp, showServerError)
+  //   throw error
+  // }
 }
 
 export const useFetchData = new (class getData {
