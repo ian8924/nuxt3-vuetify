@@ -57,7 +57,7 @@ async function fetchData<TData = unknown>(reqUrl: string, method: AsyncApiMethod
   const runtimeConfig = useRuntimeConfig()
   console.log('Runtime Config:', runtimeConfig.public)
   const options: NitroFetchOptions<NitroFetchRequest, 'get' | 'patch' | 'post' | 'put' | 'delete'> = {
-    baseURL: runtimeConfig.public.apiBase,
+    baseURL: `${runtimeConfig.public.baseURL}/api`,
     method,
     headers: {
       'Content-Type': 'application/json'

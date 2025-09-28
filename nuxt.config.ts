@@ -22,11 +22,10 @@ export default defineNuxtConfig({
 
     // 公共键（暴露给客户端）
     public: {
-      apiBase: env[mode].NUXT_PUBLIC_BASE_URL,
-      baseUrl: env[mode].NUXT_PUBLIC_BASE_URL,
+      baseURL: env[mode].BASE_URL,
+      apiBase: env[mode].API_BASE,
       environment: env[mode].NUXT_PUBLIC_ENVIRONMENT,
-      nodeEnv,
-      sss: env[mode]
+      nodeEnv
     }
   },
 

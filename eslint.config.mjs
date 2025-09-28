@@ -38,6 +38,7 @@ export default antfu(
         singleline: 3,
         multiline: 1
       }],
+      'antfu/top-level-function': 'off',
 
       // TypeScript rules
       '@typescript-eslint/no-explicit-any': 'off',

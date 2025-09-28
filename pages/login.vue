@@ -1,32 +1,43 @@
 <script setup lang="ts">
-import { useFetchData } from '@/composables/fetch'
-
 // 获取运行时配置
+// const userStore = useUserStore()
 const config = useRuntimeConfig()
 const environment = config.public.environment
 const nodeEnv = config.public.nodeEnv
 const apiBase = config.public.apiBase
 const baseUrl = config.public.baseUrl
 
-interface User {
-  id: number
-  name: string
-  email: string
-}
+const inputLoginParams = ref({
+  email: 'ianliao0915+01@gmail.com',
+  password: '1234563'
+})
 
-async function handleLogin() {
+// 添加狀態變數來追蹤錯誤
+const errorMessage = ref('')
+const isLoading = ref(false)
+const responseData = ref<any>(null)
+const useLocalAPI = ref(false)
+
+// 本地 API 登入（代理外部 API）
+const handleLocalLogin = async () => {
+  console.log('開始本地 API 登入請求（代理外部 API）...')
+  isLoading.value = true
+  errorMessage.value = ''
+  responseData.value = null
+
   try {
-    // userStore.GET_USER()
-    const { data } = await useFetchData.get<User>('/api/v1/users', {
-      id: 1
+    const data = await useFetchData.post('/auth/login', {
+      email: inputLoginParams.value.email,
+      password: inputLoginParams.value.password
     })
-    console.log('用户数据:', data?.email)
 
-    // 这里可以添加登录成功后的逻辑
-    // 比如重定向到主页
-    // await navigateTo('/dashboard')
-  } catch (error) {
-    console.error('登录失败:', error)
+    responseData.value = data
+    errorMessage.value = ''
+  } catch (error: any) {
+    responseData.value = error
+    errorMessage.value = `登入失敗: ${error?.data?.message || error?.message || '本地 API 請求失敗，請檢查服務器狀態'}`
+  } finally {
+    isLoading.value = false
   }
 }
 
@@ -38,6 +49,11 @@ function goToThemeDemo() {
 function goToFonts() {
   // 跳转到字体演示页面
   navigateTo('/fonts')
+}
+
+function goToAPITest() {
+  // 跳转到 API 測試頁面
+  navigateTo('/api-test')
 }
 
 function getEnvironmentColor(env: string) {
@@ -99,15 +115,49 @@ function getEnvironmentIcon(env: string) {
                     variant="outlined"
                   />
 
-                  <v-btn
-                    class="custom-btn w-100 mb-4"
+                  <v-switch
+                    v-model="useLocalAPI"
+                    label="使用本地 API"
+                    class="mb-4"
                     color="primary"
+                  />
+
+                  <v-btn
+                    v-if="!useLocalAPI"
+                    class="custom-btn w-100 mb-2"
+                    color="secondary"
                     size="large"
-                    prepend-icon="mdi-login"
-                    @click="handleLogin"
+                    prepend-icon="mdi-server"
+                    :loading="isLoading"
+                    variant="outlined"
+                    @click="handleLocalLogin()"
                   >
-                    登录
+                    測試本地代理 API
                   </v-btn>
+
+                  <!-- 錯誤訊息顯示 -->
+                  <v-alert
+                    v-if="errorMessage"
+                    type="error"
+                    class="mb-4"
+                    variant="tonal"
+                  >
+                    {{ errorMessage }}
+                  </v-alert>
+
+                  <!-- API 響應數據顯示 -->
+                  <v-card
+                    v-if="responseData"
+                    class="mb-4"
+                    variant="outlined"
+                  >
+                    <v-card-title class="text-body-2">
+                      API 響應數據:
+                    </v-card-title>
+                    <v-card-text>
+                      <pre class="text-caption">{{ JSON.stringify(responseData, null, 2) }}</pre>
+                    </v-card-text>
+                  </v-card>
 
                   <v-row dense class="mb-4">
                     <v-col cols="6">
@@ -130,6 +180,20 @@ function getEnvironmentIcon(env: string) {
                         @click="goToFonts"
                       >
                         字体演示
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+
+                  <v-row dense class="mb-4">
+                    <v-col cols="12">
+                      <v-btn
+                        class="custom-btn w-100"
+                        color="info"
+                        variant="outlined"
+                        prepend-icon="mdi-api"
+                        @click="goToAPITest"
+                      >
+                        API 測試頁面
                       </v-btn>
                     </v-col>
                   </v-row>
