@@ -59,7 +59,32 @@ export default defineNuxtConfig({
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: `樂見影像 - 專業影像服務平台` }
+        { name: 'description', content: `樂見影像 - 專業影像服務平台` },
+
+        // OpenGraph Meta Tags
+        { property: 'og:type', content: 'website' },
+        { property: 'og:title', content: '樂見影像 - 專業影像服務平台' },
+        { property: 'og:description', content: '提供專業的影像處理、攝影服務與視覺解決方案' },
+        { property: 'og:image', content: '/fav.png' },
+        { property: 'og:image:width', content: '1200' },
+        { property: 'og:image:height', content: '630' },
+        { property: 'og:image:alt', content: '樂見影像 - 專業影像服務平台' },
+        { property: 'og:url', content: 'https://nuxt3-vuetify.vercel.app' },
+        { property: 'og:site_name', content: '樂見影像' },
+        { property: 'og:locale', content: 'zh_TW' },
+
+        // Twitter Card Meta Tags
+        { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:title', content: '樂見影像 - 專業影像服務平台' },
+        { name: 'twitter:description', content: '提供專業的影像處理、攝影服務與視覺解決方案' },
+        { name: 'twitter:image', content: '/fav.png' },
+        { name: 'twitter:image:alt', content: '樂見影像 - 專業影像服務平台' },
+
+        // Additional SEO Meta Tags
+        { name: 'author', content: '樂見影像' },
+        { name: 'keywords', content: '樂見影像,影像處理,攝影服務,視覺設計,專業攝影' },
+        { name: 'robots', content: 'index, follow' },
+        { name: 'theme-color', content: '#565971' }
       ],
       link: [
         // Favicon 配置
@@ -67,7 +92,10 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/fav.png' },
         { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/fav.png' },
         { rel: 'apple-touch-icon', sizes: '180x180', href: '/fav.png' },
-        { rel: 'manifest', href: '/site.webmanifest' }
+        { rel: 'manifest', href: '/site.webmanifest' },
+
+        // Canonical URL
+        { rel: 'canonical', href: 'https://nuxt3-vuetify.vercel.app' }
       ]
     }
   },
