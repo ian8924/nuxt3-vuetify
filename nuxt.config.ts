@@ -55,11 +55,19 @@ export default defineNuxtConfig({
   // 头部配置
   app: {
     head: {
-      title: `Nuxt App - ${nodeEnv.toUpperCase()}`,
+      title: `樂見 App`,
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: `Nuxt 3 with Vercel deployment - ${nodeEnv} environment` }
+        { name: 'description', content: `樂見影像 - 專業影像服務平台` }
+      ],
+      link: [
+        // Favicon 配置
+        { rel: 'icon', type: 'image/x-icon', href: '/fav.png' },
+        { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/fav.png' },
+        { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/fav.png' },
+        { rel: 'apple-touch-icon', sizes: '180x180', href: '/fav.png' },
+        { rel: 'manifest', href: '/site.webmanifest' }
       ]
     }
   },
