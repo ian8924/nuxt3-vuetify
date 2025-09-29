@@ -15,25 +15,20 @@ export const useUserStore = defineStore('user', () => {
   const IS_LOGIN = computed(() => !!USER.value?.name)
 
   const LOGIN = async (params: ApiRequestSignIn) => {
-    const { success, message, data } = await signInAPI(params)
-    if (success) {
-      TOKEN.value = data?.token || ''
-      USER.value = data?.user || null
-      return {
-        success: true,
-        errorMessage: ''
-      }
-    } else {
-      return {
-        success: false,
-        errorMessage: message
-      }
+    const res = await signInAPI(params)
+    if (res.scccess) {
+      TOKEN.value = res.data?.token || ''
+      USER.value = res.data?.user || null
+    }
+    return {
+      success: res.scccess,
+      errorMessage: res.errorMessage || ''
     }
   }
 
   const REGISTER = async (params: ApiRequestRegister) => {
-    const { success, message, data } = await registerAPI(params)
-    console.log('Register API Response:', { success, message, data })
+    const res = await registerAPI(params)
+    console.log('Register API Response:', res)
     // if (success) {
     //   TOKEN.value = data?.token || ''
     //   USER.value = data?.user || null

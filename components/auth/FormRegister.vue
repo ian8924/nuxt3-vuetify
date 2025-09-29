@@ -27,7 +27,7 @@ const handleRegister = async () => {
     return
 
   loading.value = true
-  const { success, errorMessage } = await userStore.REGISTER(inputRegisterParams.value)
+  // const { success, errorMessage } = await userStore.REGISTER(inputRegisterParams.value)
   loading.value = false
   // if (success) {
   //   console.log('success')

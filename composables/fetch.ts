@@ -21,72 +21,63 @@ enum AsyncApiMethod {
 }
 
 export interface BaseApiResponse<TData = any> {
-  code: number
-  success?: boolean
-  message?: string
+  scccess?: boolean
   data?: TData
-  statusCode?: number
-  statusMessage?: string
+  errorMessage?: string
+  status?: number
 }
 
-// export const handleTokenError = (msg: string) => {
-//   const { $toast } = useNuxtApp()
-//   const runtimeConfig = useRuntimeConfig()
-//   const token = useCookie('token', {
-//     path: '/'
-//   })
-//   const tokenFromDomain = useCookie('token', {
-//     domain: runtimeConfig.public.DOMAIN_NAME,
-//     path: '/'
-//   })
-
-//   token.value = null
-//   tokenFromDomain.value = null
-//   if (process.client) {
-//     $toast.error(msg, { toastId: 'tokenError' })
-//     setTimeout(() => {
-//       const localePath = useLocalePath()
-//       const router = useRouter()
-//       const { CLEAR_TIME_INTERVAL } = useUserStore()
-//       CLEAR_TIME_INTERVAL()
-//       router.push(localePath('/login'))
-//     }, 1500)
-//   }
-// }
-
 // API 基礎設定
-async function fetchData<TData = unknown>(reqUrl: string, method: AsyncApiMethod, data?: any) {
+const fetchData = async <TData = unknown>(reqUrl: string, method: AsyncApiMethod, data?: any): Promise<BaseApiResponse<TData>> => {
   const runtimeConfig = useRuntimeConfig()
-  console.log('Runtime Config:', runtimeConfig.public)
+
   const options: NitroFetchOptions<NitroFetchRequest, 'get' | 'patch' | 'post' | 'put' | 'delete'> = {
-    baseURL: `${runtimeConfig.public.baseURL}/api`,
+    baseURL: runtimeConfig.public.apiBase,
     method,
     headers: {
       'Content-Type': 'application/json'
     }
   }
 
-  return $fetch<BaseApiResponse<TData>>(reqUrl, {
-    ...options,
-    ...(method === AsyncApiMethod.get ? { params: data } : { body: data })
+  return new Promise((resolve) => {
+    $fetch<BaseApiResponse<TData>>(reqUrl, {
+      ...options,
+      ...(method === AsyncApiMethod.get ? { params: data } : { body: data }),
+
+      // 響應攔截器
+      onResponse({ request, response }) {
+        console.log('[fetch response]', request, response.status, response._data)
+        resolve({
+          scccess: response.status === 200,
+          status: response.status,
+          errorMessage: response._data?.message || 'Unknown error',
+          data: response._data
+        })
+      }
+
+      //   // console.error('[fetch response error]', {
+      //   //   url: request,
+      //   //   status: response.status,
+      //   //   statusText: response.statusText,
+      //   //   data: response._data
+      //   // })
+
+      //   // // 處理特定的錯誤狀態
+      //   // if (response.status === 401) {
+      //   //   console.log('未授權，可能需要重新登入')
+      //   //   // 可以在這裡處理登出邏輯
+      //   // }
+
+      //   // if (response.status === 403) {
+      //   //   console.log('權限不足')
+      //   // }
+
+      //   // if (response.status >= 500) {
+      //   //   console.log('服務器錯誤')
+      //   // }
+      // }
+    })
   })
-  // try {
-  //   const res = await
-
-  //   const { data: resData } = res
-  //   console.log('Fetch Response Data:', resData)
-
-  // if (ResponseStatusCode.tokenError.includes(code as any)) {
-  //   callWithNuxt(nuxtApp, handleTokenError, [msg])
-  // }
-
-  // return res
-  // } catch (error) {
-  //   console.log('Fetch Error:', error)
-  //   // showServerError()
-  //   // callWithNuxt(nuxtApp, showServerError)
-  //   throw error
-  // }
 }
 
 export const useFetchData = new (class getData {

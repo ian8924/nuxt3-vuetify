@@ -35,8 +35,13 @@ export default defineNuxtConfig({
   },
 
   nitro: {
+    devProxy: {
+      '/api': {
+        target: 'https://user-api-dev.leis.studio/api',
+        changeOrigin: true
+      }
+    },
     preset: mode === 'prod' ? 'vercel' : undefined,
-
     prerender: {
       routes: ['/login']
     }
