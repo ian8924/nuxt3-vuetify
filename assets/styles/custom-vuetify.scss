@@ -3,14 +3,14 @@
 // 匯入 Vuetify 預設變數，只覆蓋存在的變數
 @forward 'vuetify/settings' with (
   // VTextField 高度相關變數
-  $field-input-min-height: 56px,
-  $input-control-height: 56px,
+  $field-input-min-height: 40px,
+  $input-control-height: 40px,
 
   // VInput 相關變數
   $input-font-size: 16px,
   $input-line-height: 1.5,
 
   // VField 相關變數 (影響 outlined 和 filled variants)
-  $field-input-padding-top: 16px,
-  $field-input-padding-bottom: 16px
+  $field-input-padding-top: 8px,
+  $field-input-padding-bottom: 8px
 );

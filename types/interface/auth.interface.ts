@@ -1,3 +1,19 @@
+export interface ApiRequestRegister {
+  email: string
+  password: string
+  repeartPassword?: string
+  firstName?: string
+  lastName: string
+  mobilePhone: string
+}
+
+export interface ApiResponseRegister {
+  expiresIn: number
+  token: string
+  tokenType: string
+  user: User
+}
+
 export interface ApiRequestSignIn {
   email: string
   password: string

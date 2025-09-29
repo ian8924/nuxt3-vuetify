@@ -26,14 +26,14 @@ definePageMeta({
 </script>
 
 <template>
-  <div class="tw-flex tw-pt-[56px] tw-max-w-[500px] tw-mx-auto tw-flex-col tw-items-center">
-    <div class="tw-text-2xl tw-font-bold tw-mb-8 tw-text-primary">
+  <div class="tw-flex tw-pt-[32px] tw-max-w-[500px] tw-mx-auto tw-flex-col tw-items-center">
+    <div class="tw-text-2xl tw-font-bold tw-mb-6 tw-text-primary">
       樂見會員
     </div>
     <v-tabs
       v-model="tab"
       align-tabs="end"
-      class="tw-w-full tw-mb-8"
+      class="tw-w-full tw-mb-2"
       fixed-tabs
       color="primary"
     >

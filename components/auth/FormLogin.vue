@@ -84,7 +84,6 @@ const handleLogin = async () => {
       <v-btn size="medium" color="white" class="tw-min-w-[60px] tw-min-h-[60px]">
         <NuxtImg src="/images/icons/google.svg" :width="24" />
       </v-btn>
-      <!-- </div> -->
       <v-btn size="medium" color="white" class="tw-min-w-[60px] tw-min-h-[60px]">
         <NuxtImg src="/images/icons/apple.svg" :width="24" />
       </v-btn>

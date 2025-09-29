@@ -1,62 +1,138 @@
 <script setup lang="ts">
-import { signInAPI } from '@/api/auth.api'
-import type { ApiRequestSignIn } from '@/types/interface/auth.interface'
+import type { ApiRequestRegister } from '@/types/interface/auth.interface'
 
-const inputLoginParams: Ref<ApiRequestSignIn> = ref({
-  email: 'ianliao0915+01@gmail.com',
-  password: '1234563'
+const inputRegisterParams: Ref<ApiRequestRegister> = ref({
+  email: '',
+  password: '',
+  repeartPassword: '',
+  firstName: '',
+  lastName: '',
+  mobilePhone: ''
 })
 
-// 處理登入邏輯
-const handleLogin = async () => {
-  try {
-    console.log('開始登入，參數：', inputLoginParams.value)
-    const response = await signInAPI(inputLoginParams.value)
-    console.log('登入成功：', response)
-    // TODO: 處理登入成功後的邏輯（如導航到其他頁面）
-  } catch (error) {
-    console.error('登入失敗：', error)
-  }
+const checkbox: Ref<boolean> = ref(false)
+
+const form = ref<any>(null)
+const userStore = useUserStore()
+const router = useRouter()
+const error: Ref<string> = ref('')
+const loading: Ref<boolean> = ref(false)
+
+// 處理註冊邏輯
+const handleRegister = async () => {
+  error.value = ''
+  const { valid } = await form.value.validate()
+
+  if (!valid)
+    return
+
+  loading.value = true
+  const { success, errorMessage } = await userStore.REGISTER(inputRegisterParams.value)
+  loading.value = false
+  // if (success) {
+  //   console.log('success')
+  //   // 登入成功，導航到儀表板
+  //   error.value = ''
+  //   // router.push('/dashboard')
+  // } else {
+  //   error.value = errorMessage || '登入失敗，請稍後再試'
+  // }
 }
 </script>
 
 <template>
-  <v-form class=" tw-w-full tw-mx-auto tw-flex tw-flex-col tw-gap-4" @submit.prevent="handleLogin">
+  <v-form ref="form" class=" tw-w-full tw-mx-auto tw-flex tw-flex-col tw-pb-10" @submit.prevent="handleRegister">
     <v-text-field
-      v-model="inputLoginParams.email"
-      :counter="10"
+      v-model="inputRegisterParams.email"
       :rules="[
-        (v: string) => !!v || 'Name is required',
-        (v: string) => (v && v.length <= 10) || 'Name must be 10 characters or less',
+        (v: string) => !!v || '必填',
+        (v: string) => (v && /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(v)) || '請輸入正確的 Email',
       ]"
       required
-      placeholder="Email"
-      prepend-inner-icon="mdi-account"
+      placeholder="會員信箱 *"
       variant="underlined"
       color="primary"
-      class="custom-text-field"
     />
     <v-text-field
-      v-model="inputLoginParams.password"
-      :counter="10"
+      v-model="inputRegisterParams.password"
       :rules="[
-        (v: string) => !!v || 'Password is required',
-        (v: string) => (v && v.length <= 10) || 'Password must be 10 characters or less',
+        (v: string) => !!v || '必填',
+        (v: string) => (v && v.length >= 6) || '密碼必須大於 6 個字符',
       ]"
-      label="Password"
+      placeholder="密碼 *"
       type="password"
       variant="underlined"
       color="primary"
-      class="custom-text-field"
       required
     />
+    <v-text-field
+      v-model="inputRegisterParams.repeartPassword"
+      :rules="[
+        (v: string) => !!v || '必填',
+        (v: string) => (v && v.length >= 6) || '密碼必須大於 6 個字符',
+        (v: string) => (v && v === inputRegisterParams.password) || '兩次密碼必須相同',
+      ]"
+      placeholder="確認密碼 *"
+      type="password"
+      variant="underlined"
+      color="primary"
+      required
+    />
+    <v-text-field
+      v-model="inputRegisterParams.lastName"
+      :counter="10"
+      :rules="[
+        (v: string) => !!v || '必填',
+      ]"
+      required
+      placeholder="名稱 *"
+      variant="underlined"
+      color="primary"
+    />
+    <v-text-field
+      v-model="inputRegisterParams.mobilePhone"
+      :counter="10"
+      :rules="[
+        (v: string) => !v || /^[0-9]{10}$/.test(v) || '請輸入正確的手機號碼',
+      ]"
+      required
+      placeholder="手機"
+      variant="underlined"
+      color="primary"
+    />
+
+    <v-checkbox
+      v-model="checkbox"
+      :rules="[v => !!v || '請勾選同意會員條款']"
+    >
+      <template #label>
+        同意 <NuxtLink href="/auth?type=reset" target="_blank"> <span class="tw-underline tw-font-medium tw-mx-1">會員條款</span></NuxtLink>
+      </template>
+    </v-checkbox>
+
+    <div v-if="error" class="tw-flex tw-items-center tw-gap-1 tw-justify-center tw-font-medium tw-bg-warn-10 tw-text-warn tw-p-2 tw-mb-4 tw-rounded-md">
+      <v-icon>mdi-close</v-icon> {{ error }}
+    </div>
+
     <v-btn
-      class="mt-2"
       type="submit"
       rounded
       block
     >
-      登入
+      註冊
     </v-btn>
+    <div class="tw-mt-4">
+      <v-divider color="primary-10" thickness="2px">
+        <span class="tw-font-medium tw-text-primary">社群註冊</span>
+      </v-divider>
+    </div>
+    <div class="tw-mt-4 tw-flex tw-justify-center tw-gap-10">
+      <v-btn size="medium" color="white" class="tw-min-w-[60px] tw-min-h-[60px]">
+        <NuxtImg src="/images/icons/google.svg" :width="24" />
+      </v-btn>
+      <v-btn size="medium" color="white" class="tw-min-w-[60px] tw-min-h-[60px]">
+        <NuxtImg src="/images/icons/apple.svg" :width="24" />
+      </v-btn>
+    </div>
   </v-form>
 </template>
