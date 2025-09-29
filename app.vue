@@ -1,17 +1,13 @@
 <script setup lang="ts">
-// useHead({
-//   title: 'My App',
-//   meta: [
-//     { name: 'description', content: 'My amazing site.' }
-//   ],
-//   bodyAttrs: {
-//     class: 'test'
-//   },
-//   script: [ { innerHTML: 'console.log(\'Hello world\')' } ]
-// })
+import Notify from '@/components/notify/Notify.vue'
 </script>
 
 <template>
+  <!-- notify component -->
+  <client-only>
+    <Notify />
+  </client-only>
+  <!-- page layout -->
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>

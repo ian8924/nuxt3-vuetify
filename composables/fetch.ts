@@ -19,12 +19,16 @@ export interface BaseApiResponse<TData = any> {
 // API 基礎設定
 const fetchData = async <TData = unknown>(reqUrl: string, method: AsyncApiMethod, data?: any): Promise<BaseApiResponse<TData>> => {
   const runtimeConfig = useRuntimeConfig()
+  const notifyStore = useNotifyStore()
+  const router = useRouter()
+  const token = useCookie('token').value || ''
 
   const options: NitroFetchOptions<NitroFetchRequest, 'get' | 'patch' | 'post' | 'put' | 'delete'> = {
     baseURL: runtimeConfig.public.apiBase,
     method,
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': token ? `Bearer ${token}` : '' // 假設 token 存儲在 cookie 中
     }
   }
 
@@ -36,6 +40,12 @@ const fetchData = async <TData = unknown>(reqUrl: string, method: AsyncApiMethod
       // 響應攔截器
       onResponse({ request, response }) {
         console.log('[fetch response]', request, response.status, response._data)
+
+        if (response.status === 403) {
+          notifyStore.SHOW_NOTIFY({ message: '請重新登入', type: 'error' })
+          router.push('/auth/login')
+        }
+
         resolve({
           success: response.status === 200,
           status: response.status,

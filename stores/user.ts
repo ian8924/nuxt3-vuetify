@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 // APIS
-import { registerAPI, signInAPI } from '@/api/auth.api'
+import { getUserInfoAPI, registerAPI, signInAPI } from '@/api/auth.api'
 import type { ApiRequestRegister, ApiRequestSignIn, User } from '@/types/interface/auth.interface'
 
 export const useUserStore = defineStore('user', () => {
@@ -48,12 +48,14 @@ export const useUserStore = defineStore('user', () => {
     // }
   }
 
-  const GET_USER = () => {
-    TOKEN.value = 'xxxxxx'
-    // USER.value = {
-    //   name: 'Ian'
-    // }
-    router.push('/dashboard')
+  const GET_USER = async () => {
+    const res = await getUserInfoAPI()
+
+    if (res.success && res.data) {
+      USER.value = res.data
+    } else {
+      USER.value = null
+    }
   }
 
   const LOGOUT = () => {

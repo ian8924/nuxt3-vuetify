@@ -1,4 +1,4 @@
-import type { ApiRequestRegister, ApiRequestSignIn, ApiResponseRegister, ApiResponseSignIn } from '@/types/interface/auth.interface'
+import type { ApiRequestRegister, ApiRequestSignIn, ApiResponseRegister, ApiResponseSignIn, User } from '@/types/interface/auth.interface'
 /**
  * 用戶登入
  * @param params
@@ -20,4 +20,11 @@ export const signInAPI = (params: ApiRequestSignIn) => {
  */
 export const registerAPI = (params: ApiRequestRegister) => {
   return useFetchData.post<ApiResponseRegister>('/v1/auth/register', params)
+}
+
+/**
+ * 取得用戶資訊
+ */
+export const getUserInfoAPI = () => {
+  return useFetchData.get<User>('/v1/users/me')
 }

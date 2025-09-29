@@ -2,6 +2,7 @@
 import type { ApiRequestSignIn } from '@/types/interface/auth.interface'
 
 const userStore = useUserStore()
+const notifyStore = useNotifyStore()
 const router = useRouter()
 
 const form = ref<any>(null)
@@ -27,6 +28,7 @@ const handleLogin = async () => {
   if (success) {
     // 登入成功，導航到儀表板
     error.value = ''
+    notifyStore.SHOW_NOTIFY({ message: '登入成功', type: 'success' })
     router.push('/dashboard')
   } else {
     error.value = errorMessage || '登入失敗，請稍後再試'
