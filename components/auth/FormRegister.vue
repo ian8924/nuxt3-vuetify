@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { ApiRequestRegister } from '@/types/interface/auth.interface'
 
+const notifyStore = useNotifyStore()
+
 const inputRegisterParams: Ref<ApiRequestRegister> = ref({
   email: '',
   password: '',
@@ -30,10 +32,10 @@ const handleRegister = async () => {
   const { success, errorMessage } = await userStore.REGISTER(inputRegisterParams.value)
   loading.value = false
   if (success) {
-    console.log('success')
     // 登入成功，導航到儀表板
     error.value = ''
-    // router.push('/dashboard')
+    notifyStore.SHOW_NOTIFY({ message: '註冊成功，請登入', type: 'success' })
+    router.push('/auth/login')
   } else {
     error.value = errorMessage || '註冊失敗，請稍後再試'
   }

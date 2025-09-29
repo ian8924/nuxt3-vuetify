@@ -32,7 +32,6 @@ export const useUserStore = defineStore('user', () => {
       success: res.success,
       errorMessage: res.errorMessage || ''
     }
-    console.log('Register API Response:', res)
     // if (success) {
     //   TOKEN.value = data?.token || ''
     //   USER.value = data?.user || null
@@ -61,7 +60,7 @@ export const useUserStore = defineStore('user', () => {
   const LOGOUT = () => {
     TOKEN.value = ''
     USER.value = null
-    router.push('/login')
+    router.push('/auth/login')
   }
 
   return { TOKEN, USER, IS_LOGIN, LOGIN, REGISTER, GET_USER, LOGOUT }

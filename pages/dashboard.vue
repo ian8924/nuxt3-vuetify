@@ -2,13 +2,19 @@
 import { useTheme } from 'vuetify'
 
 const notifyStore = useNotifyStore()
-
+const userStore = useUserStore()
 const theme = useTheme()
 const drawer = ref(false)
 const isDark = computed(() => theme.global.name.value === 'dark')
 
 function toggleTheme() {
   theme.global.name.value = isDark.value ? 'light' : 'dark'
+}
+
+const logout = () => {
+  userStore.LOGOUT()
+  // 这里可以添加你的登出逻辑
+  notifyStore.SHOW_NOTIFY({ message: '已登出', type: 'error' })
 }
 // 这里可以添加你的逻辑
 definePageMeta({
@@ -24,7 +30,7 @@ definePageMeta({
       <v-toolbar-title>Vuetify 自定义主题演示</v-toolbar-title>
       <v-spacer />
       <v-btn :icon="isDark ? 'mdi-weather-sunny' : 'mdi-weather-night'" @click="toggleTheme" />
-      <v-btn :icon="isDark ? 'mdi-weather-sunny' : 'mdi-weather-night'" @click="notifyStore.SHOW_NOTIFY({ message: '主题切换成功', type: 'success' })" />
+      <v-btn icon="mdi-logout" @click="logout" />
     </v-app-bar>
 
     <!-- 自定义导航抽屉 -->

@@ -1,4 +1,4 @@
-import type { ApiRequestRegister, ApiRequestSignIn, ApiResponseRegister, ApiResponseSignIn, User } from '@/types/interface/auth.interface'
+import type { ApiRequestRegister, ApiRequestResetPassword, ApiRequestSignIn, ApiRequestUpdatePassword, ApiResponseRegister, ApiResponseSignIn, User } from '@/types/interface/auth.interface'
 /**
  * 用戶登入
  * @param params
@@ -27,4 +27,23 @@ export const registerAPI = (params: ApiRequestRegister) => {
  */
 export const getUserInfoAPI = () => {
   return useFetchData.get<User>('/v1/users/me')
+}
+
+/**
+ * 發送重設密碼驗證信
+ * @param params
+ * @param { type String } email 郵箱
+ */
+export const resetPasswordAPI = (params: ApiRequestResetPassword) => {
+  return useFetchData.post<null>('/v1/auth/reset-password', params)
+}
+
+/**
+ * 發送重設密碼驗證信
+ * @param params
+ * @param { type String } token
+ * @param { type String } newPassword 新密碼
+ */
+export const updatePasswordAPI = (params: ApiRequestUpdatePassword) => {
+  return useFetchData.post<null>('/v1/auth/password', params)
 }

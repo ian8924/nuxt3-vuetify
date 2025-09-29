@@ -26,6 +26,15 @@ export interface ApiResponseSignIn {
   user: User
 }
 
+export interface ApiRequestResetPassword {
+  email: string
+}
+
+export interface ApiRequestUpdatePassword {
+  token: string
+  newPassword: string
+}
+
 export interface User {
   name: string | null
   avatarUrl: string | null
