@@ -43,7 +43,7 @@ export default defineNuxtConfig({
     },
     preset: mode === 'prod' ? 'vercel' : undefined,
     prerender: {
-      routes: ['/login']
+      routes: ['/auth/login']
     }
   },
 
@@ -114,38 +114,6 @@ export default defineNuxtConfig({
       theme: {
         defaultTheme: 'light',
         themes: variableVuetify
-      },
-      defaults: {
-        VBtn: {
-          class: 'custom-btn',
-          variant: 'elevated',
-          color: 'primary'
-        },
-        VCard: {
-          class: 'custom-card',
-          variant: 'elevated'
-
-        },
-        VTextField: {
-          class: 'custom-input',
-          variant: 'outlined',
-          density: 'comfortable'
-        },
-        VAppBar: {
-          class: 'custom-app-bar'
-        },
-        VNavigationDrawer: {
-          class: 'custom-drawer'
-        },
-        VDataTable: {
-          class: 'custom-table'
-        },
-        VChip: {
-          class: 'custom-chip'
-        },
-        VDialog: {
-          class: 'custom-dialog'
-        }
       }
     }
   }

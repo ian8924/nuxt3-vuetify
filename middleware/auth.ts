@@ -1,5 +1,3 @@
-import { useUserStore } from '~~/stores/user'
-
 export default defineNuxtRouteMiddleware(async (to) => {
   const UserStore = useUserStore()
   const { IS_LOGIN, TOKEN } = storeToRefs(UserStore)
