@@ -1,15 +1,4 @@
-// import { callWithNuxt } from 'nuxt/app'
-// import { useUserStore } from '~~/stores/user'
 import type { NitroFetchOptions, NitroFetchRequest } from 'nitropack'
-
-// export const ResponseStatusCode = {
-//   // TOKEN 無法使用
-//   tokenError: ['10002', '106101'],
-//   NoPermission: 4,
-//   C2COrderNotFound: 2029,
-//   UserIsNotC2CMerchant: 2085,
-//   Maintenance: '999999'
-// } as const
 
 //  types
 enum AsyncApiMethod {
@@ -21,7 +10,7 @@ enum AsyncApiMethod {
 }
 
 export interface BaseApiResponse<TData = any> {
-  scccess?: boolean
+  success?: boolean
   data?: TData
   errorMessage?: string
   status?: number
@@ -48,7 +37,7 @@ const fetchData = async <TData = unknown>(reqUrl: string, method: AsyncApiMethod
       onResponse({ request, response }) {
         console.log('[fetch response]', request, response.status, response._data)
         resolve({
-          scccess: response.status === 200,
+          success: response.status === 200,
           status: response.status,
           errorMessage: response._data?.message || 'Unknown error',
           data: response._data

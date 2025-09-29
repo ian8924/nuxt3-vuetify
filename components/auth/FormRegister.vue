@@ -27,21 +27,21 @@ const handleRegister = async () => {
     return
 
   loading.value = true
-  // const { success, errorMessage } = await userStore.REGISTER(inputRegisterParams.value)
+  const { success, errorMessage } = await userStore.REGISTER(inputRegisterParams.value)
   loading.value = false
-  // if (success) {
-  //   console.log('success')
-  //   // 登入成功，導航到儀表板
-  //   error.value = ''
-  //   // router.push('/dashboard')
-  // } else {
-  //   error.value = errorMessage || '登入失敗，請稍後再試'
-  // }
+  if (success) {
+    console.log('success')
+    // 登入成功，導航到儀表板
+    error.value = ''
+    // router.push('/dashboard')
+  } else {
+    error.value = errorMessage || '註冊失敗，請稍後再試'
+  }
 }
 </script>
 
 <template>
-  <v-form ref="form" class=" tw-w-full tw-mx-auto tw-flex tw-flex-col tw-pb-10" @submit.prevent="handleRegister">
+  <v-form ref="form" class=" tw-w-full tw-mx-auto tw-flex tw-flex-col tw-pt-6" @submit.prevent="handleRegister">
     <v-text-field
       v-model="inputRegisterParams.email"
       :rules="[
@@ -115,18 +115,19 @@ const handleRegister = async () => {
     </div>
 
     <v-btn
+      class="tw-mt-2"
       type="submit"
       rounded
       block
     >
       註冊
     </v-btn>
-    <div class="tw-mt-4">
+    <div class="tw-mt-7">
       <v-divider color="primary-10" thickness="2px">
         <span class="tw-font-medium tw-text-primary">社群註冊</span>
       </v-divider>
     </div>
-    <div class="tw-mt-4 tw-flex tw-justify-center tw-gap-10">
+    <div class="tw-mt-7 tw-flex tw-justify-center tw-gap-10">
       <v-btn size="medium" color="white" class="tw-min-w-[60px] tw-min-h-[60px]">
         <NuxtImg src="/images/icons/google.svg" :width="24" />
       </v-btn>

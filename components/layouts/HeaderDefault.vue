@@ -13,7 +13,7 @@
       <a href="/dashboard">
         常見問題
       </a>
-      <v-btn color="primary" rounded @click="$router.push('/auth?type=login')">
+      <v-btn color="primary" rounded @click="$router.push('/auth/login')">
         登入
         <v-icon size="large" class="tw-ml-1" color="white">
           mdi-account

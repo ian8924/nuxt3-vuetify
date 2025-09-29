@@ -16,18 +16,22 @@ export const useUserStore = defineStore('user', () => {
 
   const LOGIN = async (params: ApiRequestSignIn) => {
     const res = await signInAPI(params)
-    if (res.scccess) {
+    if (res.success) {
       TOKEN.value = res.data?.token || ''
       USER.value = res.data?.user || null
     }
     return {
-      success: res.scccess,
+      success: res.success,
       errorMessage: res.errorMessage || ''
     }
   }
 
   const REGISTER = async (params: ApiRequestRegister) => {
     const res = await registerAPI(params)
+    return {
+      success: res.success,
+      errorMessage: res.errorMessage || ''
+    }
     console.log('Register API Response:', res)
     // if (success) {
     //   TOKEN.value = data?.token || ''

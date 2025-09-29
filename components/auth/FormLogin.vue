@@ -61,10 +61,11 @@ const handleLogin = async () => {
       color="primary"
       required
     />
-    <div class="hover:tw-underline tw-text-right tw-mb-4 tw-line-height-8">
-      <NuxtLink href="/auth?type=reset">忘記密碼？</NuxtLink>
+    <div class="hover:tw-underline tw-text-right tw-mb-4 tw-font-medium tw-line-height-8">
+      <NuxtLink href="/auth/reset">忘記密碼？</NuxtLink>
     </div>
     <v-btn
+      class="tw-mt-[30px]"
       type="submit"
       rounded
       block
