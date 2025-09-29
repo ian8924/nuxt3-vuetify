@@ -114,6 +114,13 @@ export default defineNuxtConfig({
       theme: {
         defaultTheme: 'light',
         themes: variableVuetify
+      },
+      defaults: {
+        VBtn: {
+          class: 'custom-btn',
+          variant: 'elevated',
+          color: 'primary'
+        }
       }
     }
   }
