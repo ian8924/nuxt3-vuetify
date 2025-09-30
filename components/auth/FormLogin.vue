@@ -31,6 +31,10 @@ const handleLogin = async () => {
     notifyStore.SHOW_NOTIFY({ message: '登入成功', type: 'success' })
     router.push('/dashboard')
   } else {
+    if (errorMessage === 'Username or password is incorrect') {
+      error.value = '帳號或密碼錯誤'
+      return
+    }
     error.value = errorMessage || '登入失敗，請稍後再試'
   }
 }

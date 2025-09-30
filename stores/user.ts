@@ -12,7 +12,7 @@ export const useUserStore = defineStore('user', () => {
   // USER 代表用户信息
   const USER = ref<User | null>(null)
 
-  const IS_LOGIN = computed(() => !!USER.value?.name)
+  const IS_LOGIN = computed(() => !!USER.value?.id)
 
   const LOGIN = async (params: ApiRequestSignIn) => {
     const res = await signInAPI(params)

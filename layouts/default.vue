@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <HeaderDefault />
+    <LayoutHeaderDefault />
     <NuxtPage />
   </v-app>
 </template>
