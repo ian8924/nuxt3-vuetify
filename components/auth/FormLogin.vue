@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ApiRequestSignIn } from '@/types/interface/auth.interface'
+import { PhKey, PhUser } from '@phosphor-icons/vue'
 
 const userStore = useUserStore()
 const notifyStore = useNotifyStore()
@@ -50,10 +51,14 @@ const handleLogin = async () => {
       ]"
       required
       placeholder="會員信箱"
-      prepend-inner-icon="mdi-account-outline"
       variant="underlined"
       color="primary"
-    />
+    >
+      <template #prepend-inner>
+        <PhUser :size="24" class="tw-mr-1" />
+      </template>
+    </v-text-field>
+
     <v-text-field
       v-model="inputLoginParams.password"
       :rules="[
@@ -61,12 +66,15 @@ const handleLogin = async () => {
         (v: string) => (v && v.length >= 6) || '密碼必須大於 6 個字符',
       ]"
       placeholder="密碼"
-      prepend-inner-icon="mdi-key-outline"
       type="password"
       variant="underlined"
       color="primary"
       required
-    />
+    >
+      <template #prepend-inner>
+        <PhKey :size="24" class="tw-mr-1" />
+      </template>
+    </v-text-field>
     <div class="hover:tw-underline tw-text-right tw-mb-4 tw-font-medium tw-line-height-8">
       <NuxtLink href="/auth/reset">忘記密碼？</NuxtLink>
     </div>
@@ -81,6 +89,11 @@ const handleLogin = async () => {
     </v-btn>
     <div v-if="error" class="tw-flex tw-items-center tw-gap-1 tw-justify-center tw-font-medium tw-bg-warn-10 tw-text-warn tw-p-4 tw-rounded-md">
       <v-icon>mdi-close</v-icon> {{ error }}
+    </div>
+    <div>
+      <PhCube size="32" weight="fill" class="tw-text-primary" />
+      <PhHeart size="32" weight="fill" class="tw-text-primary" />
+      <PhHorse size="32" weight="fill" class="tw-text-primary" />
     </div>
     <div class="tw-mt-4">
       <v-divider color="primary-10" thickness="2px">

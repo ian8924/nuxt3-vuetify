@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { PhUser } from '@phosphor-icons/vue'
+
 const router = useRouter()
 
 const userStore = useUserStore()
@@ -28,10 +30,8 @@ const logout = () => {
       </a>
       <template v-if="!IS_LOGIN">
         <v-btn color="primary" rounded @click="$router.push('/auth/login')">
+          <PhUser :size="16" class="tw-mr-1" />
           登入
-          <v-icon size="large" class="tw-ml-1" color="white">
-            mdi-account
-          </v-icon>
         </v-btn>
       </template>
       <template v-else>
