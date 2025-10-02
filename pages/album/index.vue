@@ -1,6 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
-  layout: 'layout-album'
+  layout: 'layout-album',
+  middleware: 'auth'
 })
 </script>
 

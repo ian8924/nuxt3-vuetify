@@ -29,15 +29,17 @@ const logout = () => {
         <a href="/dashboard">
           常見問題
         </a>
-        <template v-if="!IS_LOGIN">
-          <v-btn color="primary" rounded @click="$router.push('/auth/login')">
-            <PhUser :size="16" class="tw-mr-1" />
-            登入
-          </v-btn>
-        </template>
-        <template v-else>
-          <v-btn icon="mdi-logout" @click="logout" />
-        </template>
+        <client-only>
+          <template v-if="!IS_LOGIN">
+            <v-btn color="primary" rounded @click="$router.push('/auth/login')">
+              <PhUser :size="16" class="tw-mr-1" />
+              登入
+            </v-btn>
+          </template>
+          <template v-else>
+            <v-btn icon="mdi-logout" @click="logout" />
+          </template>
+        </client-only>
       </div>
     </div>
   </div>
