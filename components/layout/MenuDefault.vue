@@ -6,6 +6,11 @@ const isSubMenuOpen = defineModel('openSubMenu', {
   default: true
 })
 
+const showSubMenuToggle = defineModel('showSubMenuToggle', {
+  type: Boolean,
+  default: true
+})
+
 const mainMenu = [
   { title: '首页', icon: PhHouse, path: '/dashboard' },
   { title: '相簿', icon: PhImages, path: '/album' },
@@ -43,7 +48,7 @@ const toggleDrawer = () => {
           </div>
         </v-list-item>
       </v-list>
-      <template #append>
+      <template v-if="showSubMenuToggle" #append>
         <div class="tw-flex tw-justify-center tw-mb-2">
           <v-icon-btn color="white" @click="toggleDrawer">
             <PhTextOutdent v-if="!isSubMenuOpen" weight="bold" :size="24" />

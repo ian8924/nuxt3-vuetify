@@ -8,7 +8,7 @@ const isSubMenuOpen = ref(true)
   <v-app>
     <LayoutHeaderDefault />
     <div class="tw-flex tw-pt-[70px]">
-      <LayoutMenuDefault v-model:open-sub-menu="isSubMenuOpen" />
+      <LayoutMenuDefault v-model:open-sub-menu="isSubMenuOpen" :show-sub-menu-toggle="false" />
       <NuxtPage />
     </div>
   </v-app>
