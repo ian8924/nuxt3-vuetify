@@ -17,26 +17,28 @@ const logout = () => {
 </script>
 
 <template>
-  <div class="tw-px-10 tw-py-3 tw-flex tw-items-center tw-justify-between tw-border-b tw-border-surface tw-bg-white">
-    <a href="/dashboard">
-      <NuxtImg src="/images/web/logo.png" :width="71" class="tw-cursor-pointer" />
-    </a>
-    <div class="tw-flex tw-gap-6 tw-text-lg tw-font-medium tw-items-center">
+  <div class="tw-fixed tw-top-0 tw-left-0 tw-right-0 tw-z-[3000]">
+    <div class="tw-px-10 tw-py-3 tw-flex tw-items-center tw-justify-between tw-border-b tw-border-surface tw-bg-white">
       <a href="/dashboard">
-        樂見平台
+        <NuxtImg src="/images/web/logo.png" :width="71" class="tw-cursor-pointer" />
       </a>
-      <a href="/dashboard">
-        常見問題
-      </a>
-      <template v-if="!IS_LOGIN">
-        <v-btn color="primary" rounded @click="$router.push('/auth/login')">
-          <PhUser :size="16" class="tw-mr-1" />
-          登入
-        </v-btn>
-      </template>
-      <template v-else>
-        <v-btn icon="mdi-logout" @click="logout" />
-      </template>
+      <div class="tw-flex tw-gap-6 tw-text-lg tw-font-medium tw-items-center">
+        <a href="/dashboard">
+          樂見平台
+        </a>
+        <a href="/dashboard">
+          常見問題
+        </a>
+        <template v-if="!IS_LOGIN">
+          <v-btn color="primary" rounded @click="$router.push('/auth/login')">
+            <PhUser :size="16" class="tw-mr-1" />
+            登入
+          </v-btn>
+        </template>
+        <template v-else>
+          <v-btn icon="mdi-logout" @click="logout" />
+        </template>
+      </div>
     </div>
   </div>
 </template>
