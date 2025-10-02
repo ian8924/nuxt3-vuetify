@@ -17,7 +17,7 @@ export const useNotifyStore = defineStore('notify', () => {
       NOTIFY_INFO.value.message = ''
       NOTIFY_INFO.value.type = ''
       IS_SHOW_NOTIFY.value = false
-    }, 3000)
+    }, 10000)
   }
 
   return { NOTIFY_INFO, IS_SHOW_NOTIFY, SHOW_NOTIFY }

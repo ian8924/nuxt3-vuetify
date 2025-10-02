@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { PhUser } from '@phosphor-icons/vue'
-
-const router = useRouter()
+import { PhSignOut, PhUser } from '@phosphor-icons/vue'
 
 const userStore = useUserStore()
 const notifyStore = useNotifyStore()
@@ -12,12 +10,11 @@ const logout = () => {
   userStore.LOGOUT()
   // 这里可以添加你的登出逻辑
   notifyStore.SHOW_NOTIFY({ message: '已登出', type: 'error' })
-  router.push('/auth/login')
 }
 </script>
 
 <template>
-  <div class="tw-fixed tw-top-0 tw-left-0 tw-right-0 tw-z-[3000]">
+  <div class="tw-fixed tw-top-0 tw-left-0 tw-right-0 tw-z-[1500]">
     <div class="tw-px-10 tw-py-3 tw-flex tw-items-center tw-justify-between tw-border-b tw-border-surface tw-bg-white">
       <a href="/dashboard">
         <NuxtImg src="/images/web/logo.png" :width="71" class="tw-cursor-pointer" />
@@ -37,7 +34,26 @@ const logout = () => {
             </v-btn>
           </template>
           <template v-else>
-            <v-btn icon="mdi-logout" @click="logout" />
+            <v-menu offset="20px">
+              <template #activator="{ props }">
+                <NuxtImg
+                  v-bind="props"
+                  src="/images/web/avator.png"
+                  width="40px"
+                  class="tw-cursor-pointer"
+                />
+              </template>
+              <v-list width="150px">
+                <v-list-item @click="logout">
+                  <v-list-item-title>
+                    <div class="tw-flex tw-items-center tw-gap-2">
+                      <PhSignOut :size="24" class="tw-mr-1" />
+                      登出
+                    </div>
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
           </template>
         </client-only>
       </div>

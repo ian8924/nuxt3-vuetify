@@ -19,10 +19,11 @@ const notifyColor = computed(() => {
 })
 </script>
 
-<template v-if="IS_SHOW_NOTIFY" class="tw-fixed tw-top-5 tw-right-5 tw-z-50">
+<template>
   <v-snackbar
     v-model="IS_SHOW_NOTIFY"
-    :timeout="5000"
+    z-index="2000"
+    :timeout="3000"
     :color="notifyColor"
     rounded
     location="top right"

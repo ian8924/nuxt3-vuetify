@@ -90,11 +90,6 @@ const handleLogin = async () => {
     <div v-if="error" class="tw-flex tw-items-center tw-gap-1 tw-justify-center tw-font-medium tw-bg-warn-10 tw-text-warn tw-p-4 tw-rounded-md">
       <v-icon>mdi-close</v-icon> {{ error }}
     </div>
-    <div>
-      <PhCube size="32" weight="fill" class="tw-text-primary" />
-      <PhHeart size="32" weight="fill" class="tw-text-primary" />
-      <PhHorse size="32" weight="fill" class="tw-text-primary" />
-    </div>
     <div class="tw-mt-4">
       <v-divider color="primary-10" thickness="2px">
         <span class="tw-font-medium tw-text-primary">社群登入</span>
