@@ -26,7 +26,7 @@ export default defineNuxtConfig({
     }
   },
 
-  modules: ['vuetify-nuxt-module', '@pinia/nuxt', '@nuxtjs/tailwindcss', '@nuxt/image'],
+  modules: ['vuetify-nuxt-module', '@pinia/nuxt', '@nuxtjs/tailwindcss', '@nuxt/image', '@vueuse/nuxt'],
   // eslint: {
   //   checker: true // <---
   // },

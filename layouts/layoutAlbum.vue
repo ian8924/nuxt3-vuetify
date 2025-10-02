@@ -3,6 +3,7 @@ import { PhDesktop, PhImages, PhPencilSimpleLine } from '@phosphor-icons/vue'
 import { ref } from 'vue'
 
 const isSubMenuOpen = ref(true)
+const listGroupOpen = ref(['album', 'website']) // 控制 list group 的開合狀態
 </script>
 
 <template>
@@ -23,7 +24,7 @@ const isSubMenuOpen = ref(true)
             color="#fafafa"
             flat
           >
-            <v-list class="tw-font-medium tw-text-sm  tw-text-black">
+            <v-list v-model:opened="listGroupOpen" class="tw-font-medium tw-text-sm  tw-text-black">
               <!-- 照片管理 -->
               <v-list-item class="tw-cursor-pointer">
                 <template #prepend>
@@ -34,7 +35,7 @@ const isSubMenuOpen = ref(true)
                 </template>
               </v-list-item>
               <!-- 相簿管理 -->
-              <v-list-group>
+              <v-list-group value="album">
                 <template #activator="{ props }">
                   <v-list-item
                     v-bind="props"
@@ -58,8 +59,8 @@ const isSubMenuOpen = ref(true)
                   </template>
                 </v-list-item>
               </v-list-group>
-              <!-- 相簿管理 -->
-              <v-list-group>
+              <!-- 網站設定 -->
+              <v-list-group value="website">
                 <template #activator="{ props }">
                   <v-list-item
                     v-bind="props"
