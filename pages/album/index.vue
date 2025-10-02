@@ -93,29 +93,33 @@ definePageMeta({
     </TitleBlockDefault>
     <TitleBlockDefault>
       <template #left>
-        <div class="tw-flex tw-items-center tw-gap-6 tw-text-sm tw-text-gray-600">
-          <div class="tw-flex tw-items-center tw-cursor-pointer tw-text-[#c0c0c0]" :class="{ 'tw-text-black': activeTab === 'all' }" @click="activeTab = 'all'">
-            全部 14
+        <div class="tw-flex tw-flex-col md:tw-flex-row">
+          <div class="tw-flex tw-items-center tw-gap-6 tw-text-sm tw-text-gray-600">
+            <div class="tw-flex tw-items-center tw-cursor-pointer tw-text-[#c0c0c0]" :class="{ 'tw-text-black': activeTab === 'all' }" @click="activeTab = 'all'">
+              全部 14
+            </div>
+            <v-divider class="tw-my-auto" vertical length="10px" />
+            <div class="tw-flex tw-items-center tw-cursor-pointer tw-text-[#c0c0c0]" :class="{ 'tw-text-black': activeTab === 'in-use' }" @click="activeTab = 'in-use'">
+              使用中 14
+            </div>
+            <v-divider class="tw-my-auto" vertical length="10px" />
+            <div class="tw-flex tw-items-center tw-cursor-pointer tw-text-[#c0c0c0]" :class="{ 'tw-text-black': activeTab === 'locked' }" @click="activeTab = 'locked'">
+              已鎖定 14
+            </div>
+            <v-divider class="tw-my-auto" vertical length="10px" />
           </div>
-          <v-divider class="tw-my-auto" vertical length="10px" />
-          <div class="tw-flex tw-items-center tw-cursor-pointer tw-text-[#c0c0c0]" :class="{ 'tw-text-black': activeTab === 'in-use' }" @click="activeTab = 'in-use'">
-            使用中 14
+          <div class="tww-ml-5 tw-mt-4 md:tw-mt-0">
+            <v-text-field
+              hide-details
+              bg-color="white"
+              class="tw-w-full md:tw-w-[430px]"
+              prepend-inner-icon="mdi-magnify"
+              rounded
+              flat
+              placeholder="搜尋名稱"
+              variant="solo"
+            />
           </div>
-          <v-divider class="tw-my-auto" vertical length="10px" />
-          <div class="tw-flex tw-items-center tw-cursor-pointer tw-text-[#c0c0c0]" :class="{ 'tw-text-black': activeTab === 'locked' }" @click="activeTab = 'locked'">
-            已鎖定 14
-          </div>
-          <v-divider class="tw-my-auto" vertical length="10px" />
-          <v-text-field
-            hide-details
-            bg-color="white"
-            width="430"
-            prepend-inner-icon="mdi-magnify"
-            rounded
-            flat
-            placeholder="搜尋名稱"
-            variant="solo"
-          ></v-text-field>
         </div>
       </template>
       <template #right>
@@ -126,15 +130,15 @@ definePageMeta({
     </TitleBlockDefault>
     <div class="tw-px-[40px] tw-py-[18px] tw-w-full tw-flex-1">
       <template v-if="list.length > 0">
-        <div class="tw-grid tw-gap-6" :class="{ 'tw-grid-cols-3': width <= 1000, 'tw-grid-cols-4': width > 1000 && width <= 1240, 'tw-grid-cols-5': width > 1240 }">
+        <div class="tw-grid tw-gap-6" :class="{ 'tw-grid-cols-2': width <= 600, 'tw-grid-cols-3': width > 600 && width <= 1000, 'tw-grid-cols-4': width > 1000 && width <= 1240, 'tw-grid-cols-5': width > 1240 }">
           <v-card
             v-for="item in list"
             :key="item.id"
             color="white"
             class="tw-p-6 tw-rounded-lg tw-mb-6 tw-min-h-[278px] tw-cursor-pointer hover:tw-shadow-lg"
-            :to="`/album/${item.id}`"
+            :to="`/album/${item.id}/picture`"
           >
-            <div class="tw-aspect-[5/3] tw-overflow-hidden tw-rounded">
+            <div class="tw-aspect-[2/1] tw-overflow-hidden tw-rounded">
               <NuxtImg class="tw-w-full tw-h-full tw-object-cover" :src="item.image" />
             </div>
             <div class="tw-p-4">
