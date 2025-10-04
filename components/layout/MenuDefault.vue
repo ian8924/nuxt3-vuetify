@@ -12,12 +12,12 @@ const showSubMenuToggle = defineModel('showSubMenuToggle', {
 })
 
 const mainMenu = [
-  { title: '首页', icon: PhHouse, path: '/dashboard' },
-  { title: '相簿', icon: PhImages, path: '/album' },
-  { title: '活動', icon: PhTicket, path: '/activity' },
-  { title: '錢包', icon: PhWallet, path: '/wallet' },
-  { title: '設定', icon: PhSlidersHorizontal, path: '/setting' },
-  { title: '會員', icon: PhUser, path: '/profile' }
+  { title: '首页', icon: PhHouse, path: '/dashboard', enable: true },
+  { title: '相簿', icon: PhImages, path: '/album', enable: true },
+  { title: '活動', icon: PhTicket, path: '/activity', enable: true },
+  { title: '錢包', icon: PhWallet, path: '/wallet', enable: false },
+  { title: '設定', icon: PhSlidersHorizontal, path: '/setting', enable: false },
+  { title: '會員', icon: PhUser, path: '/profile', enable: false }
 ]
 
 const toggleDrawer = () => {
@@ -41,6 +41,7 @@ const toggleDrawer = () => {
           :value="item.path"
           :to="item.path"
           :active="item.path === $route.path"
+          :disabled="!item.enable"
         >
           <div class="tw-flex tw-flex-col tw-items-center tw-py-1">
             <component :is="item.icon" size="24" />

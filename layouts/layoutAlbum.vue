@@ -2,8 +2,18 @@
 import { PhDesktop, PhImages, PhPencilSimpleLine } from '@phosphor-icons/vue'
 import { ref } from 'vue'
 
+const route = useRoute()
+const albumStore = useAlbumStore()
+const { ALBUM } = storeToRefs(albumStore)
+
 const isSubMenuOpen = ref(true)
-const listGroupOpen = ref(['album', 'website']) // 控制 list group 的開合狀態
+const listGroupOpen = ref() // 控制 list group 的開合狀態
+
+onMounted(() => {
+  nextTick(() => {
+    listGroupOpen.value = ['album', 'website']
+  })
+})
 </script>
 
 <template>
@@ -26,7 +36,7 @@ const listGroupOpen = ref(['album', 'website']) // 控制 list group 的開合�
           >
             <v-list v-model:opened="listGroupOpen" class="tw-font-medium tw-text-sm  tw-text-black">
               <!-- 照片管理 -->
-              <v-list-item class="tw-cursor-pointer">
+              <v-list-item class="tw-cursor-pointer" :active="route.name === 'album-id-pictures'" :to="`/album/${ALBUM?.id}/pictures`">
                 <template #prepend>
                   <div class=" tw-flex tw-items-center tw-px-2 tw-py-2 tw-font-semibold tw-text-gray-600">
                     <PhImages size="16" class="tw-mr-3" />
@@ -50,7 +60,8 @@ const listGroupOpen = ref(['album', 'website']) // 控制 list group 的開合�
                 <v-list-item
                   key="info"
                   value="info"
-                  active
+                  :active="route.name === 'album-id-info'"
+                  :to="`/album/${ALBUM?.id}/info`"
                 >
                   <template #prepend>
                     <div class="tw-py-2 tw-ml-[-20px] tw-font-semibold tw-text-gray-600">
@@ -75,6 +86,8 @@ const listGroupOpen = ref(['album', 'website']) // 控制 list group 的開合�
                 <v-list-item
                   key="setting"
                   value="setting"
+                  :active="route.name === 'album-id-setting'"
+                  :to="`/album/${ALBUM?.id}/setting`"
                 >
                   <template #prepend>
                     <div class="tw-py-2 tw-ml-[-20px] tw-font-semibold tw-text-gray-600">
@@ -86,6 +99,8 @@ const listGroupOpen = ref(['album', 'website']) // 控制 list group 的開合�
                 <v-list-item
                   key="frame"
                   value="frame"
+                  :active="route.name === 'album-id-frame'"
+                  :to="`/album/${ALBUM?.id}/frame`"
                 >
                   <template #prepend>
                     <div class="tw-py-2 tw-ml-[-20px] tw-font-semibold tw-text-gray-600">
