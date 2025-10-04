@@ -17,3 +17,9 @@ export interface ApiResponseList<T> {
   }
   size: number
 }
+
+export interface ApiResponseSingle<T> {
+  data: T
+  success: boolean
+  message: string
+}

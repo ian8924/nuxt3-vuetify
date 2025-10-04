@@ -15,8 +15,10 @@ const list: Ref<Media[]> = ref([])
 const displayList = computed(() => list.value.filter(item => item.fileName.includes(inputSearch.value)))
 
 // Overlay 控制
+const currentMediaID = ref<number | null>(null)
 const overlay = ref(false)
-const openOverlay = (state: boolean) => {
+const openOverlay = (state: boolean, mediaID: number) => {
+  currentMediaID.value = mediaID
   overlay.value = state
 }
 
@@ -104,21 +106,23 @@ definePageMeta({
             <v-card
               color="white"
               class="tw-p-6 tw-rounded-lg tw-mb-6 tw-min-h-[278px] tw-cursor-pointer hover:tw-shadow-lg"
-              @click="openOverlay(true)"
+              @click="openOverlay(true, item.id)"
             >
               <!-- 照片 -->
-              <div
+              <!-- <div
                 class="tw-aspect-[4/3] tw-overflow-hidden tw-rounded tw-bg-surface tw-flex tw-items-center tw-justify-center tw-bg-center tw-bg-contain"
                 :style="`background-image: url(${item.cdnUrl});`"
-              />
-              <!-- <div class="tw-aspect-[4/3] tw-overflow-hidden tw-rounded tw-bg-surface tw-flex tw-items-center tw-justify-center tw-bg-center tw-bg-contain">
+                loading="lazy"
+              /> -->
+              <div class="tw-aspect-[4/3] tw-overflow-hidden tw-rounded tw-bg-surface tw-flex tw-items-center tw-justify-center">
                 <NuxtImg
+                  class="tw-object-cover tw-h-full"
                   :src="item.cdnUrl"
-                  fit="cover"
-                  width="400"
-                  height="300"
+                  height="100%"
+                  fill="cover"
+                  loading="lazy"
                 />
-              </div> -->
+              </div>
               <div class="tw-p-4">
                 <v-tooltip :text="item.fileName" location="bottom">
                   <template #activator="{ props }">
@@ -141,5 +145,5 @@ definePageMeta({
       </template>
     </div>
   </v-main>
-  <v-overlay v-model="overlay"></v-overlay>
+  <OverlayPic v-if="currentMediaID && overlay" v-model="overlay" :media-i-d="currentMediaID" />
 </template>
