@@ -2,7 +2,7 @@ export default defineEventHandler(async (event) => {
   // 讀取請求體
   const body = await readBody(event)
   const config = useRuntimeConfig()
-  console.log('External API Response:1111', body)
+  // console.log('External API Response:1111', body)
 
   try {
     // 轉發請求到外部 API

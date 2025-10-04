@@ -13,6 +13,10 @@ const mode: any = process.env.MODE ? process.env.MODE : 'dev'
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
+  devServer: {
+    port: 3001
+  },
+
   // 环境变量配置
   runtimeConfig: {
 
@@ -22,6 +26,7 @@ export default defineNuxtConfig({
     public: {
       baseURL: env[mode].BASE_URL,
       apiBase: env[mode].API_BASE,
+      apiAlbum: env[mode].API_ALBUM,
       nodeEnv
     }
   },
@@ -36,8 +41,12 @@ export default defineNuxtConfig({
 
   nitro: {
     devProxy: {
-      '/api': {
+      '/user-api': {
         target: 'https://user-api-dev.leis.studio/api',
+        changeOrigin: true
+      },
+      '/album-api': {
+        target: 'https://album-api-dev.leis.studio/api',
         changeOrigin: true
       }
     },

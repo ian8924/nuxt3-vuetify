@@ -17,14 +17,23 @@ export interface BaseApiResponse<TData = any> {
 }
 
 // API 基礎設定
-const fetchData = async <TData = unknown>(reqUrl: string, method: AsyncApiMethod, data?: any): Promise<BaseApiResponse<TData>> => {
+const fetchData = async <TData = unknown>(reqUrl: string, method: AsyncApiMethod, data?: any, apiService?: 'user' | 'album'): Promise<BaseApiResponse<TData>> => {
   const runtimeConfig = useRuntimeConfig()
   const notifyStore = useNotifyStore()
   const router = useRouter()
   const token = useCookie('token').value || ''
 
+  let baseURL = ''
+  if (apiService === 'user') {
+    baseURL = runtimeConfig.public.apiBase
+  } else if (apiService === 'album') {
+    baseURL = runtimeConfig.public.apiAlbum
+  }
+
+  console.log('[fetch request]', method, baseURL + reqUrl, data)
+
   const options: NitroFetchOptions<NitroFetchRequest, 'get' | 'patch' | 'post' | 'put' | 'delete'> = {
-    baseURL: runtimeConfig.public.apiBase,
+    baseURL,
     method,
     headers: {
       'Content-Type': 'application/json',
@@ -39,7 +48,7 @@ const fetchData = async <TData = unknown>(reqUrl: string, method: AsyncApiMethod
 
       // 響應攔截器
       onResponse({ request, response }) {
-        console.log('[fetch response]', request, response.status, response._data)
+        console.log('[fetch response]', request, response.status)
 
         if (response.status === 403) {
           notifyStore.SHOW_NOTIFY({ message: '請重新登入', type: 'error' })
@@ -80,23 +89,23 @@ const fetchData = async <TData = unknown>(reqUrl: string, method: AsyncApiMethod
 }
 
 export const useFetchData = new (class getData {
-  get<TData = any>(url: string, params?: any) {
-    return fetchData<TData>(url, AsyncApiMethod.get, params)
+  get<TData = any>(url: string, params?: any, apiService: 'user' | 'album' = 'user') {
+    return fetchData<TData>(url, AsyncApiMethod.get, params, apiService)
   }
 
-  post<TData = any>(url: string, body?: any) {
-    return fetchData<TData>(url, AsyncApiMethod.post, body)
+  post<TData = any>(url: string, body?: any, apiService: 'user' | 'album' = 'user') {
+    return fetchData<TData>(url, AsyncApiMethod.post, body, apiService)
   }
 
-  put<TData = any>(url: string, body?: any) {
-    return fetchData<TData>(url, AsyncApiMethod.put, body)
+  put<TData = any>(url: string, body?: any, apiService: 'user' | 'album' = 'user') {
+    return fetchData<TData>(url, AsyncApiMethod.put, body, apiService)
   }
 
-  patch<TData = any>(url: string, body?: any) {
-    return fetchData<TData>(url, AsyncApiMethod.patch, body)
+  patch<TData = any>(url: string, body?: any, apiService: 'user' | 'album' = 'user') {
+    return fetchData<TData>(url, AsyncApiMethod.patch, body, apiService)
   }
 
-  delete<TData = any>(url: string, body?: any) {
-    return fetchData<TData>(url, AsyncApiMethod.delete, body)
+  delete<TData = any>(url: string, body?: any, apiService: 'user' | 'album' = 'user') {
+    return fetchData<TData>(url, AsyncApiMethod.delete, body, apiService)
   }
 })()
