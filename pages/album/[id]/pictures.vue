@@ -164,7 +164,7 @@ definePageMeta({
   <!-- 刪除確認視窗 -->
   <DialogConfirmDelete v-model="isShowConfirmDelete" :is-loading-delete="isLoadingDelete" @confirm="deleteMedia(deleteMediaID)" />
   <!-- 新增照片視窗 -->
-  <DialogFileUpload
+  <DialogUploadMedia
     v-if="ALBUM"
     v-model="isShowFileUpload"
     :album-id="ALBUM.id"
