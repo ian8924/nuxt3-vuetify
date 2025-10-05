@@ -3,10 +3,13 @@ import { resetPasswordAPI } from '@/api/auth.api'
 import type { ApiRequestResetPassword } from '@/types/interface/auth.interface'
 
 const router = useRouter()
+const route = useRoute()
+const notifyStore = useNotifyStore()
 
 const form = ref<any>(null)
 const inputResetParams: Ref<ApiRequestResetPassword> = ref({
-  email: ''
+  email: '',
+  token: (route.query.token as string) || ''
 })
 
 const error: Ref<string> = ref('')
@@ -20,14 +23,13 @@ const handleReset = async () => {
     return
 
   loading.value = true
-  router.push('/auth/reset?step=step2')
-
   const { success, errorMessage } = await resetPasswordAPI(inputResetParams.value)
   loading.value = false
   if (success) {
     error.value = ''
     router.push('/auth/reset?step=step2')
   } else {
+    notifyStore.SHOW_NOTIFY({ message: errorMessage || '重設密碼失敗，請稍後再試', type: 'error' })
     error.value = errorMessage || '重設密碼失敗，請稍後再試'
   }
 }

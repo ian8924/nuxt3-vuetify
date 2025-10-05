@@ -28,6 +28,7 @@ export interface ApiResponseSignIn {
 
 export interface ApiRequestResetPassword {
   email: string
+  token: string
 }
 
 export interface ApiRequestUpdatePassword {

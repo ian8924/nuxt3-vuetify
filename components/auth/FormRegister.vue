@@ -59,7 +59,7 @@ const handleRegister = async () => {
       v-model="inputRegisterParams.password"
       :rules="[
         (v: string) => !!v || '必填',
-        (v: string) => (v && v.length >= 6) || '密碼必須大於 6 個字符',
+        (v: string) => (v && v.length >= 8) || '密碼必須大於 8 個字符',
       ]"
       placeholder="密碼 *"
       type="password"
@@ -71,7 +71,7 @@ const handleRegister = async () => {
       v-model="inputRegisterParams.repeartPassword"
       :rules="[
         (v: string) => !!v || '必填',
-        (v: string) => (v && v.length >= 6) || '密碼必須大於 6 個字符',
+        (v: string) => (v && v.length >= 8) || '密碼必須大於 8 個字符',
         (v: string) => (v && v === inputRegisterParams.password) || '兩次密碼必須相同',
       ]"
       placeholder="確認密碼 *"
@@ -95,10 +95,11 @@ const handleRegister = async () => {
       v-model="inputRegisterParams.mobilePhone"
       :counter="10"
       :rules="[
+        (v: string) => !!v || '必填',
         (v: string) => !v || /^[0-9]{10}$/.test(v) || '請輸入正確的手機號碼',
       ]"
       required
-      placeholder="手機"
+      placeholder="手機 *"
       variant="underlined"
       color="primary"
     />
@@ -121,6 +122,7 @@ const handleRegister = async () => {
       type="submit"
       rounded
       block
+      :loading="loading"
     >
       註冊
     </v-btn>

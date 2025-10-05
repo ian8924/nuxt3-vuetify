@@ -49,7 +49,7 @@ const { formatFileSize } = useFileFormatter()
       class="tw-absolute tw-p-2 tw-bottom-2 tw-right-2 tw-cursor-pointer hover:tw-text-red-600 tw-text-on-surface-60"
       @click.stop="openDeleteDialog(item.id)"
     >
-      <PhTrash weight="bold" :size="16" />
+      <PhTrash weight="bold" :size="20" />
     </div>
   </v-card>
 </template>

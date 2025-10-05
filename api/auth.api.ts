@@ -19,7 +19,7 @@ export const signInAPI = (params: ApiRequestSignIn) => {
  * @param { type String } mobilePhone 手機號碼 (選填)
  */
 export const registerAPI = (params: ApiRequestRegister) => {
-  return useFetchData.post<ApiResponseRegister>('/v1/auth/register', params)
+  return useFetchData.post<ApiResponseRegister>('/v1/auth/register-json', params)
 }
 
 /**
