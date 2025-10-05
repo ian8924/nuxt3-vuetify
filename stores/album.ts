@@ -7,7 +7,6 @@ export const useAlbumStore = defineStore('album', () => {
   const ALBUM: Ref<Album | null> = ref(null)
 
   const GET_ALBUM_INFO = async (albumId: number) => {
-    console.log('1')
     const { success, data } = await getAlbumByIdAPI(albumId)
     if (success && data) {
       ALBUM.value = data

@@ -140,7 +140,7 @@ definePageMeta({
                 class="tw-aspect-[2/1] tw-overflow-hidden tw-rounded tw-bg-center tw-bg-contain"
                 :style="`background-image: url(${item.coverPhotoUrl});`"
               /> -->
-              <div class="tw-aspect-[4/3] tw-overflow-hidden tw-rounded tw-bg-surface tw-flex tw-items-center tw-justify-center">
+              <div class="tw-aspect-[2/1] tw-overflow-hidden tw-rounded tw-bg-surface tw-flex tw-items-center tw-justify-center">
                 <NuxtImg
                   class="tw-object-cover tw-h-full"
                   :src="item.coverPhotoUrl"

@@ -56,7 +56,7 @@ const fetchData = async <TData = unknown>(reqUrl: string, method: AsyncApiMethod
         }
 
         resolve({
-          success: response.status === 200,
+          success: response.status === 200 || response.status === 204,
           status: response.status,
           errorMessage: response._data?.message || 'Unknown error',
           data: response._data

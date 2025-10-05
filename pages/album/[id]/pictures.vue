@@ -2,15 +2,19 @@
 import { getAlbumPicturesAPI } from '@/api/album/list.api'
 import type { Media } from '@/types/interface/media.interface'
 import { PhArrowLeft, PhPlus } from '@phosphor-icons/vue'
+import { deleteMediaByIdAPI } from '~/api/media/info.api'
 
 const albumStore = useAlbumStore()
+const notifyStore = useNotifyStore()
 const { ALBUM } = storeToRefs(albumStore)
 
 const router = useRouter()
-const { formatFileSize } = useFileFormatter()
 const isLoading = ref(false)
-
+const isLoadingDelete = ref(false)
+const isShowConfirmDelete = ref(false)
+const deleteMediaID = ref<number | null>(null)
 const inputSearch = ref('')
+
 const list: Ref<Media[]> = ref([])
 const displayList = computed(() => list.value.filter(item => item.fileName.includes(inputSearch.value)))
 
@@ -30,6 +34,42 @@ const fetchAlbumPictures = async () => {
   isLoading.value = false
   if (success) {
     list.value = data?.content || []
+  }
+}
+
+const toggleMedia = (direction: 'next' | 'previous') => {
+  if (!currentMediaID.value && displayList.value.length === 0)
+    return
+  const currentIndex = displayList.value.findIndex(item => item.id === currentMediaID.value)
+  if (direction === 'next') {
+    const nextIndex = (currentIndex + 1) % displayList.value.length
+    if (displayList.value[nextIndex]) {
+      currentMediaID.value = displayList.value[nextIndex].id
+    }
+  } else if (direction === 'previous') {
+    const previousIndex = (currentIndex - 1 + displayList.value.length) % displayList.value.length
+    if (displayList.value[previousIndex]) {
+      currentMediaID.value = displayList.value[previousIndex].id
+    }
+  }
+}
+
+const openDeleteDialog = (id: number) => {
+  isShowConfirmDelete.value = true
+  deleteMediaID.value = id
+}
+
+const deleteMedia = async (id: number | null) => {
+  if (id === null)
+    return
+  isLoadingDelete.value = true
+  const { success } = await deleteMediaByIdAPI(id)
+  isLoadingDelete.value = false
+  if (success) {
+    notifyStore.SHOW_NOTIFY({ message: '刪除成功', type: 'success' })
+    await fetchAlbumPictures()
+    isShowConfirmDelete.value = false
+    deleteMediaID.value = null
   }
 }
 
@@ -103,40 +143,7 @@ definePageMeta({
             sm="6"
             md="3"
           >
-            <v-card
-              color="white"
-              class="tw-p-6 tw-rounded-lg tw-mb-6 tw-min-h-[278px] tw-cursor-pointer hover:tw-shadow-lg"
-              @click="openOverlay(true, item.id)"
-            >
-              <!-- 照片 -->
-              <!-- <div
-                class="tw-aspect-[4/3] tw-overflow-hidden tw-rounded tw-bg-surface tw-flex tw-items-center tw-justify-center tw-bg-center tw-bg-contain"
-                :style="`background-image: url(${item.cdnUrl});`"
-                loading="lazy"
-              /> -->
-              <div class="tw-aspect-[4/3] tw-overflow-hidden tw-rounded tw-bg-surface tw-flex tw-items-center tw-justify-center">
-                <NuxtImg
-                  class="tw-object-cover tw-h-full"
-                  :src="item.cdnUrl"
-                  height="100%"
-                  fill="cover"
-                  loading="lazy"
-                />
-              </div>
-              <div class="tw-p-4">
-                <v-tooltip :text="item.fileName" location="bottom">
-                  <template #activator="{ props }">
-                    <div
-                      v-bind="props"
-                      class="tw-font-medium tw-text-base tw-line-clamp-2 tw-break-words tw-h-[48px]"
-                    >
-                      {{ item.fileName }}
-                    </div>
-                  </template>
-                </v-tooltip>
-                <div class="tw-mt-2 tw-text-xs tw-text-on-surface-80">{{ formatFileSize(item.size) }}</div>
-              </div>
-            </v-card>
+            <CardPic :item="item" :open-overlay="openOverlay" :open-delete-dialog="openDeleteDialog" />
           </v-col>
         </v-row>
       </template>
@@ -145,5 +152,12 @@ definePageMeta({
       </template>
     </div>
   </v-main>
-  <OverlayPic v-if="currentMediaID && overlay" v-model="overlay" :media-i-d="currentMediaID" />
+  <OverlayPic
+    v-if="currentMediaID && overlay"
+    v-model="overlay"
+    :media-i-d="currentMediaID"
+    @click-next="toggleMedia('next')"
+    @click-previous="toggleMedia('previous')"
+  />
+  <DialogConfirmDelete v-model="isShowConfirmDelete" :is-loading-delete="isLoadingDelete" @confirm="deleteMedia(deleteMediaID)" />
 </template>

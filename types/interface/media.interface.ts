@@ -3,7 +3,9 @@ export interface Media {
   cdnUrl: string
   createdAt: string
   description: string | null
-  exif: string | null
+  exif: {
+    raw: string
+  }
   fileId: string
   fileName: string
   height: number
@@ -24,5 +26,24 @@ export interface Media {
   updatedAt: string | null
   uploadedBy: string | null
   url: string | null
-  width: number | null
+  width: number
+}
+
+export interface MediaMetadata {
+  name: string
+  size: string
+  resolution: string
+  mp: string
+  mode: string | null
+  device: string
+  focalLength: string
+  aperture: string
+  shutterSpeed: string
+  iso: string
+  datetime: string | null
+  location: string
+  url: string
+  id: number | null
+  title: string | null
+  description: string | null
 }
