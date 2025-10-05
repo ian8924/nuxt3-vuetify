@@ -14,6 +14,7 @@ const isLoadingDelete = ref(false)
 const isShowConfirmDelete = ref(false)
 const deleteMediaID = ref<number | null>(null)
 const inputSearch = ref('')
+const isShowFileUpload = ref(false)
 
 const list: Ref<Media[]> = ref([])
 const displayList = computed(() => list.value.filter(item => item.fileName.includes(inputSearch.value)))
@@ -111,7 +112,7 @@ definePageMeta({
           />
         </template>
         <template #right>
-          <v-btn rounded>
+          <v-btn rounded @click="isShowFileUpload = true">
             匯入照片 <PhPlus size="16" class="tw-ml-1" />
           </v-btn>
         </template>
@@ -152,6 +153,7 @@ definePageMeta({
       </template>
     </div>
   </v-main>
+  <!-- 照片預覽 Overlay -->
   <OverlayPic
     v-if="currentMediaID && overlay"
     v-model="overlay"
@@ -159,5 +161,13 @@ definePageMeta({
     @click-next="toggleMedia('next')"
     @click-previous="toggleMedia('previous')"
   />
+  <!-- 刪除確認視窗 -->
   <DialogConfirmDelete v-model="isShowConfirmDelete" :is-loading-delete="isLoadingDelete" @confirm="deleteMedia(deleteMediaID)" />
+  <!-- 新增照片視窗 -->
+  <DialogFileUpload
+    v-if="ALBUM"
+    v-model="isShowFileUpload"
+    :album-id="ALBUM.id"
+    @success="fetchAlbumPictures"
+  />
 </template>
