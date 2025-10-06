@@ -43,7 +43,7 @@ const logout = () => {
                   class="tw-cursor-pointer"
                 />
               </template>
-              <v-list width="150px">
+              <v-list width="150px" bg-color="white">
                 <v-list-item @click="logout">
                   <v-list-item-title>
                     <div class="tw-flex tw-items-center tw-gap-2">

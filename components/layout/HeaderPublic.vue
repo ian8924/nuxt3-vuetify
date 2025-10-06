@@ -1,14 +1,5 @@
 <script setup lang="ts">
-const userStore = useUserStore()
-const notifyStore = useNotifyStore()
 
-const { IS_LOGIN } = storeToRefs(userStore)
-
-const logout = () => {
-  userStore.LOGOUT()
-  // 这里可以添加你的登出逻辑
-  notifyStore.SHOW_NOTIFY({ message: '已登出', type: 'error' })
-}
 </script>
 
 <template>

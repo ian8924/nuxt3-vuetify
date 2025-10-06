@@ -145,6 +145,7 @@ definePageMeta({
               <span class="tw-font-medium tw-text-sm">網站可見度 </span>
               <v-select
                 v-model="form.visibility"
+                color="black"
                 variant="underlined"
                 placeholder="請選擇網站可見度"
                 hint="1"
