@@ -122,7 +122,7 @@ definePageMeta({
 </script>
 
 <template>
-  <v-main class="tw-flex tw-flex-col tw-min-h-[calc(100vh-70px)] tw-bg-[#fafafa] tw-relative ">
+  <v-main class="tw-flex tw-flex-col tw-min-h-[calc(100vh-70px)] tw-bg-[#fafafa] tw-relative">
     <div class="tw-sticky tw-top-[70px] tw-bg-[#fafafa] tw-z-10 tw-shadow-sm">
       <TitleBlockDefault>
         <template #left>
@@ -160,119 +160,119 @@ definePageMeta({
           </v-btn>
         </template>
       </TitleBlockDefault>
-      <v-card
-        :loading="isLoading"
-        :disabled="isLoading"
-        color="white"
-        class="tw-mx-[40px] tw-my-4 tw-min-h-[calc(100vh-250px)] tw-px-6 tw-pt-6 tw-pb-10 tw-flex tw-gap-6 tw-rounded-lg"
-      >
-        <div class="tw-flex tw-w-full tw-gap-6 tw-p-10">
-          <v-form ref="refForm" class="tw-w-[50%]">
-            <div class="tw-font-medium tw-text-xl tw-mb-6">基本資訊</div>
-            <div>
-              <span class="tw-font-medium tw-text-sm">相簿名稱</span>
-              <v-text-field
-                v-model="form.name"
+    </div>
+    <v-card
+      :loading="isLoading"
+      :disabled="isLoading"
+      color="white"
+      class="tw-mx-[40px] tw-my-4 tw-min-h-[calc(100vh-250px)] tw-px-6 tw-pt-6 tw-pb-10 tw-flex tw-gap-6 tw-rounded-lg"
+    >
+      <div class="tw-flex tw-w-full tw-gap-6 tw-p-10">
+        <v-form ref="refForm" class="tw-w-[50%]">
+          <div class="tw-font-medium tw-text-xl tw-mb-6">基本資訊</div>
+          <div>
+            <span class="tw-font-medium tw-text-sm">相簿名稱</span>
+            <v-text-field
+              v-model="form.name"
+              variant="underlined"
+              :rules="[
+                (v: string) => !!v || '必填',
+              ]"
+              placeholder="請輸入相簿名稱"
+              required
+            />
+          </div>
+          <div>
+            <span class="tw-font-medium tw-text-sm">描述</span>
+            <v-text-field
+              v-model="form.description"
+              variant="underlined"
+              placeholder="請輸入相簿描述"
+            />
+          </div>
+          <div>
+            <span class="tw-font-medium tw-text-sm">拍攝地點</span>
+            <v-text-field
+              v-model="form.location"
+              variant="underlined"
+              placeholder="請輸入拍攝地點"
+            />
+          </div>
+          <div>
+            <span class="tw-font-medium tw-text-sm">拍攝時間</span>
+            <div class="tw-flex tw-items-center tw-gap-4">
+              <v-date-input
+                v-model="form.startedAt"
+                input-format="yyyy/mm/dd"
+                prepend-icon=""
                 variant="underlined"
+                placeholder="請輸入拍攝時間"
+                required
                 :rules="[
                   (v: string) => !!v || '必填',
                 ]"
-                placeholder="請輸入相簿名稱"
+              />
+              <div class="tw-mb-3">
+                -
+              </div>
+              <v-date-input
+                v-model="form.endedAt"
+                input-format="yyyy/mm/dd"
+                prepend-icon=""
+                variant="underlined"
+                placeholder="請輸入拍攝時間"
                 required
+                :rules="[
+                  (v: string) => !!v || '必填',
+                  (v: string) => (new Date(v) >= new Date(form.startedAt)) || '結束時間需大於開始時間',
+                ]"
               />
             </div>
-            <div>
-              <span class="tw-font-medium tw-text-sm">描述</span>
-              <v-text-field
-                v-model="form.description"
-                variant="underlined"
-                placeholder="請輸入相簿描述"
-              />
-            </div>
-            <div>
-              <span class="tw-font-medium tw-text-sm">拍攝地點</span>
-              <v-text-field
-                v-model="form.location"
-                variant="underlined"
-                placeholder="請輸入拍攝地點"
-              />
-            </div>
-            <div>
-              <span class="tw-font-medium tw-text-sm">拍攝時間</span>
-              <div class="tw-flex tw-items-center tw-gap-4">
-                <v-date-input
-                  v-model="form.startedAt"
-                  input-format="yyyy/mm/dd"
-                  prepend-icon=""
-                  variant="underlined"
-                  placeholder="請輸入拍攝時間"
-                  required
-                  :rules="[
-                    (v: string) => !!v || '必填',
-                  ]"
-                />
-                <div class="tw-mb-3">
-                  -
-                </div>
-                <v-date-input
-                  v-model="form.endedAt"
-                  input-format="yyyy/mm/dd"
-                  prepend-icon=""
-                  variant="underlined"
-                  placeholder="請輸入拍攝時間"
-                  required
-                  :rules="[
-                    (v: string) => !!v || '必填',
-                    (v: string) => (new Date(v) >= new Date(form.startedAt)) || '結束時間需大於開始時間',
-                  ]"
-                />
-              </div>
-            </div>
-          </v-form>
-          <div class="tw-w-[50%]">
-            <div class="tw-font-medium tw-text-xl tw-mb-6">相簿封面</div>
-            <template v-if="localCoverImage">
-              <div class="tw-relotive">
-                <NuxtImg
-                  v-if="localCoverImage"
-                  :src="localCoverImage"
-                  class="tw-border tw-rounded-md tw-w-full"
-                  alt="Cover Image"
-                />
-                <v-btn
-                  size="small"
-                  color="error"
-                  class="tw-mt-2 tw-absolute tw-top-0 tw-right-0"
-                  @click="localCoverImage = ''; coverImageFile = []"
-                >
-                  變更封面
-                </v-btn>
-              </div>
-            </template>
-            <template v-else>
-              <v-file-upload
-                v-model="coverImageFile"
-                density="comfortable"
-                variant="comfortable"
-                @change="changeFile"
-              >
-                <template #icon>
-                  <PhImage size="54" class="tw-text-on-surface-20 tw-my-4" />
-                </template>
-                <template #title>
-                  <div class="tw-pb-8">
-                    拖曳圖片到此處上傳
-                    <div class="tw-text-sm tw-text-on-surface-60 tw-mt-1">
-                      支援 JPG、PNG 檔案
-                    </div>
-                  </div>
-                </template>
-              </v-file-upload>
-              <div class="tw-mt-2 tw-text-sm tw-text-on-surface-60">* 最佳封面比例 4:3</div>
-            </template>
           </div>
+        </v-form>
+        <div class="tw-w-[50%]">
+          <div class="tw-font-medium tw-text-xl tw-mb-6">相簿封面</div>
+          <template v-if="localCoverImage">
+            <div class="tw-relotive">
+              <NuxtImg
+                v-if="localCoverImage"
+                :src="localCoverImage"
+                class="tw-border tw-rounded-md tw-w-full"
+                alt="Cover Image"
+              />
+              <v-btn
+                size="small"
+                color="error"
+                class="tw-mt-2 tw-absolute tw-top-0 tw-right-0"
+                @click="localCoverImage = ''; coverImageFile = []"
+              >
+                變更封面
+              </v-btn>
+            </div>
+          </template>
+          <template v-else>
+            <v-file-upload
+              v-model="coverImageFile"
+              density="comfortable"
+              variant="comfortable"
+              @change="changeFile"
+            >
+              <template #icon>
+                <PhImage size="54" class="tw-text-on-surface-20 tw-my-4" />
+              </template>
+              <template #title>
+                <div class="tw-pb-8">
+                  拖曳圖片到此處上傳
+                  <div class="tw-text-sm tw-text-on-surface-60 tw-mt-1">
+                    支援 JPG、PNG 檔案
+                  </div>
+                </div>
+              </template>
+            </v-file-upload>
+            <div class="tw-mt-2 tw-text-sm tw-text-on-surface-60">* 最佳封面比例 4:3</div>
+          </template>
         </div>
-      </v-card>
-    </div>
+      </div>
+    </v-card>
   </v-main>
 </template>

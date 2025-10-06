@@ -2,6 +2,7 @@ export interface Album {
 
   activityId: number
   coverId: number
+  sharedPassword: string
   coverInfo: {
     fileId: string
     fileName: string
@@ -23,7 +24,6 @@ export interface Album {
   id: number
   location: string
   name: string
-  sharedPassword: string
   startedAt: string
   status: number
   updatedAt: string

@@ -8,6 +8,7 @@ import type { Album, ApiRequestCreateAlbum } from '~/types/interface/album.inter
 const router = useRouter()
 const userStore = useUserStore()
 const { USER } = storeToRefs(userStore)
+const notifyStore = useNotifyStore()
 
 const isLoading = ref(false)
 const isLoadingCreate = ref(false)
@@ -58,6 +59,7 @@ const createAlbum = async () => {
   const { success, data } = await createAlbumAPI(defaultData)
   isLoadingCreate.value = false
   if (success && data) {
+    notifyStore.SHOW_NOTIFY({ message: '相簿創建成功', type: 'success' })
     router.push(`/album/${data.id}/info`)
   }
 }

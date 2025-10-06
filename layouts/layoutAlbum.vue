@@ -101,6 +101,7 @@ onMounted(() => {
                   value="frame"
                   :active="route.name === 'album-id-frame'"
                   :to="`/album/${ALBUM?.id}/frame`"
+                  disabled
                 >
                   <template #prepend>
                     <div class="tw-py-2 tw-ml-[-20px] tw-font-semibold tw-text-gray-600">
@@ -111,6 +112,7 @@ onMounted(() => {
                 <v-list-item
                   key="SEO"
                   value="SEO"
+                  disabled
                 >
                   <template #prepend>
                     <div class="tw-py-2 tw-ml-[-20px] tw-font-semibold tw-text-gray-600">
