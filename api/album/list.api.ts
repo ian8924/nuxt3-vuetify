@@ -1,6 +1,6 @@
 import type { Album } from '@/types/interface/album.interface'
 import type { ApiResponseList } from '@/types/interface/api.interface'
-import type { Media } from '@/types/interface/media.interface'
+import type { ApiRequestListMedia, Media } from '@/types/interface/media.interface'
 
 /**
  * 取得使用者相簿列表
@@ -16,6 +16,6 @@ export const getUserAlbumsAPI = (userId: number) => {
  * @param params
  * @param { type String } userId 使用者ID
  */
-export const getAlbumPicturesAPI = (albumId: number) => {
-  return useFetchData.get<ApiResponseList<Media[]>>(`/v1/albums/${albumId}/media`, {}, 'album')
+export const getAlbumPicturesAPI = (albumId: number, params: ApiRequestListMedia) => {
+  return useFetchData.get<ApiResponseList<Media[]>>(`/v1/albums/${albumId}/media`, params, 'album')
 }

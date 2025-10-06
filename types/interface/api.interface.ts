@@ -1,3 +1,10 @@
+export interface ApiRequestPagination {
+  page?: number
+  size?: number
+  sort?: string
+  order?: 'asc' | 'desc'
+}
+
 export interface ApiResponseList<T> {
   content: T
   empty: boolean
@@ -16,6 +23,8 @@ export interface ApiResponseList<T> {
     offset: number
   }
   size: number
+  totalElements: number
+  totalPages: number
 }
 
 export interface ApiResponseSingle<T> {

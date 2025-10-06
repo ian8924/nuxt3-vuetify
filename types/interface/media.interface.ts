@@ -1,3 +1,5 @@
+import type { ApiRequestPagination } from './api.interface'
+
 export interface Media {
   albumId: number
   cdnUrl: string
@@ -47,3 +49,5 @@ export interface MediaMetadata {
   title: string | null
   description: string | null
 }
+
+export interface ApiRequestListMedia extends ApiRequestPagination { keyword?: string }

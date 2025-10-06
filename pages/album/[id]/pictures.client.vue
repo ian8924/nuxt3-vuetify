@@ -2,6 +2,7 @@
 import { getAlbumPicturesAPI } from '@/api/album/list.api'
 import type { Media } from '@/types/interface/media.interface'
 import { PhArrowLeft, PhArrowSquareOut, PhPlus, PhSelection, PhTrash } from '@phosphor-icons/vue'
+import { useDebounceFn } from '@vueuse/core'
 import { deleteMediaByIdAPI } from '~/api/media/info.api'
 
 const albumStore = useAlbumStore()
@@ -10,7 +11,9 @@ const { ALBUM, ALBUM_PUBLIC_LINK_WEBSITE } = storeToRefs(albumStore)
 
 const router = useRouter()
 const isLoading = ref(false)
+const isLoadingMore = ref(false)
 const isLoadingDelete = ref(false)
+
 const isShowConfirmDelete = ref(false)
 const inputSearch = ref('')
 const isShowFileUpload = ref(false)
@@ -19,7 +22,11 @@ const selectMode = ref(false)
 const selectMediaIDs = ref<number[]>([])
 
 const list: Ref<Media[]> = ref([])
-const displayList = computed(() => list.value.filter(item => item.fileName.includes(inputSearch.value)))
+const displayList = computed(() => list.value)
+
+const totalMedias: Ref<number> = ref(0)
+const currentPage = ref(1)
+const totalPages: Ref<number> = ref(0)
 
 // Overlay 控制
 const currentMediaID = ref<number | null>(null)
@@ -34,12 +41,37 @@ const fetchAlbumPictures = async () => {
     return
   isLoading.value = true
   list.value = []
-  const { success, data } = await getAlbumPicturesAPI(ALBUM.value?.id)
+  currentPage.value = 1
+  const request = { page: 0, size: 16, keyword: inputSearch.value }
+  const { success, data } = await getAlbumPicturesAPI(ALBUM.value?.id, request)
   isLoading.value = false
   if (success) {
+    totalMedias.value = data?.totalElements || 0
+    totalPages.value = data?.totalPages || 0
     list.value = data?.content || []
   }
 }
+
+const fetchMorePictures = async () => {
+  if (!ALBUM.value?.id)
+    return
+  if (totalPages.value === currentPage.value)
+    return
+  currentPage.value += 1
+  isLoadingMore.value = true
+  const request = { page: currentPage.value - 1, size: 16, keyword: inputSearch.value }
+  const { success, data } = await getAlbumPicturesAPI(ALBUM.value?.id, request)
+  isLoadingMore.value = false
+  if (success) {
+    totalMedias.value = data?.totalElements || 0
+    totalPages.value = data?.totalPages || 0
+    list.value = [...list.value, ...(data?.content || [])]
+  }
+}
+
+const debouncedSearch = useDebounceFn(() => {
+  fetchAlbumPictures()
+}, 1000)
 
 const toggleMedia = (direction: 'next' | 'previous') => {
   if (!currentMediaID.value && displayList.value.length === 0)
@@ -118,6 +150,9 @@ definePageMeta({
             </div>
           </div>
         </template>
+        <template #right>
+          <div class="tw-font-medium tw-text-sm tw-text-gray-600">共 {{ totalMedias }} 張照片</div>
+        </template>
       </TitleBlockDefault>
       <TitleBlockDefault>
         <template #left>
@@ -131,6 +166,7 @@ definePageMeta({
             flat
             placeholder="搜尋名稱"
             variant="solo"
+            @input="debouncedSearch()"
           />
         </template>
         <template #right>
@@ -223,6 +259,16 @@ definePageMeta({
               />
             </v-col>
           </v-row>
+          <div v-if="currentPage < totalPages" class="tw-text-center tw-my-6">
+            <v-btn
+              :loading="isLoadingMore"
+              rounded
+              color="primary"
+              @click="fetchMorePictures"
+            >
+              載入更多
+            </v-btn>
+          </div>
         </template>
         <template v-else>
           <NoDataDefault />
