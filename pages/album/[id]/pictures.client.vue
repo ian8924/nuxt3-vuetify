@@ -1,20 +1,22 @@
 <script setup lang="ts">
 import { getAlbumPicturesAPI } from '@/api/album/list.api'
 import type { Media } from '@/types/interface/media.interface'
-import { PhArrowLeft, PhPlus } from '@phosphor-icons/vue'
+import { PhArrowLeft, PhArrowSquareOut, PhPlus, PhSelection, PhTrash } from '@phosphor-icons/vue'
 import { deleteMediaByIdAPI } from '~/api/media/info.api'
 
 const albumStore = useAlbumStore()
 const notifyStore = useNotifyStore()
-const { ALBUM } = storeToRefs(albumStore)
+const { ALBUM, ALBUM_PUBLIC_LINK_WEBSITE } = storeToRefs(albumStore)
 
 const router = useRouter()
 const isLoading = ref(false)
 const isLoadingDelete = ref(false)
 const isShowConfirmDelete = ref(false)
-const deleteMediaID = ref<number | null>(null)
 const inputSearch = ref('')
 const isShowFileUpload = ref(false)
+
+const selectMode = ref(false)
+const selectMediaIDs = ref<number[]>([])
 
 const list: Ref<Media[]> = ref([])
 const displayList = computed(() => list.value.filter(item => item.fileName.includes(inputSearch.value)))
@@ -55,23 +57,42 @@ const toggleMedia = (direction: 'next' | 'previous') => {
   }
 }
 
-const openDeleteDialog = (id: number) => {
+const openDeleteDialog = (ids: number[]) => {
+  selectMediaIDs.value = ids
   isShowConfirmDelete.value = true
-  deleteMediaID.value = id
 }
 
-const deleteMedia = async (id: number | null) => {
-  if (id === null)
-    return
-  isLoadingDelete.value = true
-  const { success } = await deleteMediaByIdAPI(id)
-  isLoadingDelete.value = false
-  if (success) {
-    notifyStore.SHOW_NOTIFY({ message: '刪除成功', type: 'success' })
-    await fetchAlbumPictures()
-    isShowConfirmDelete.value = false
-    deleteMediaID.value = null
+const selectMedia = (id: number) => {
+  console.log('id', id)
+  if (selectMediaIDs.value.includes(id)) {
+    selectMediaIDs.value = selectMediaIDs.value.filter(item => item !== id)
+  } else {
+    selectMediaIDs.value.push(id)
   }
+}
+
+const deleteMedia = async (ids: number[] | null) => {
+  if (ids?.length === 0)
+    return
+
+  const promiseList: any[] = []
+
+  ids?.forEach((id) => {
+    promiseList.push(deleteMediaByIdAPI(id))
+  })
+
+  isLoadingDelete.value = true
+  await Promise.all(promiseList).then(() => {
+    notifyStore.SHOW_NOTIFY({ message: '刪除成功', type: 'success' })
+    fetchAlbumPictures()
+  }).finally(() => {
+    isShowConfirmDelete.value = false
+    selectMediaIDs.value = []
+  })
+}
+
+const openLink = () => {
+  window.open(ALBUM_PUBLIC_LINK_WEBSITE.value, '_blank')
 }
 
 onMounted(() => {
@@ -112,9 +133,55 @@ definePageMeta({
           />
         </template>
         <template #right>
-          <v-btn rounded @click="isShowFileUpload = true">
-            匯入照片 <PhPlus size="16" class="tw-ml-1" />
-          </v-btn>
+          <div v-if="!selectMode" class="tw-flex tw-items-center tw-gap-3">
+            <v-btn
+              rounded
+              color="transparent"
+              class="tw-font-medium tw-text-sm"
+              @click="selectMode = true"
+            >
+              批量處理
+              <PhSelection size="16" class="tw-ml-1" />
+            </v-btn>
+            <v-divider class="tw-my-auto" vertical length="10px" />
+            <v-btn
+              rounded
+              color="transparent"
+              class="tw-font-medium tw-text-sm"
+              @click="openLink"
+            >
+              查看網站
+              <PhArrowSquareOut size="16" class="tw-ml-1" />
+            </v-btn>
+            <v-btn rounded @click="isShowFileUpload = true">
+              匯入照片 <PhPlus size="16" class="tw-ml-1" />
+            </v-btn>
+          </div>
+          <div v-else class="tw-flex tw-items-center tw-gap-3">
+            <span class="tw-font-medium tw-text-sm tw-text-on-background">已選擇 {{ selectMediaIDs.length }} 張照片</span>
+            <v-divider class="tw-my-auto" vertical length="10px" />
+            <v-btn
+              rounded
+              class="tw-font-medium tw-text-sm"
+              :disabled="selectMediaIDs.length === 0"
+              @click="openDeleteDialog(selectMediaIDs)"
+            >
+              刪除
+              <PhTrash size="16" class="tw-ml-1" />
+            </v-btn>
+            <v-divider class="tw-my-auto" vertical length="10px" />
+            <v-btn
+              rounded
+              color="transparent"
+              class="tw-font-medium tw-text-sm"
+              @click="
+                selectMode = false;
+                selectMediaIDs = [];
+              "
+            >
+              取消
+            </v-btn>
+          </div>
         </template>
       </TitleBlockDefault>
     </div>
@@ -144,7 +211,14 @@ definePageMeta({
             sm="6"
             md="3"
           >
-            <CardPic :item="item" :open-overlay="openOverlay" :open-delete-dialog="openDeleteDialog" />
+            <CardPic
+              :item="item"
+              :open-overlay="openOverlay"
+              :open-delete-dialog="v => openDeleteDialog([v])"
+              :select-mode="selectMode"
+              :select-media-i-ds="selectMediaIDs"
+              @toggle-select="selectMedia(item.id)"
+            />
           </v-col>
         </v-row>
       </template>
@@ -162,7 +236,7 @@ definePageMeta({
     @click-previous="toggleMedia('previous')"
   />
   <!-- 刪除確認視窗 -->
-  <DialogConfirmDelete v-model="isShowConfirmDelete" :is-loading-delete="isLoadingDelete" @confirm="deleteMedia(deleteMediaID)" />
+  <DialogConfirmDelete v-model="isShowConfirmDelete" :is-loading-delete="isLoadingDelete" @confirm="deleteMedia(selectMediaIDs)" />
   <!-- 新增照片視窗 -->
   <DialogUploadMedia
     v-if="ALBUM"

@@ -138,7 +138,7 @@ definePageMeta({
             <span>
               相簿容量 ？ / 1500 張
             </span>
-            <v-divider class=" tw-my-auto" vertical length="10px" />
+            <v-divider class="tw-my-auto" vertical length="10px" />
             <span>
               相簿大小：0 MB
             </span>

@@ -4,8 +4,15 @@ import { ref } from 'vue'
 import type { Album } from '~/types/interface/album.interface'
 
 export const useAlbumStore = defineStore('album', () => {
+  const runtimeConfig = useRuntimeConfig()
+  const baseURL = runtimeConfig.public.baseURL
+
   const isloading = ref(false)
   const ALBUM: Ref<Album | null> = ref(null)
+
+  const ALBUM_PUBLIC_LINK_WEBSITE = computed(() =>
+    `${baseURL}/public/album/${ALBUM?.value?.id}`
+  )
 
   const GET_ALBUM_INFO = async (albumId: number) => {
     if (isloading.value)
@@ -18,5 +25,5 @@ export const useAlbumStore = defineStore('album', () => {
     }
   }
 
-  return { ALBUM, GET_ALBUM_INFO }
+  return { ALBUM, ALBUM_PUBLIC_LINK_WEBSITE, GET_ALBUM_INFO }
 })

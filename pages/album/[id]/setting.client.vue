@@ -6,16 +6,12 @@ import copy from 'copy-to-clipboard'
 const router = useRouter()
 const route = useRoute()
 
-const runtimeConfig = useRuntimeConfig()
-const baseURL = runtimeConfig.public.baseURL
-
 const albumStore = useAlbumStore()
-const { ALBUM } = storeToRefs(albumStore)
+const { ALBUM, ALBUM_PUBLIC_LINK_WEBSITE } = storeToRefs(albumStore)
 const notifyStore = useNotifyStore()
 
 const refForm = ref()
 const isLoading = ref(false)
-const linkWebsite = ref(`${baseURL}/public/album/${route.params.id}`)
 
 const form = ref({
   visibility: ALBUM.value?.visibility || 0,
@@ -61,11 +57,11 @@ const save = async () => {
 }
 
 const openLink = () => {
-  window.open(linkWebsite.value, '_blank')
+  window.open(ALBUM_PUBLIC_LINK_WEBSITE.value, '_blank')
 }
 
 const copyLink = () => {
-  copy(linkWebsite.value)
+  copy(ALBUM_PUBLIC_LINK_WEBSITE.value)
   notifyStore.SHOW_NOTIFY({ message: '已複製連結', type: 'success' })
 }
 
@@ -130,7 +126,7 @@ definePageMeta({
             <div>
               <span class="tw-font-medium tw-text-sm">公開網址</span>
               <v-text-field
-                v-model="linkWebsite"
+                v-model="ALBUM_PUBLIC_LINK_WEBSITE"
                 class="tw-border-b tw-border-[#565454bb] tw-rounded"
                 variant="underlined"
                 hide-details
