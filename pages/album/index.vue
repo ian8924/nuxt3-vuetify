@@ -42,7 +42,7 @@ const fetchAlbumList = async () => {
   const { success, data } = await getUserAlbumsAPI(USER.value?.id)
   isLoading.value = false
   if (success) {
-    list.value = data?.content.reverse() || []
+    list.value = data?.content || []
   }
 }
 

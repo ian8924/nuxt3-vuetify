@@ -14,7 +14,7 @@ const showSubMenuToggle = defineModel('showSubMenuToggle', {
 const mainMenu = [
   { title: '首页', icon: PhHouse, path: '/dashboard', enable: true },
   { title: '相簿', icon: PhImages, path: '/album', enable: true },
-  { title: '活動', icon: PhTicket, path: '/activity', enable: true },
+  { title: '活動', icon: PhTicket, path: '/activity', enable: false },
   { title: '錢包', icon: PhWallet, path: '/wallet', enable: false },
   { title: '設定', icon: PhSlidersHorizontal, path: '/setting', enable: false },
   { title: '會員', icon: PhUser, path: '/profile', enable: false }

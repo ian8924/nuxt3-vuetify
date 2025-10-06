@@ -168,7 +168,7 @@ definePageMeta({
       class="tw-mx-[40px] tw-my-4 tw-min-h-[calc(100vh-250px)] tw-px-6 tw-pt-6 tw-pb-10 tw-flex tw-gap-6 tw-rounded-lg"
     >
       <div class="tw-flex tw-w-full tw-gap-6 tw-p-10">
-        <v-form ref="refForm" class="tw-w-[50%]">
+        <v-form ref="refForm" class="tw-w-[50%] tw-px-2">
           <div class="tw-font-medium tw-text-xl tw-mb-6">基本資訊</div>
           <div>
             <span class="tw-font-medium tw-text-sm">相簿名稱</span>
@@ -230,7 +230,7 @@ definePageMeta({
             </div>
           </div>
         </v-form>
-        <div class="tw-w-[50%]">
+        <div class="tw-w-[50%] tw-px-2">
           <div class="tw-font-medium tw-text-xl tw-mb-6">相簿封面</div>
           <template v-if="localCoverImage">
             <div class="tw-relotive">
