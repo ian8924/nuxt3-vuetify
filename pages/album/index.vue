@@ -39,7 +39,8 @@ const fetchAlbumList = async () => {
   if (!USER.value?.id)
     return
   isLoading.value = true
-  const { success, data } = await getUserAlbumsAPI(USER.value?.id)
+  const request = { page: 0, size: 1000 }
+  const { success, data } = await getUserAlbumsAPI(USER.value?.id, request)
   isLoading.value = false
   if (success) {
     list.value = data?.content || []

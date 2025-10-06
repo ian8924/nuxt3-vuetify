@@ -1,3 +1,5 @@
+import type { ApiRequestPagination } from './api.interface'
+
 export interface Album {
 
   activityId: number
@@ -40,3 +42,5 @@ export interface ApiRequestCreateAlbum {
   endedAt: string
   sharedPassword?: string
 }
+
+export interface ApiRequestListAlbum extends ApiRequestPagination { keyword?: string }

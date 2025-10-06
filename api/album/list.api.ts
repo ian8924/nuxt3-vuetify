@@ -7,8 +7,8 @@ import type { ApiRequestListMedia, Media } from '@/types/interface/media.interfa
  * @param params
  * @param { type String } userId 使用者ID
  */
-export const getUserAlbumsAPI = (userId: number) => {
-  return useFetchData.get<ApiResponseList<Album[]>>(`/v1/albums/user/${userId}`, {}, 'album')
+export const getUserAlbumsAPI = (userId: number, params: any) => {
+  return useFetchData.get<ApiResponseList<Album[]>>(`/v1/albums/user/${userId}`, params, 'album')
 }
 
 /**
