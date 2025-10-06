@@ -69,8 +69,8 @@ const updateCoverImage = async () => {
 }
 
 const save = async () => {
-  const isValid = refForm.value?.validate()
-  if (!isValid) {
+  const { valid } = await refForm.value?.validate()
+  if (!valid) {
     return
   }
 
@@ -183,11 +183,7 @@ definePageMeta({
               <v-text-field
                 v-model="form.description"
                 variant="underlined"
-                :rules="[
-                  (v: string) => !!v || '必填',
-                ]"
                 placeholder="請輸入相簿描述"
-                required
               />
             </div>
             <div>
@@ -195,11 +191,7 @@ definePageMeta({
               <v-text-field
                 v-model="form.location"
                 variant="underlined"
-                :rules="[
-                  (v: string) => !!v || '必填',
-                ]"
                 placeholder="請輸入拍攝地點"
-                required
               />
             </div>
             <div>
