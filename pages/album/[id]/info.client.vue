@@ -68,6 +68,25 @@ const updateCoverImage = async () => {
   }
 }
 
+const fetchAlbumInfo = async () => {
+  const albumID = Number(route.params.id)
+  if (!albumID)
+    return
+
+  await albumStore.GET_ALBUM_INFO(albumID)
+
+  console.log('ALBUM', ALBUM.value)
+
+  form.value = {
+    name: ALBUM.value?.name || '',
+    description: ALBUM.value?.description || '',
+    location: ALBUM.value?.location || '',
+    startedAt: ALBUM.value?.startedAt || '',
+    endedAt: ALBUM.value?.endedAt || ''
+  }
+  localCoverImage.value = ALBUM.value?.coverPhotoUrl || ''
+}
+
 const save = async () => {
   const { valid } = await refForm.value?.validate()
   if (!valid) {
@@ -84,28 +103,12 @@ const save = async () => {
   isLoading.value = true
   await Promise.all(promiseList).then(() => {
     notifyStore.SHOW_NOTIFY({ message: '儲存成功', type: 'success' })
+    fetchAlbumInfo()
   }).catch(() => {
     notifyStore.SHOW_NOTIFY({ message: '儲存失敗，請稍後再試', type: 'error' })
   }).finally(() => {
     isLoading.value = false
   })
-}
-
-const fetchAlbumInfo = async () => {
-  const albumID = Number(route.params.id)
-  if (!albumID)
-    return
-
-  await albumStore.GET_ALBUM_INFO(albumID)
-
-  form.value = {
-    name: ALBUM.value?.name || '',
-    description: ALBUM.value?.description || '',
-    location: ALBUM.value?.location || '',
-    startedAt: ALBUM.value?.startedAt || '',
-    endedAt: ALBUM.value?.endedAt || ''
-  }
-  localCoverImage.value = ALBUM.value?.coverPhotoUrl || ''
 }
 
 onMounted(() => {
