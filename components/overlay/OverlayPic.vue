@@ -2,6 +2,7 @@
 import { getMediaByIdAPI } from '@/api/media/info.api'
 import type { Media, MediaMetadata } from '@/types/interface/media.interface'
 import { PhCalendarDots, PhCamera, PhCaretLeft, PhCaretRight, PhCube, PhImage, PhMapPinLine, PhX } from '@phosphor-icons/vue'
+import dayjs from 'dayjs'
 
 const props = defineProps({
   mediaID: {
@@ -13,7 +14,6 @@ const props = defineProps({
 const emits = defineEmits(['clickPrevious', 'clickNext', 'update:modelValue'])
 
 const { getImageMetadata } = useImgMeta()
-const { formatDateTime, formatDate } = useFormatTime()
 
 const showOverlay = defineModel('modelValue', {
   type: Boolean,
@@ -122,9 +122,9 @@ onMounted(() => {
                 <PhCalendarDots weight="bold" :size="24" />
               </div>
               <div v-if="currentMedia?.createdAt">
-                <div class="tw-text-primary tw-text-base tw-text-wrap tw-w-[250px] tw-break-words">{{ formatDate(currentMedia?.createdAt) }}</div>
+                <div class="tw-text-primary tw-text-base tw-text-wrap tw-w-[250px] tw-break-words">{{ dayjs(currentMedia?.createdAt).format('YYYY/MM/DD') }}</div>
                 <div class="tw-text-on-surface-80 tw-text-sm tw-mt-1">
-                  {{ formatDateTime(currentMedia?.createdAt) }} GMT+08:00
+                  {{ dayjs(currentMedia?.createdAt).format('dddd A hh:mm') }} GMT+08:00
                 </div>
               </div>
             </div>

@@ -58,69 +58,67 @@ const confirm = async () => {
 </script>
 
 <template>
-  <div class="pa-4 text-center">
-    <v-dialog
-      v-model="dialog"
-      max-width="500"
-      :persistent="isLoadingUpload"
+  <v-dialog
+    v-model="dialog"
+    max-width="500"
+    :persistent="isLoadingUpload"
+  >
+    <v-card
+      title="上傳照片"
     >
-      <v-card
-        title="上傳照片"
-      >
-        <div class="tw-my-4 tw-px-6 tw-py-8 tw-border-2 tw-border-dashed tw-border-gray-300 tw-rounded-md">
-          <v-file-upload
-            v-model="files"
-            class="tw-mx-6"
-            density="comfortable"
-            title="點擊或拖曳檔案到此處上傳"
-            variant="comfortable"
-            multiple
-            accept="image/*"
-            show-size
-            clearable
-            :disabled="isLoadingUpload"
-          >
-            <template #item="{ props: itemProps, file }">
-              <v-file-upload-item
-                v-bind="itemProps"
-                lines="one"
-              >
-                <template #prepend>
-                  <v-avatar size="100" rounded></v-avatar>
-                </template>
+      <div class="tw-my-4 tw-px-6 tw-py-8 tw-border-2 tw-border-dashed tw-border-gray-300 tw-rounded-md">
+        <v-file-upload
+          v-model="files"
+          class="tw-mx-6"
+          density="comfortable"
+          title="點擊或拖曳檔案到此處上傳"
+          variant="comfortable"
+          multiple
+          accept="image/*"
+          show-size
+          clearable
+          :disabled="isLoadingUpload"
+        >
+          <template #item="{ props: itemProps, file }">
+            <v-file-upload-item
+              v-bind="itemProps"
+              lines="one"
+            >
+              <template #prepend>
+                <v-avatar size="100" rounded></v-avatar>
+              </template>
 
-                <template #clear="{ props: clearProps }">
-                  <div v-if="successFileNames.includes(file.name)" class="tw-text-white tw-flex tw-items-center">
-                    <PhCheckCircle size="24" color="green" />
-                  </div>
-                  <v-btn v-if="!isLoadingUpload" color="primary" v-bind="clearProps"></v-btn>
-                </template>
-              </v-file-upload-item>
-            </template>
-          </v-file-upload>
-        </div>
+              <template #clear="{ props: clearProps }">
+                <div v-if="successFileNames.includes(file.name)" class="tw-text-white tw-flex tw-items-center">
+                  <PhCheckCircle size="24" color="green" />
+                </div>
+                <v-btn v-if="!isLoadingUpload" color="primary" v-bind="clearProps"></v-btn>
+              </template>
+            </v-file-upload-item>
+          </template>
+        </v-file-upload>
+      </div>
 
-        <v-divider></v-divider>
+      <v-divider></v-divider>
 
-        <v-card-actions>
-          <v-spacer></v-spacer>
+      <v-card-actions>
+        <v-spacer></v-spacer>
 
-          <v-btn
-            text="取消"
-            variant="plain"
-            @click="dialog = false"
-          />
+        <v-btn
+          text="取消"
+          variant="plain"
+          @click="dialog = false"
+        />
 
-          <v-btn
-            :loading="isLoadingUpload"
-            :disabled="files.length === 0 || isLoadingUpload"
-            color="primary"
-            text="確定上傳"
-            variant="tonal"
-            @click="confirm"
-          />
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </div>
+        <v-btn
+          :loading="isLoadingUpload"
+          :disabled="files.length === 0 || isLoadingUpload"
+          color="primary"
+          text="確定上傳"
+          variant="tonal"
+          @click="confirm"
+        />
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>

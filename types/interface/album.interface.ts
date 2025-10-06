@@ -29,3 +29,14 @@ export interface Album {
   updatedAt: string
   visibility: number
 }
+
+export interface ApiRequestCreateAlbum {
+  name: string
+  description: string
+  activityId?: number
+  visibility: number
+  location?: string
+  startedAt: string
+  endedAt: string
+  sharedPassword?: string
+}

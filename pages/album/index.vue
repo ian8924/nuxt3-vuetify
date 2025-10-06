@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import NoDataDefault from '@/components/noData/NoDataDefault.vue'
-import { PhImages, PhPlus } from '@phosphor-icons/vue'
-
+import { createAlbumAPI } from '@/api/album/info.api'
 import { getUserAlbumsAPI } from '@/api/album/list.api'
-import type { Album } from '~/types/interface/album.interface'
+import { PhImages, PhPlus } from '@phosphor-icons/vue'
+import dayjs from 'dayjs'
+import type { Album, ApiRequestCreateAlbum } from '~/types/interface/album.interface'
 
+const router = useRouter()
 const userStore = useUserStore()
 const { USER } = storeToRefs(userStore)
 
 const isLoading = ref(false)
-const { formatDate } = useFormatTime()
+const isLoadingCreate = ref(false)
 
 const activeTab = ref('all')
 const inputSearch = ref('')
@@ -41,6 +42,23 @@ const fetchAlbumList = async () => {
   isLoading.value = false
   if (success) {
     list.value = data?.content.reverse() || []
+  }
+}
+
+const createAlbum = async () => {
+  const nowDate = dayjs().format('YYYY/MM/DD')
+  const defaultData: ApiRequestCreateAlbum = {
+    name: `${dayjs().format('YYYY/MM/DD HH:mm')} 樂見的相簿`,
+    description: '',
+    startedAt: nowDate,
+    endedAt: nowDate,
+    visibility: 1
+  }
+  isLoadingCreate.value = true
+  const { success, data } = await createAlbumAPI(defaultData)
+  isLoadingCreate.value = false
+  if (success && data) {
+    router.push(`/album/${data.id}/info`)
   }
 }
 
@@ -97,7 +115,7 @@ definePageMeta({
           </div>
         </template>
         <template #right>
-          <v-btn rounded>
+          <v-btn :loading="isLoadingCreate" rounded @click="createAlbum">
             新建相簿 <PhPlus size="16" class="tw-ml-1" />
           </v-btn>
         </template>
@@ -133,7 +151,7 @@ definePageMeta({
           >
             <v-card
               color="white"
-              class="tw-p-6 tw-rounded-lg tw-mb-6 tw-min-h-[278px] tw-cursor-pointer hover:tw-shadow-lg"
+              class="tw-p-6 tw-rounded-lg tw-mb-6 tw-min-h-[240px] tw-cursor-pointer hover:tw-shadow-lg"
               :to="`/album/${item.id}/pictures`"
             >
               <!-- <div
@@ -160,8 +178,8 @@ definePageMeta({
                     </div>
                   </template>
                 </v-tooltip>
-                <div class="tw-mt-2 tw-text-sm tw-text-on-surface tw-line-clamp-2 tw-break-words tw-h-[48px]">{{ item.description }}</div>
-                <div class="tw-mt-1 tw-text-sm tw-text-on-surface-80 tw-truncate">{{ formatDate(item.startedAt) }} - {{ formatDate(item.endedAt) }}</div>
+                <div class="tw-mt-2 tw-text-sm tw-text-on-surface tw-line-clamp-1 tw-break-words tw-h-[24px]">{{ item.description }}</div>
+                <div class="tw-mt-1 tw-text-sm tw-text-on-surface-80 tw-truncate">{{ dayjs(item.startedAt).format('YYYY/MM/DD') }} - {{ dayjs(item.endedAt).format('YYYY/MM/DD') }}</div>
               </div>
             </v-card>
           </v-col>
