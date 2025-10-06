@@ -160,12 +160,12 @@ definePageMeta({
               >
                 <template #message>
                   <div class="tw-flex tw-text-xs tw-items-center tw-gap-1">
-                    <PhQuestion size="16" /> 決定訪客是否可已瀏覽您的相簿
+                    <PhQuestion size="16" /> 決定訪客是否可以瀏覽您的相簿
                   </div>
                 </template>
               </v-select>
             </div>
-            <div v-if="form.visibility === 0">
+            <div>
               <span class="tw-font-medium tw-text-sm">密碼</span>
               <v-text-field
                 v-model="form.sharedPassword"
