@@ -84,6 +84,9 @@ definePageMeta({
             相簿列表
           </div>
         </template>
+        <template #right>
+          <div class="tw-font-medium tw-text-sm tw-text-gray-600">共 {{ totalAlbums }} 個相簿</div>
+        </template>
       </TitleBlockDefault>
       <TitleBlockDefault>
         <template #left>
