@@ -33,6 +33,7 @@ const fetchAlbumPictures = async () => {
   if (!ALBUM.value?.id)
     return
   isLoading.value = true
+  list.value = []
   const { success, data } = await getAlbumPicturesAPI(ALBUM.value?.id)
   isLoading.value = false
   if (success) {
@@ -63,7 +64,6 @@ const openDeleteDialog = (ids: number[]) => {
 }
 
 const selectMedia = (id: number) => {
-  console.log('id', id)
   if (selectMediaIDs.value.includes(id)) {
     selectMediaIDs.value = selectMediaIDs.value.filter(item => item !== id)
   } else {
@@ -86,6 +86,7 @@ const deleteMedia = async (ids: number[] | null) => {
     notifyStore.SHOW_NOTIFY({ message: '刪除成功', type: 'success' })
     fetchAlbumPictures()
   }).finally(() => {
+    isLoadingDelete.value = false
     isShowConfirmDelete.value = false
     selectMediaIDs.value = []
   })
@@ -202,28 +203,30 @@ definePageMeta({
           </v-col>
         </v-row>
       </template>
-      <template v-if="list.length > 0">
-        <v-row>
-          <v-col
-            v-for="item in displayList"
-            :key="item.id"
-            cols="12"
-            sm="6"
-            md="3"
-          >
-            <CardPic
-              :item="item"
-              :open-overlay="openOverlay"
-              :open-delete-dialog="v => openDeleteDialog([v])"
-              :select-mode="selectMode"
-              :select-media-i-ds="selectMediaIDs"
-              @toggle-select="selectMedia(item.id)"
-            />
-          </v-col>
-        </v-row>
-      </template>
       <template v-else>
-        <NoDataDefault />
+        <template v-if="list.length > 0">
+          <v-row>
+            <v-col
+              v-for="item in displayList"
+              :key="item.id"
+              cols="12"
+              sm="6"
+              md="3"
+            >
+              <CardPic
+                :item="item"
+                :open-overlay="openOverlay"
+                :open-delete-dialog="v => openDeleteDialog([v])"
+                :select-mode="selectMode"
+                :select-media-i-ds="selectMediaIDs"
+                @toggle-select="selectMedia(item.id)"
+              />
+            </v-col>
+          </v-row>
+        </template>
+        <template v-else>
+          <NoDataDefault />
+        </template>
       </template>
     </div>
   </v-main>
