@@ -158,7 +158,7 @@ definePageMeta({
                 <nuxt-img
                   :src="item.cdnUrl"
                   fit="fill"
-                  class="sm:tw-rounded-lg tw-h-full tw-mx-auto tw-absolute tw-inset-0"
+                  class="tw-h-full tw-mx-auto tw-absolute tw-inset-0"
                 />
               </v-card>
             </v-col>

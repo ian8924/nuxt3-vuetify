@@ -32,7 +32,7 @@ const showOverlay = defineModel('modelValue', {
         <nuxt-img
           :src="props.imgUrl"
           fit="contain"
-          class="tw-rounded-lg tw-min-w-[50%] tw-max-w-full tw-max-h-full sm:tw-max-w-[90vw] sm:tw-max-h-[90vh]"
+          class="tw-min-w-[50%] tw-max-w-full tw-max-h-full sm:tw-max-w-[90vw] sm:tw-max-h-[90vh]"
         />
 
         <div class="tw-absolute tw-top-[calc(50%-12px)] tw-right-4">
