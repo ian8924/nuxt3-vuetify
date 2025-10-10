@@ -121,10 +121,10 @@ definePageMeta({
     >
       <div class="tw-flex tw-w-full tw-gap-6 tw-p-10">
         <v-form ref="refForm" class="tw-w-[50%]">
-          <div class="tw-font-medium tw-text-xl tw-mb-6">基本設定</div>
+          <div class="tw-font-medium tw-text-xl tw-mb-6">基本設定 </div>
           <div class="tw-flex tw-flex-col tw-gap-4">
             <div>
-              <span class="tw-font-medium tw-text-sm">公開網址</span>
+              <span class="tw-font-medium tw-text-sm">公開網址 </span>
               <v-text-field
                 v-model="ALBUM_PUBLIC_LINK_WEBSITE"
                 class="tw-border-b tw-border-[#565454bb] tw-rounded"
@@ -156,6 +156,9 @@ definePageMeta({
                   {
                     value: 0, text: '隱私',
                   },
+                  {
+                    value: 2, text: '不公開（密碼保護）',
+                  },
                 ]"
               >
                 <template #message>
@@ -165,7 +168,7 @@ definePageMeta({
                 </template>
               </v-select>
             </div>
-            <div>
+            <div v-if="form.visibility === 2">
               <span class="tw-font-medium tw-text-sm">密碼</span>
               <v-text-field
                 v-model="form.sharedPassword"
@@ -173,6 +176,10 @@ definePageMeta({
                 placeholder="請輸入瀏覽密碼"
                 hint="1"
                 persistent-hint
+                required
+                :rules="[
+                  (v: string) => !!v || '必填',
+                ]"
               >
                 <template #message>
                   <div class="tw-flex tw-text-xs tw-items-center tw-gap-1">
