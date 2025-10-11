@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { createAlbumAPI } from '@/api/album/info.api'
 import { getUserAlbumsAPI } from '@/api/album/list.api'
-import { PhImages, PhPlus } from '@phosphor-icons/vue'
+import { PhPlus, PhTicket } from '@phosphor-icons/vue'
 import dayjs from 'dayjs'
 import type { Album, ApiRequestCreateAlbum } from '~/types/interface/album.interface'
 
@@ -61,7 +61,7 @@ const createAlbum = async () => {
   isLoadingCreate.value = false
   if (success && data) {
     notifyStore.SHOW_NOTIFY({ message: '相簿創建成功', type: 'success' })
-    router.push(`/album/${data.id}/info`)
+    router.push(`/admin/album/${data.id}/info`)
   }
 }
 
@@ -79,9 +79,9 @@ definePageMeta({
     <div class="tw-sticky tw-top-[70px] tw-bg-[#fafafa] tw-z-10 tw-shadow-sm">
       <TitleBlockDefault>
         <template #left>
-          <PhImages size="24" class="tw-mr-2" />
+          <PhTicket size="24" class="tw-mr-2" />
           <div class="tw-font-medium tw-text-base">
-            相簿列表
+            活動管理
           </div>
         </template>
         <template #right>
@@ -158,7 +158,7 @@ definePageMeta({
             <v-card
               color="white"
               class="tw-p-6 tw-rounded-lg tw-mb-6 tw-min-h-[240px] tw-cursor-pointer hover:tw-shadow-lg"
-              :to="`/album/${item.id}/pictures`"
+              :to="`/admin/album/${item.id}/pictures`"
             >
               <!-- <div
                 class="tw-aspect-[2/1] tw-overflow-hidden tw-rounded tw-bg-center tw-bg-contain"

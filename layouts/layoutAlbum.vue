@@ -36,7 +36,7 @@ onMounted(() => {
           >
             <v-list v-model:opened="listGroupOpen" class="tw-font-medium tw-text-sm  tw-text-black">
               <!-- 照片管理 -->
-              <v-list-item class="tw-cursor-pointer" :active="route.name === 'album-id-pictures'" :to="`/album/${ALBUM?.id}/pictures`">
+              <v-list-item class="tw-cursor-pointer" :active="route.name === 'admin-album-albumID-pictures'" :to="`/admin/album/${ALBUM?.id}/pictures`">
                 <template #prepend>
                   <div class=" tw-flex tw-items-center tw-px-2 tw-py-2 tw-font-semibold tw-text-gray-600">
                     <PhImages size="16" class="tw-mr-3" />
@@ -60,8 +60,8 @@ onMounted(() => {
                 <v-list-item
                   key="info"
                   value="info"
-                  :active="route.name === 'album-id-info'"
-                  :to="`/album/${ALBUM?.id}/info`"
+                  :active="route.name === 'admin-album-albumID-info'"
+                  :to="`/admin/album/${ALBUM?.id}/info`"
                 >
                   <template #prepend>
                     <div class="tw-py-2 tw-ml-[-20px] tw-font-semibold tw-text-gray-600">
@@ -86,8 +86,8 @@ onMounted(() => {
                 <v-list-item
                   key="setting"
                   value="setting"
-                  :active="route.name === 'album-id-setting'"
-                  :to="`/album/${ALBUM?.id}/setting`"
+                  :active="route.name === 'admin-album-albumID-setting'"
+                  :to="`/admin/album/${ALBUM?.id}/setting`"
                 >
                   <template #prepend>
                     <div class="tw-py-2 tw-ml-[-20px] tw-font-semibold tw-text-gray-600">
@@ -99,8 +99,8 @@ onMounted(() => {
                 <v-list-item
                   key="frame"
                   value="frame"
-                  :active="route.name === 'album-id-frame'"
-                  :to="`/album/${ALBUM?.id}/frame`"
+                  :active="route.name === 'admin-album-albumID-frame'"
+                  :to="`/admin/album/${ALBUM?.id}/frame`"
                   disabled
                 >
                   <template #prepend>

@@ -19,7 +19,7 @@ const form = ref({
 })
 
 const fetchAlbumInfo = async () => {
-  const albumID = Number(route.params.id)
+  const albumID = Number(route.params.albumID)
   if (!albumID)
     return
 
@@ -80,7 +80,7 @@ definePageMeta({
     <div class="tw-sticky tw-top-[70px] tw-bg-[#fafafa] tw-z-10 tw-shadow-sm">
       <TitleBlockDefault>
         <template #left>
-          <div class="tw-flex tw-items-center tw-cursor-pointer" @click="router.push('/album')">
+          <div class="tw-flex tw-items-center tw-cursor-pointer" @click="router.push('/admin/album')">
             <PhArrowLeft size="24" class="tw-mr-2" />
             <div class="tw-font-medium tw-text-base">
               基本設定
