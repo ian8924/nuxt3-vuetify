@@ -1,4 +1,4 @@
-import type { Activity, Tag } from '@/types/interface/activity.interface'
+import type { Activity, Tag, Theme } from '@/types/interface/activity.interface'
 import type { ApiResponseList, ApiResponseSingle } from '@/types/interface/api.interface'
 import type { ApiRequestListMedia, Media } from '@/types/interface/media.interface'
 
@@ -21,12 +21,22 @@ export const getAlbumPicturesAPI = (albumId: number, params: ApiRequestListMedia
 }
 
 /**
- * 透過 ID 取得活動資訊
- * @param eventID
+ *  取得活動標籤列表
  */
 export const getTagsAPI = (params: any) => {
   return useFetchData.get<ApiResponseSingle<ApiResponseList<Tag[]>>>(
     `/v1/tags`,
+    params,
+    'activity'
+  )
+}
+
+/**
+ *  取得活動主題列表
+ */
+export const getThemesAPI = (params: any) => {
+  return useFetchData.get<ApiResponseSingle<ApiResponseList<Theme[]>>>(
+    `/v1/themes`,
     params,
     'activity'
   )

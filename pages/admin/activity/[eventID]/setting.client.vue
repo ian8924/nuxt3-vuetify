@@ -1,39 +1,47 @@
 <script setup lang="ts">
-import { patchAlbumByIdAPI } from '@/api/album/info.api'
-import { PhArrowLeft, PhArrowSquareOut, PhCopy, PhFloppyDisk, PhQuestion } from '@phosphor-icons/vue'
+import { deleteActivityByIdAPI, patchActivityByIdAPI } from '@/api/activity/info.api'
+import { VisibilityEnum } from '@/types/enum/visibility.enum'
+import { PhArrowLeft, PhArrowSquareOut, PhCopy, PhQuestion, PhTrash } from '@phosphor-icons/vue'
 import copy from 'copy-to-clipboard'
 
 const router = useRouter()
 const route = useRoute()
 
-const albumStore = useAlbumStore()
-const { ALBUM, ALBUM_PUBLIC_LINK_WEBSITE } = storeToRefs(albumStore)
+const activityStore = useActivityStore()
+const { ACTIVITY, ACTIVITY_PUBLIC_LINK_WEBSITE } = storeToRefs(activityStore)
 const notifyStore = useNotifyStore()
 
 const refForm = ref()
 const isLoading = ref(false)
+const showConfirmDeleteDialog = ref(false)
 
 const form = ref({
-  visibility: ALBUM.value?.visibility || 0,
-  sharedPassword: ALBUM.value?.sharedPassword || ''
+  visibility: ACTIVITY.value?.visibility || 0,
+  sharedPassword: ACTIVITY.value?.sharedPassword || ''
 })
 
-const fetchAlbumInfo = async () => {
-  const albumID = Number(route.params.albumID)
-  if (!albumID)
+const fetchActivityInfo = async () => {
+  const activityID = route.params.activityID as string
+  if (!activityID)
     return
 
-  await albumStore.GET_ALBUM_INFO(albumID)
+  await activityStore.GET_ACTIVITY_INFO(activityID)
 
   form.value = {
-    visibility: ALBUM.value?.visibility || 0,
-    sharedPassword: ALBUM.value?.sharedPassword || ''
+    visibility: ACTIVITY.value?.visibility || 0,
+    sharedPassword: ACTIVITY.value?.sharedPassword || ''
   }
 }
 
-const patchAlbum = async () => {
+const patchActivity = async () => {
   isLoading.value = true
-  const { success } = await patchAlbumByIdAPI(ALBUM.value?.id as number, {
+  if (!ACTIVITY.value?.eventId) {
+    return
+  }
+  const { success } = await patchActivityByIdAPI(ACTIVITY.value?.eventId, {
+    name: ACTIVITY.value?.name,
+    startedAt: ACTIVITY.value?.startedAt,
+    endedAt: ACTIVITY.value?.endedAt,
     visibility: form.value.visibility,
     sharedPassword: form.value.sharedPassword
   })
@@ -41,7 +49,7 @@ const patchAlbum = async () => {
 
   if (success) {
     notifyStore.SHOW_NOTIFY({ message: '儲存成功', type: 'success' })
-    fetchAlbumInfo()
+    fetchActivityInfo()
   } else {
     notifyStore.SHOW_NOTIFY({ message: '儲存失敗，請稍後再試', type: 'error' })
   }
@@ -53,25 +61,40 @@ const save = async () => {
     return
   }
 
-  patchAlbum()
+  patchActivity()
+}
+
+const deleteActivity = async () => {
+  showConfirmDeleteDialog.value = true
+}
+
+const confirmDelete = async () => {
+  showConfirmDeleteDialog.value = false
+  const { success } = await deleteActivityByIdAPI(ACTIVITY.value?.eventId as string)
+  if (success) {
+    notifyStore.SHOW_NOTIFY({ message: '活動已刪除', type: 'success' })
+    router.push('/admin/activity')
+  } else {
+    notifyStore.SHOW_NOTIFY({ message: '刪除失敗，請稍後再試', type: 'error' })
+  }
 }
 
 const openLink = () => {
-  window.open(ALBUM_PUBLIC_LINK_WEBSITE.value, '_blank')
+  window.open(ACTIVITY_PUBLIC_LINK_WEBSITE.value, '_blank')
 }
 
 const copyLink = () => {
-  copy(ALBUM_PUBLIC_LINK_WEBSITE.value)
+  copy(ACTIVITY_PUBLIC_LINK_WEBSITE.value)
   notifyStore.SHOW_NOTIFY({ message: '已複製連結', type: 'success' })
 }
 
 onMounted(() => {
-  fetchAlbumInfo()
+  fetchActivityInfo()
 })
 
 definePageMeta({
-  layout: 'layout-album',
-  middleware: ['auth', 'album']
+  layout: 'layout-activity',
+  middleware: ['auth', 'activity']
 })
 </script>
 
@@ -80,7 +103,7 @@ definePageMeta({
     <div class="tw-sticky tw-top-[70px] tw-bg-[#fafafa] tw-z-10 tw-shadow-sm">
       <TitleBlockDefault>
         <template #left>
-          <div class="tw-flex tw-items-center tw-cursor-pointer" @click="router.push('/admin/album')">
+          <div class="tw-flex tw-items-center tw-cursor-pointer" @click="router.push('/admin/activity')">
             <PhArrowLeft size="24" class="tw-mr-2" />
             <div class="tw-font-medium tw-text-base">
               基本設定
@@ -123,10 +146,11 @@ definePageMeta({
         <v-form ref="refForm" class="tw-w-[50%]">
           <div class="tw-font-medium tw-text-xl tw-mb-6">基本設定 </div>
           <div class="tw-flex tw-flex-col tw-gap-4">
+            <!-- 公開網址 -->
             <div>
               <span class="tw-font-medium tw-text-sm">公開網址 </span>
               <v-text-field
-                v-model="ALBUM_PUBLIC_LINK_WEBSITE"
+                v-model="ACTIVITY_PUBLIC_LINK_WEBSITE"
                 class="tw-border-b tw-border-[#565454bb] tw-rounded tw-mt-[-8px]"
                 variant="underlined"
                 hide-details
@@ -137,6 +161,7 @@ definePageMeta({
                 </template>
               </v-text-field>
             </div>
+            <!-- 網站可見度 -->
             <div>
               <span class="tw-font-medium tw-text-sm">網站可見度 </span>
               <v-select
@@ -152,13 +177,13 @@ definePageMeta({
                 :return-object="false"
                 :items="[
                   {
-                    value: 1, text: '公開',
+                    value: VisibilityEnum.Public, text: '公開',
                   },
                   {
-                    value: 0, text: '隱私',
+                    value: VisibilityEnum.Private, text: '隱私',
                   },
                   {
-                    value: 2, text: '不公開（密碼保護）',
+                    value: VisibilityEnum.Shared, text: '不公開（密碼保護）',
                   },
                 ]"
               >
@@ -169,6 +194,7 @@ definePageMeta({
                 </template>
               </v-select>
             </div>
+            <!-- 密碼保護 -->
             <div v-if="form.visibility === 2">
               <span class="tw-font-medium tw-text-sm">密碼</span>
               <v-text-field
@@ -190,10 +216,26 @@ definePageMeta({
                 </template>
               </v-text-field>
             </div>
+            <div class="tw-font-medium tw-text-xl tw-mt-6">刪除帳號 </div>
+            <v-btn
+              :loading="isLoading"
+              :disabled="isLoading"
+              color="error"
+              variant="tonal"
+              class="tw-font-medium tw-text-sm"
+              @click="deleteActivity"
+            >
+              刪除活動
+              <PhTrash size="16" class="tw-ml-1" />
+            </v-btn>
+            <div class="tw-text-sm tw-text-gray-600">
+              刪除帳號後，您的所有資料將會被永久刪除且無法復原，請謹慎操作。
+            </div>
           </div>
         </v-form>
         <div class="tw-w-[50%]" />
       </div>
     </v-card>
   </v-main>
+  <DialogConfirmDeleteActivity v-model="showConfirmDeleteDialog" @confirm="confirmDelete" />
 </template>

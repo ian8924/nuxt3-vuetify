@@ -94,6 +94,18 @@ export interface Tag {
   usageCount: number
 }
 
+export interface Theme {
+  id: number
+  name: string
+  description: string
+  colorCode: string
+  iconUrl: string
+  isActive: boolean
+  createdBy: number
+  createdAt: string
+  updatedAt: string
+}
+
 export interface ApiRequestCreateActivity {
   name: string
   organizer?: string
@@ -105,13 +117,15 @@ export interface ApiRequestCreateActivity {
 }
 
 export interface ApiRequestActivity {
-  name: string
+  name?: string
   organizer?: string
-  startedAt: Dayjs | string
-  endedAt: Dayjs | string
+  startedAt?: Dayjs | string
+  endedAt?: Dayjs | string
   description?: string
   location?: string
   visibility: number
   activityTime?: string
   tagIds?: number[]
+  themeId?: number
+  sharedPassword?: string
 }

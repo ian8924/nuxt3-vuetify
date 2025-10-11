@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { createActivityAPI } from '@/api/activity/info.api'
 import { getUserActivityListAPI } from '@/api/activity/list.api'
+import { VisibilityEnum } from '@/types/enum/visibility.enum'
 import type { Activity, ApiRequestCreateActivity } from '@/types/interface/activity.interface'
 import { PhPlus, PhTicket } from '@phosphor-icons/vue'
 import dayjs from 'dayjs'
@@ -13,24 +14,27 @@ const notifyStore = useNotifyStore()
 const isLoading = ref(false)
 const isLoadingCreate = ref(false)
 
-const activeTab = ref('all')
+const activeTab: Ref<VisibilityEnum | 'all'> = ref('all')
 const inputSearch = ref('')
 const list: Ref<Activity[]> = ref([])
 
 // 計算各狀態活動數量
 const totalActivities = computed(() => list.value.length)
-const totalActivitiesActive = computed(() => list.value.filter(item => item.status === 1 || item.status === 0)?.length)
-const totalActivitiesLocked = computed(() => list.value.filter(item => item.status === 2 || item.status === 3)?.length)
+const totalPublic = computed(() => list.value.filter(item => item.visibility === VisibilityEnum.Public)?.length)
+const totalPrivate = computed(() => list.value.filter(item => item.visibility === VisibilityEnum.Private)?.length)
+const totalShared = computed(() => list.value.filter(item => item.visibility === VisibilityEnum.Shared)?.length)
 
 // 根據搜尋和篩選條件顯示相簿
 const displayAlbums = computed(() => {
   return list.value.filter(item => item.name.includes(inputSearch.value)).filter((item) => {
     if (activeTab.value === 'all')
       return true
-    if (activeTab.value === 'in-use')
-      return item.status === 1 || item.status === 0
-    if (activeTab.value === 'locked')
-      return item.status === 2 || item.status === 3
+    if (activeTab.value === VisibilityEnum.Public)
+      return item.visibility === VisibilityEnum.Public
+    if (activeTab.value === VisibilityEnum.Private)
+      return item.visibility === VisibilityEnum.Private
+    if (activeTab.value === VisibilityEnum.Shared)
+      return item.visibility === VisibilityEnum.Shared
     return true
   })
 })
@@ -97,15 +101,16 @@ definePageMeta({
                 全部 {{ totalActivities }}
               </div>
               <v-divider class="tw-my-auto" vertical length="10px" />
-              <div class="tw-flex tw-items-center tw-cursor-pointer tw-text-[#c0c0c0]" :class="{ 'tw-text-black': activeTab === 'in-use' }" @click="activeTab = 'in-use'">
-                公開 {{ totalActivitiesActive }}
+              <div class="tw-flex tw-items-center tw-cursor-pointer tw-text-[#c0c0c0]" :class="{ 'tw-text-black': activeTab === VisibilityEnum.Public }" @click="activeTab = VisibilityEnum.Public">
+                公開 {{ totalPublic }}
               </div>
               <v-divider class="tw-my-auto" vertical length="10px" />
-              <div class="tw-flex tw-items-center tw-cursor-pointer tw-text-[#c0c0c0]" :class="{ 'tw-text-black': activeTab === 'locked' }" @click="activeTab = 'locked'">
-                未公開 {{ totalActivitiesLocked }}
+              <div class="tw-flex tw-items-center tw-cursor-pointer tw-text-[#c0c0c0]" :class="{ 'tw-text-black': activeTab === VisibilityEnum.Shared }" @click="activeTab = VisibilityEnum.Shared">
+                未公開 {{ totalShared }}
               </div>
-              <div class="tw-flex tw-items-center tw-cursor-pointer tw-text-[#c0c0c0]" :class="{ 'tw-text-black': activeTab === 'locked' }" @click="activeTab = 'locked'">
-                隱私 {{ totalActivitiesLocked }}
+              <v-divider class="tw-my-auto" vertical length="10px" />
+              <div class="tw-flex tw-items-center tw-cursor-pointer tw-text-[#c0c0c0]" :class="{ 'tw-text-black': activeTab === VisibilityEnum.Private }" @click="activeTab = VisibilityEnum.Private">
+                隱私 {{ totalPrivate }}
               </div>
               <v-divider class="tw-my-auto" vertical length="10px" />
             </div>

@@ -23,6 +23,15 @@ export const patchActivityByIdAPI = (eventId: string, params: Partial<ApiRequest
 }
 
 /**
+ * 刪除活動 by id
+ * @param { type String } eventId 活動ID
+ */
+
+export const deleteActivityByIdAPI = (eventId: string) => {
+  return useFetchData.delete<ApiResponseSingle<null>>(`/v1/activities/${eventId}`, {}, 'activity', false, true)
+}
+
+/**
  * 透過 ID 取得活動資訊
  * @param eventID
  */
@@ -44,7 +53,7 @@ export const postActivityCoverAPI = (activityId: number, params: { cover: File }
 }
 
 /**
- * 透過 ID 取得活動資訊
+ * 建立活動標籤
  * @param eventID
  */
 export const postCreateTagAPI = (params: any) => {

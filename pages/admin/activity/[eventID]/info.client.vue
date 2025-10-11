@@ -2,8 +2,8 @@
 import { patchActivityByIdAPI, postActivityCoverAPI, postCreateTagAPI } from '@/api/activity/info.api'
 import { PhArrowLeft, PhArrowSquareOut, PhFloppyDisk, PhImage, PhQuestion } from '@phosphor-icons/vue'
 
-import { getTagsAPI } from '@/api/activity/list.api'
-import type { Tag } from '@/types/interface/activity.interface'
+import { getTagsAPI, getThemesAPI } from '@/api/activity/list.api'
+import type { Tag, Theme } from '@/types/interface/activity.interface'
 import Dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 
@@ -25,17 +25,25 @@ const form = ref({
   startedAt: ACTIVITY.value?.startedAt || '',
   endedAt: ACTIVITY.value?.endedAt || '',
   activityTime: ACTIVITY.value?.activityTime || '',
-  tags: [] as number[]
+  tags: ACTIVITY.value?.tags?.map(tag => tag.id) || [],
+  themeId: ACTIVITY.value?.theme?.id || undefined
 })
 
 const coverImageFile: Ref<File | File[]> = ref([])
 const localCoverImage = ref(ACTIVITY.value?.coverPhotoUrl || '')
 const tags = ref<Tag[]>([])
+const themes = ref<Theme[]>([])
 
 const inputSearchTag = ref('')
 
 const optionTags = computed(() => {
   return tags.value.map(item => ({
+    text: item.name,
+    value: item.id
+  }))
+})
+const optionThemes = computed(() => {
+  return themes.value.map(item => ({
     text: item.name,
     value: item.id
   }))
@@ -68,7 +76,8 @@ const patchActivity = async () => {
     startedAt: Dayjs.utc(form.value.startedAt).local(),
     endedAt: Dayjs.utc(form.value.endedAt).local(),
     activityTime: form.value.activityTime,
-    tagIds: form.value.tags
+    tagIds: form.value.tags,
+    themeId: form.value.themeId
   })
 
   if (success) {
@@ -103,16 +112,10 @@ const fetchActivityInfo = async () => {
     startedAt: Dayjs.utc(ACTIVITY.value?.startedAt).local().format('YYYY/MM/DD'),
     endedAt: Dayjs.utc(ACTIVITY.value?.endedAt).local().format('YYYY/MM/DD'),
     activityTime: ACTIVITY.value?.activityTime || '',
-    tags: ACTIVITY.value?.tags.map(tag => tag.id) || []
+    tags: ACTIVITY.value?.tags?.map(tag => tag.id) || [],
+    themeId: ACTIVITY.value?.theme?.id || undefined
   }
   localCoverImage.value = ACTIVITY.value?.coverPhotoUrl || ''
-}
-
-const fetchAllTags = async () => {
-  const { data, success } = await getTagsAPI({ page: 0, size: 1000 })
-  if (!success || !data)
-    return
-  tags.value = data.data.content || []
 }
 
 const save = async () => {
@@ -144,6 +147,13 @@ const openLink = () => {
   window.open(ACTIVITY_PUBLIC_LINK_WEBSITE.value, '_blank')
 }
 
+const fetchAllTags = async () => {
+  const { data, success } = await getTagsAPI({ page: 0, size: 1000 })
+  if (!success || !data)
+    return
+  tags.value = data.data.content || []
+}
+
 const addTag = async () => {
   if (!inputSearchTag.value)
     return
@@ -164,9 +174,17 @@ const addTag = async () => {
   }
 }
 
+const fetchAllThemes = async () => {
+  const { data, success } = await getThemesAPI({ page: 0, size: 1000 })
+  if (!success || !data)
+    return
+  themes.value = data.data.content || []
+}
+
 onMounted(() => {
   fetchActivityInfo()
   fetchAllTags()
+  fetchAllThemes()
 })
 
 definePageMeta({
@@ -222,6 +240,7 @@ definePageMeta({
       <div class="tw-flex tw-w-full tw-gap-6 tw-p-10">
         <v-form ref="refForm" class="tw-w-[50%] tw-px-2">
           <div class="tw-font-medium tw-text-xl tw-mb-6">基本資訊</div>
+          <!-- 活動名稱 -->
           <div>
             <span class="tw-font-medium tw-text-sm">活動名稱</span>
             <v-text-field
@@ -235,6 +254,7 @@ definePageMeta({
               required
             />
           </div>
+          <!-- 地點 -->
           <div>
             <span class="tw-font-medium tw-text-sm">地點</span>
             <v-text-field
@@ -244,6 +264,7 @@ definePageMeta({
               placeholder="請輸入活動地點"
             />
           </div>
+          <!-- 活動日期 -->
           <div>
             <span class="tw-font-medium tw-text-sm">活動日期</span>
             <div class="tw-flex tw-items-center tw-gap-4">
@@ -277,6 +298,7 @@ definePageMeta({
               />
             </div>
           </div>
+          <!-- 活動時間 -->
           <div>
             <span class="tw-font-medium tw-text-sm">活動時間</span>
             <v-text-field
@@ -286,9 +308,23 @@ definePageMeta({
               placeholder="請輸入活動時間"
             />
           </div>
+          <!-- 活動主題 -->
+          <div>
+            <span class="tw-font-medium tw-text-sm">活動主題</span>
+            <v-select
+              v-model="form.themeId"
+              :items="optionThemes"
+              item-title="text"
+              item-value="value"
+              clearable
+              placeholder="請選擇主題"
+              variant="underlined"
+              class="tw-mt-[-8px]"
+            />
+          </div>
+          <!-- 標籤 -->
           <div>
             <span class="tw-font-medium tw-text-sm">標籤 </span>
-
             <v-autocomplete
               v-model="form.tags"
               :items="optionTags"
@@ -315,6 +351,7 @@ definePageMeta({
             </v-autocomplete>
           </div>
           <div class="tw-font-medium tw-text-xl tw-my-6">進階資訊</div>
+          <!-- 活動簡介 -->
           <div>
             <span class="tw-font-medium tw-text-sm">活動簡介</span>
             <v-textarea
