@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { patchActivityByIdAPI, postActivityCoverAPI } from '@/api/activity/info.api'
-import { PhArrowLeft, PhFloppyDisk, PhImage } from '@phosphor-icons/vue'
+import { PhArrowLeft, PhArrowSquareOut, PhFloppyDisk, PhImage } from '@phosphor-icons/vue'
+
+import { getTagsAPI } from '@/api/activity/list.api'
+import type { Tag } from '@/types/interface/activity.interface'
 import Dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 
@@ -9,7 +12,7 @@ const router = useRouter()
 const route = useRoute()
 
 const activityStore = useActivityStore()
-const { ACTIVITY } = storeToRefs(activityStore)
+const { ACTIVITY, ACTIVITY_PUBLIC_LINK_WEBSITE } = storeToRefs(activityStore)
 const notifyStore = useNotifyStore()
 
 const refForm = ref()
@@ -21,11 +24,22 @@ const form = ref({
   location: ACTIVITY.value?.location || '',
   startedAt: ACTIVITY.value?.startedAt || '',
   endedAt: ACTIVITY.value?.endedAt || '',
-  activityTime: ACTIVITY.value?.activityTime || ''
+  activityTime: ACTIVITY.value?.activityTime || '',
+  tags: [] as number[]
 })
 
 const coverImageFile: Ref<File | File[]> = ref([])
 const localCoverImage = ref(ACTIVITY.value?.coverPhotoUrl || '')
+const tags = ref<Tag[]>([])
+
+const inputSearchTag = ref('')
+
+const optionTags = computed(() => {
+  return tags.value.map(item => ({
+    text: item.name,
+    value: item.id
+  }))
+})
 
 const changeFile = (event: Event) => {
   if (!event.target) {
@@ -92,6 +106,13 @@ const fetchActivityInfo = async () => {
   localCoverImage.value = ACTIVITY.value?.coverPhotoUrl || ''
 }
 
+const fetchAllTags = async () => {
+  const { data, success } = await getTagsAPI({ page: 0, size: 1000 })
+  if (!success || !data)
+    return
+  tags.value = data.data.content || []
+}
+
 const save = async () => {
   const { valid } = await refForm.value?.validate()
   if (!valid) {
@@ -117,8 +138,13 @@ const save = async () => {
   })
 }
 
+const openLink = () => {
+  window.open(ACTIVITY_PUBLIC_LINK_WEBSITE.value, '_blank')
+}
+
 onMounted(() => {
   fetchActivityInfo()
+  fetchAllTags()
 })
 
 definePageMeta({
@@ -142,6 +168,15 @@ definePageMeta({
       </TitleBlockDefault>
       <TitleBlockDefault>
         <template #right>
+          <v-btn
+            rounded
+            color="transparent"
+            class="tw-font-medium tw-text-sm tw-mr-3"
+            @click="openLink"
+          >
+            查看網站
+            <PhArrowSquareOut size="16" class="tw-ml-1" />
+          </v-btn>
           <v-btn
             rounded
             :loading="isLoading"
@@ -169,6 +204,7 @@ definePageMeta({
             <span class="tw-font-medium tw-text-sm">活動名稱</span>
             <v-text-field
               v-model="form.name"
+              class="tw-mt-[-8px]"
               variant="underlined"
               :rules="[
                 (v: string) => !!v || '必填',
@@ -177,18 +213,11 @@ definePageMeta({
               required
             />
           </div>
-          <!-- <div>
-            <span class="tw-font-medium tw-text-sm">描述</span>
-            <v-text-field
-              v-model="form.description"
-              variant="underlined"
-              placeholder="請輸入相簿描述"
-            />
-          </div> -->
           <div>
             <span class="tw-font-medium tw-text-sm">地點</span>
             <v-text-field
               v-model="form.location"
+              class="tw-mt-[-8px]"
               variant="underlined"
               placeholder="請輸入活動地點"
             />
@@ -198,6 +227,7 @@ definePageMeta({
             <div class="tw-flex tw-items-center tw-gap-4">
               <v-date-input
                 v-model="form.startedAt"
+                class="tw-mt-[-8px]"
                 input-format="yyyy/mm/dd"
                 prepend-icon=""
                 variant="underlined"
@@ -212,6 +242,7 @@ definePageMeta({
               </div>
               <v-date-input
                 v-model="form.endedAt"
+                class="tw-mt-[-8px]"
                 input-format="yyyy/mm/dd"
                 prepend-icon=""
                 variant="underlined"
@@ -228,8 +259,57 @@ definePageMeta({
             <span class="tw-font-medium tw-text-sm">活動時間</span>
             <v-text-field
               v-model="form.activityTime"
+              class="tw-mt-[-8px]"
               variant="underlined"
               placeholder="請輸入活動時間"
+            />
+          </div>
+          <div>
+            <span class="tw-font-medium tw-text-sm">標籤
+            </span>
+
+            <v-select
+              v-model="form.tags"
+              :items="tags"
+              item-title="name"
+              multiple
+              chips
+            >
+              <template #prepend-item>
+                <input type="text">
+                <v-text-field
+                  v-model="inputSearchTag"
+                  hide-details
+                  bg-color="white"
+                  class="tw-px-2"
+                  prepend-inner-icon="mdi-magnify"
+                  density="comfortable"
+                  rounded
+                  flat
+                  placeholder="搜尋名稱"
+                  variant="solo"
+                />
+              </template>
+              <template #append-item>
+                <v-list-item
+                  v-for="item in tags"
+                  :key="item.id"
+                  :subtitle="item.description"
+                  :title="item.name"
+                >
+                </v-list-item>
+              </template>
+            </v-select>
+          </div>
+          <div class="tw-font-medium tw-text-xl tw-my-6">進階資訊</div>
+          <div>
+            <span class="tw-font-medium tw-text-sm">活動簡介</span>
+            <v-textarea
+              v-model="form.description"
+              class="tw-mt-[-8px]"
+
+              variant="underlined"
+              placeholder="請輸入活動簡介"
             />
           </div>
         </v-form>

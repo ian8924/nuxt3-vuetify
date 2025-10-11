@@ -114,6 +114,7 @@ definePageMeta({
                 v-model="inputSearch"
                 hide-details
                 bg-color="white"
+                density="comfortable"
                 class="tw-w-full md:tw-w-[430px]"
                 prepend-inner-icon="mdi-magnify"
                 rounded

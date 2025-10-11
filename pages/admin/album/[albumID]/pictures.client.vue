@@ -162,6 +162,7 @@ definePageMeta({
             bg-color="white"
             class="tw-w-full md:tw-w-[430px]"
             prepend-inner-icon="mdi-magnify"
+            density="comfortable"
             rounded
             flat
             placeholder="搜尋名稱"

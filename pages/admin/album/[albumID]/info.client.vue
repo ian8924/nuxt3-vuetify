@@ -172,6 +172,7 @@ definePageMeta({
             <span class="tw-font-medium tw-text-sm">相簿名稱</span>
             <v-text-field
               v-model="form.name"
+              class="tw-mt-[-8px]"
               variant="underlined"
               :rules="[
                 (v: string) => !!v || '必填',
@@ -184,6 +185,7 @@ definePageMeta({
             <span class="tw-font-medium tw-text-sm">描述</span>
             <v-text-field
               v-model="form.description"
+              class="tw-mt-[-8px]"
               variant="underlined"
               placeholder="請輸入相簿描述"
             />
@@ -192,6 +194,7 @@ definePageMeta({
             <span class="tw-font-medium tw-text-sm">拍攝地點</span>
             <v-text-field
               v-model="form.location"
+              class="tw-mt-[-8px]"
               variant="underlined"
               placeholder="請輸入拍攝地點"
             />
@@ -202,6 +205,7 @@ definePageMeta({
               <v-date-input
                 v-model="form.startedAt"
                 input-format="yyyy/mm/dd"
+                class="tw-mt-[-8px]"
                 prepend-icon=""
                 variant="underlined"
                 placeholder="請輸入拍攝時間"
@@ -216,6 +220,7 @@ definePageMeta({
               <v-date-input
                 v-model="form.endedAt"
                 input-format="yyyy/mm/dd"
+                class="tw-mt-[-8px]"
                 prepend-icon=""
                 variant="underlined"
                 placeholder="請輸入拍攝時間"

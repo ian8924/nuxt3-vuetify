@@ -109,6 +109,7 @@ definePageMeta({
               <v-text-field
                 v-model="inputSearch"
                 hide-details
+                density="comfortable"
                 bg-color="white"
                 class="tw-w-full md:tw-w-[430px]"
                 prepend-inner-icon="mdi-magnify"

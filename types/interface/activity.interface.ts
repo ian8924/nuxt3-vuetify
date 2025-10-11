@@ -82,6 +82,18 @@ export interface Activity {
 
 }
 
+export interface Tag {
+  colorCode: string
+  createdAt: string
+  createdBy: number
+  description: string
+  id: number
+  isActive: boolean
+  name: string
+  updatedAt: string
+  usageCount: number
+}
+
 export interface ApiRequestCreateActivity {
   name: string
   organizer?: string

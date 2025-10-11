@@ -127,7 +127,7 @@ definePageMeta({
               <span class="tw-font-medium tw-text-sm">公開網址 </span>
               <v-text-field
                 v-model="ALBUM_PUBLIC_LINK_WEBSITE"
-                class="tw-border-b tw-border-[#565454bb] tw-rounded"
+                class="tw-border-b tw-border-[#565454bb] tw-rounded tw-mt-[-8px]"
                 variant="underlined"
                 hide-details
                 readonly
@@ -141,6 +141,7 @@ definePageMeta({
               <span class="tw-font-medium tw-text-sm">網站可見度 </span>
               <v-select
                 v-model="form.visibility"
+                class="tw-mt-[-8px]"
                 color="black"
                 variant="underlined"
                 placeholder="請選擇網站可見度"
@@ -172,6 +173,7 @@ definePageMeta({
               <span class="tw-font-medium tw-text-sm">密碼</span>
               <v-text-field
                 v-model="form.sharedPassword"
+                class="tw-mt-[-8px]"
                 variant="underlined"
                 placeholder="請輸入瀏覽密碼"
                 hint="1"
