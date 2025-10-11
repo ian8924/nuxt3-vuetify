@@ -1,7 +1,6 @@
 import type { ApiRequestPagination } from './api.interface'
 
 export interface Album {
-
   activityId: number
   coverId: number
   sharedPassword: string

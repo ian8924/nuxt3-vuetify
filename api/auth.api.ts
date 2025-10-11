@@ -35,7 +35,7 @@ export const getUserInfoAPI = () => {
  * @param { type String } email 郵箱
  */
 export const resetPasswordAPI = (params: ApiRequestResetPassword) => {
-  return useFetchData.post<null>('/v1/auth/reset-password', params)
+  return useFetchData.post<null>('/v1/users/reset-password', params)
 }
 
 /**
@@ -45,5 +45,5 @@ export const resetPasswordAPI = (params: ApiRequestResetPassword) => {
  * @param { type String } newPassword 新密碼
  */
 export const updatePasswordAPI = (params: ApiRequestUpdatePassword) => {
-  return useFetchData.post<null>('/v1/auth/password', params)
+  return useFetchData.post<null>('/v1/users/password', params)
 }

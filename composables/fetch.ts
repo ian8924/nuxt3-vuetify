@@ -17,7 +17,14 @@ export interface BaseApiResponse<TData = any> {
 }
 
 // API 基礎設定
-const fetchData = async <TData = unknown>(reqUrl: string, method: AsyncApiMethod, data?: any, apiService?: 'user' | 'album', isUpload = false): Promise<BaseApiResponse<TData>> => {
+const fetchData = async <TData = unknown>(
+  reqUrl: string,
+  method: AsyncApiMethod,
+  data?: any,
+  apiService?: 'user' | 'album' | 'activity',
+  isUpload = false,
+  returnError = false
+): Promise<BaseApiResponse<TData>> => {
   const runtimeConfig = useRuntimeConfig()
   const notifyStore = useNotifyStore()
   const router = useRouter()
@@ -28,6 +35,8 @@ const fetchData = async <TData = unknown>(reqUrl: string, method: AsyncApiMethod
     baseURL = runtimeConfig.public.apiBase
   } else if (apiService === 'album') {
     baseURL = runtimeConfig.public.apiAlbum
+  } else if (apiService === 'activity') {
+    baseURL = runtimeConfig.public.apiActivity
   }
 
   let formData = null
@@ -45,8 +54,6 @@ const fetchData = async <TData = unknown>(reqUrl: string, method: AsyncApiMethod
     }
   }
 
-  console.log('[fetch request]', method, baseURL + reqUrl, data)
-
   const options: NitroFetchOptions<NitroFetchRequest, 'get' | 'patch' | 'post' | 'put' | 'delete'> = {
     baseURL,
     method,
@@ -56,7 +63,7 @@ const fetchData = async <TData = unknown>(reqUrl: string, method: AsyncApiMethod
     }
   }
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     $fetch<BaseApiResponse<TData>>(reqUrl, {
       ...options,
       ...(method === AsyncApiMethod.get ? { params: data } : { body: isUpload ? formData : data }),
@@ -69,13 +76,23 @@ const fetchData = async <TData = unknown>(reqUrl: string, method: AsyncApiMethod
           notifyStore.SHOW_NOTIFY({ message: '請重新登入', type: 'error' })
           router.push('/auth/login')
         }
-
-        resolve({
-          success: response.status === 200 || response.status === 204 || response.status === 201,
-          status: response.status,
-          errorMessage: response._data?.message || 'Unknown error',
-          data: response._data
-        })
+        if (response.status === 200 || response.status === 204 || response.status === 201) {
+          resolve({
+            success: response.status === 200 || response.status === 204 || response.status === 201,
+            status: response.status,
+            errorMessage: response._data?.message || 'Unknown error',
+            data: response._data
+          })
+        } else {
+          returnError
+            ? reject(new Error(response._data?.message || 'Unknown error'))
+            : resolve({
+                success: response.status === 200 || response.status === 204 || response.status === 201,
+                status: response.status,
+                errorMessage: response._data?.message || 'Unknown error',
+                data: response._data
+              })
+        }
       }
 
       //   // console.error('[fetch response error]', {
@@ -104,23 +121,23 @@ const fetchData = async <TData = unknown>(reqUrl: string, method: AsyncApiMethod
 }
 
 export const useFetchData = new (class getData {
-  get<TData = any>(url: string, params?: any, apiService: 'user' | 'album' = 'user') {
-    return fetchData<TData>(url, AsyncApiMethod.get, params, apiService)
+  get<TData = any>(url: string, params?: any, apiService: 'user' | 'album' | 'activity' = 'user', isUpload: boolean = false, returnError: boolean = false) {
+    return fetchData<TData>(url, AsyncApiMethod.get, params, apiService, isUpload, returnError)
   }
 
-  post<TData = any>(url: string, body?: any, apiService: 'user' | 'album' = 'user', isUpload: boolean = false) {
-    return fetchData<TData>(url, AsyncApiMethod.post, body, apiService, isUpload)
+  post<TData = any>(url: string, body?: any, apiService: 'user' | 'album' | 'activity' = 'user', isUpload: boolean = false, returnError: boolean = false) {
+    return fetchData<TData>(url, AsyncApiMethod.post, body, apiService, isUpload, returnError)
   }
 
-  put<TData = any>(url: string, body?: any, apiService: 'user' | 'album' = 'user') {
-    return fetchData<TData>(url, AsyncApiMethod.put, body, apiService)
+  put<TData = any>(url: string, body?: any, apiService: 'user' | 'album' | 'activity' = 'user', isUpload: boolean = false, returnError: boolean = false) {
+    return fetchData<TData>(url, AsyncApiMethod.put, body, apiService, isUpload, returnError)
   }
 
-  patch<TData = any>(url: string, body?: any, apiService: 'user' | 'album' = 'user') {
-    return fetchData<TData>(url, AsyncApiMethod.patch, body, apiService)
+  patch<TData = any>(url: string, body?: any, apiService: 'user' | 'album' | 'activity' = 'user', isUpload: boolean = false, returnError: boolean = false) {
+    return fetchData<TData>(url, AsyncApiMethod.patch, body, apiService, isUpload, returnError)
   }
 
-  delete<TData = any>(url: string, body?: any, apiService: 'user' | 'album' = 'user') {
-    return fetchData<TData>(url, AsyncApiMethod.delete, body, apiService)
+  delete<TData = any>(url: string, body?: any, apiService: 'user' | 'album' | 'activity' = 'user', isUpload: boolean = false, returnError: boolean = false) {
+    return fetchData<TData>(url, AsyncApiMethod.delete, body, apiService, isUpload, returnError)
   }
 })()

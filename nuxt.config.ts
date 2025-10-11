@@ -27,6 +27,7 @@ export default defineNuxtConfig({
       baseURL: env[mode].BASE_URL,
       apiBase: env[mode].API_BASE,
       apiAlbum: env[mode].API_ALBUM,
+      apiActivity: env[mode].API_ACTIVITY,
       nodeEnv
     }
   },
@@ -47,6 +48,10 @@ export default defineNuxtConfig({
       },
       '/album-api': {
         target: 'https://album-api-dev.leis.studio/api',
+        changeOrigin: true
+      },
+      '/activity-api': {
+        target: 'https://activity-api-dev.leis.studio/api',
         changeOrigin: true
       }
     },
