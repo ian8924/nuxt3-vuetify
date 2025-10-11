@@ -41,7 +41,7 @@ const handleReset = async () => {
     notifyStore.SHOW_NOTIFY({ message: '重設密碼成功，請登入', type: 'success' })
     router.push('/auth/login')
   } else {
-    error.value = errorMessage || '重設密碼失敗，請稍後再試'
+    notifyStore.SHOW_NOTIFY({ message: errorMessage || '重設密碼失敗，請稍後再試', type: 'error' })
   }
 }
 </script>
