@@ -103,3 +103,15 @@ export interface ApiRequestCreateActivity {
   location?: string
   visibility: number
 }
+
+export interface ApiRequestActivity {
+  name: string
+  organizer?: string
+  startedAt: Dayjs | string
+  endedAt: Dayjs | string
+  description?: string
+  location?: string
+  visibility: number
+  activityTime?: string
+  tagIds?: number[]
+}

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { patchActivityByIdAPI, postActivityCoverAPI } from '@/api/activity/info.api'
-import { PhArrowLeft, PhArrowSquareOut, PhFloppyDisk, PhImage } from '@phosphor-icons/vue'
+import { patchActivityByIdAPI, postActivityCoverAPI, postCreateTagAPI } from '@/api/activity/info.api'
+import { PhArrowLeft, PhArrowSquareOut, PhFloppyDisk, PhImage, PhQuestion } from '@phosphor-icons/vue'
 
 import { getTagsAPI } from '@/api/activity/list.api'
 import type { Tag } from '@/types/interface/activity.interface'
@@ -67,7 +67,8 @@ const patchActivity = async () => {
     location: form.value.location,
     startedAt: Dayjs.utc(form.value.startedAt).local(),
     endedAt: Dayjs.utc(form.value.endedAt).local(),
-    activityTime: form.value.activityTime
+    activityTime: form.value.activityTime,
+    tagIds: form.value.tags
   })
 
   if (success) {
@@ -101,7 +102,8 @@ const fetchActivityInfo = async () => {
     location: ACTIVITY.value?.location || '',
     startedAt: Dayjs.utc(ACTIVITY.value?.startedAt).local().format('YYYY/MM/DD'),
     endedAt: Dayjs.utc(ACTIVITY.value?.endedAt).local().format('YYYY/MM/DD'),
-    activityTime: ACTIVITY.value?.activityTime || ''
+    activityTime: ACTIVITY.value?.activityTime || '',
+    tags: ACTIVITY.value?.tags.map(tag => tag.id) || []
   }
   localCoverImage.value = ACTIVITY.value?.coverPhotoUrl || ''
 }
@@ -140,6 +142,26 @@ const save = async () => {
 
 const openLink = () => {
   window.open(ACTIVITY_PUBLIC_LINK_WEBSITE.value, '_blank')
+}
+
+const addTag = async () => {
+  if (!inputSearchTag.value)
+    return
+  // 檢查是否已存在相同名稱的標籤
+  const existingTag = tags.value.find(tag => tag.name.toLowerCase() === inputSearchTag.value.toLowerCase())
+  if (existingTag) {
+    if (!form.value.tags.includes(existingTag.id)) {
+      form.value.tags.push(existingTag.id)
+    }
+    inputSearchTag.value = ''
+    return
+  }
+  const { success, data } = await postCreateTagAPI({ name: inputSearchTag.value })
+  if (success) {
+    data?.data.id && form.value.tags.push(data.data.id)
+    tags.value.push(data?.data as Tag)
+    inputSearchTag.value = ''
+  }
 }
 
 onMounted(() => {
@@ -265,41 +287,32 @@ definePageMeta({
             />
           </div>
           <div>
-            <span class="tw-font-medium tw-text-sm">標籤
-            </span>
+            <span class="tw-font-medium tw-text-sm">標籤 </span>
 
-            <v-select
+            <v-autocomplete
               v-model="form.tags"
-              :items="tags"
-              item-title="name"
+              :items="optionTags"
+              item-title="text"
+              item-value="value"
               multiple
               chips
+              clearable
+              deletable-chips
+              placeholder="請選擇標籤"
+              variant="underlined"
+              class="tw-mt-[-8px]"
+              :rules="[
+                (v: number[]) => v.length <= 5 || '最多五個標籤',
+              ]"
+              @update:search="v => inputSearchTag = v"
+              @keyup.enter="addTag"
             >
-              <template #prepend-item>
-                <input type="text">
-                <v-text-field
-                  v-model="inputSearchTag"
-                  hide-details
-                  bg-color="white"
-                  class="tw-px-2"
-                  prepend-inner-icon="mdi-magnify"
-                  density="comfortable"
-                  rounded
-                  flat
-                  placeholder="搜尋名稱"
-                  variant="solo"
-                />
+              <template #message>
+                <div class="tw-flex tw-text-xs tw-items-center tw-gap-1">
+                  <PhQuestion size="16" /> 最多五個標籤
+                </div>
               </template>
-              <template #append-item>
-                <v-list-item
-                  v-for="item in tags"
-                  :key="item.id"
-                  :subtitle="item.description"
-                  :title="item.name"
-                >
-                </v-list-item>
-              </template>
-            </v-select>
+            </v-autocomplete>
           </div>
           <div class="tw-font-medium tw-text-xl tw-my-6">進階資訊</div>
           <div>
@@ -307,7 +320,6 @@ definePageMeta({
             <v-textarea
               v-model="form.description"
               class="tw-mt-[-8px]"
-
               variant="underlined"
               placeholder="請輸入活動簡介"
             />

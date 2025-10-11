@@ -1,5 +1,5 @@
-import type { Activity, ApiRequestCreateActivity } from '@/types/interface/activity.interface'
-import type { ApiResponseSingle } from '~/types/interface/api.interface'
+import type { Activity, ApiRequestActivity, ApiRequestCreateActivity, Tag } from '@/types/interface/activity.interface'
+import type { ApiResponseSingle } from '@/types/interface/api.interface'
 
 /**
  * 建立活動
@@ -18,7 +18,7 @@ export const createActivityAPI = (data: ApiRequestCreateActivity) => {
  * @param params
  * @param { type String } eventId 活動ID
  */
-export const patchActivityByIdAPI = (eventId: string, params: Partial<Activity>) => {
+export const patchActivityByIdAPI = (eventId: string, params: Partial<ApiRequestActivity>) => {
   return useFetchData.put<Activity>(`/v1/activities/${eventId}`, params, 'activity', false, true)
 }
 
@@ -41,4 +41,16 @@ export const getActivityByIdAPI = (eventID: string) => {
  */
 export const postActivityCoverAPI = (activityId: number, params: { cover: File }) => {
   return useFetchData.post(`/v1/upload/activities/${activityId}/cover`, params, 'activity', true)
+}
+
+/**
+ * 透過 ID 取得活動資訊
+ * @param eventID
+ */
+export const postCreateTagAPI = (params: any) => {
+  return useFetchData.post<ApiResponseSingle<Tag>>(
+    `/v1/tags`,
+    params,
+    'activity'
+  )
 }
