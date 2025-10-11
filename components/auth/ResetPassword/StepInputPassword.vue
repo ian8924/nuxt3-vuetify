@@ -3,6 +3,7 @@ import { updatePasswordAPI } from '@/api/auth.api'
 import type { ApiRequestUpdatePassword } from '@/types/interface/auth.interface'
 
 const router = useRouter()
+const route = useRoute()
 const notifyStore = useNotifyStore()
 
 interface InputResetPassword {
@@ -29,7 +30,7 @@ const handleReset = async () => {
 
   loading.value = true
   const request: ApiRequestUpdatePassword = {
-    token: '',
+    token: route.query.token as string,
     newPassword: inputResetParams.value.password
   }
 

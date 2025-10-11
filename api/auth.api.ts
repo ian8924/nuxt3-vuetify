@@ -45,5 +45,5 @@ export const resetPasswordAPI = (params: ApiRequestResetPassword) => {
  * @param { type String } newPassword 新密碼
  */
 export const updatePasswordAPI = (params: ApiRequestUpdatePassword) => {
-  return useFetchData.post<null>('/v1/users/password', params)
+  return useFetchData.put<null>('/v1/users/password', params)
 }
