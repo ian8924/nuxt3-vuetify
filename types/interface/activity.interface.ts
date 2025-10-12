@@ -106,6 +106,20 @@ export interface Theme {
   updatedAt: string
 }
 
+export interface ActivityLink {
+  id: number
+  activityId: number
+  type: string
+  text: string
+  action: string
+  target: string
+  displayOrder: number
+  isActive: boolean
+  createdBy: number
+  createdAt: string
+  updatedAt: string
+}
+
 export interface ApiRequestCreateActivity {
   name: string
   organizer?: string
@@ -128,4 +142,13 @@ export interface ApiRequestActivity {
   tagIds?: number[]
   themeId?: number
   sharedPassword?: string
+}
+
+export interface ApiRequestCreateLink {
+  activityId: number
+  text: string
+  action: string
+  target: string
+  displayOrder: number
+  isActive: boolean
 }

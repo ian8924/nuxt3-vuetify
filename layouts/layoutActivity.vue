@@ -63,9 +63,8 @@ onMounted(() => {
                 <v-list-item
                   key="btn"
                   value="btn"
-                  :active="false"
-                  :to="`/admin/activity/${ACTIVITY?.eventId}/btn`"
-                  disabled
+                  :active="route.name === 'admin-activity-eventID-buttons'"
+                  :to="`/admin/activity/${ACTIVITY?.eventId}/buttons`"
                 >
                   <template #prepend>
                     <div class="tw-py-2 tw-ml-[-20px] tw-font-semibold tw-text-gray-600">

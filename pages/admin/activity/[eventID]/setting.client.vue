@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { deleteActivityByIdAPI, patchActivityByIdAPI } from '@/api/activity/info.api'
 import { VisibilityEnum } from '@/types/enum/visibility.enum'
-import { PhArrowLeft, PhArrowSquareOut, PhCopy, PhQuestion, PhTrash } from '@phosphor-icons/vue'
+import { PhArrowLeft, PhArrowSquareOut, PhCopy, PhFloppyDisk, PhQuestion, PhTrash } from '@phosphor-icons/vue'
 import copy from 'copy-to-clipboard'
 
 const router = useRouter()
@@ -21,11 +21,11 @@ const form = ref({
 })
 
 const fetchActivityInfo = async () => {
-  const activityID = route.params.activityID as string
-  if (!activityID)
+  const eventID = route.params.eventID as string
+  if (!eventID)
     return
 
-  await activityStore.GET_ACTIVITY_INFO(activityID)
+  await activityStore.GET_ACTIVITY_INFO(eventID)
 
   form.value = {
     visibility: ACTIVITY.value?.visibility || 0,
