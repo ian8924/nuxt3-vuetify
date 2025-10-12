@@ -120,6 +120,22 @@ export interface ActivityLink {
   updatedAt: string
 }
 
+export interface Participant {
+  id?: number
+  activityId?: number
+  type?: string
+  title?: string
+  name?: string
+  url?: string
+  avatarUrl?: string
+  displayOrder?: number
+  createdBy?: number
+  createdAt?: string
+  updatedAt?: string
+  isNew?: boolean
+  tempFile?: any
+}
+
 export interface ApiRequestCreateActivity {
   name: string
   organizer?: string
