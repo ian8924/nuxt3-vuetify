@@ -15,7 +15,7 @@ const isLoading = ref(false)
 const defaultParticipantClient: Participant = {
   id: 0,
   activityId: ACTIVITY.value?.id || 0,
-  type: 'guest',
+  type: 'org',
   title: '',
   name: '',
   url: '',
@@ -44,8 +44,8 @@ const fetchActivityLinks = async () => {
   const { data, success } = await getActivityParticipantsAPI(ACTIVITY.value?.id)
   isLoading.value = false
   if (success) {
-    list.value = structuredClone(data?.data)?.filter(item => item.type === 'guest') || []
-    originalList.value = structuredClone(data?.data)?.filter(item => item.type === 'guest') || []
+    list.value = structuredClone(data?.data)?.filter(item => item.type === 'org') || []
+    originalList.value = structuredClone(data?.data)?.filter(item => item.type === 'org') || []
   }
 }
 
@@ -55,7 +55,7 @@ const createApi = async (item: Participant) => {
   }
   const requests: Participant = {
     activityId: ACTIVITY.value?.id,
-    type: 'guest',
+    type: 'org',
     title: item.title,
     name: item.name,
     url: item.url
@@ -79,7 +79,7 @@ const putApi = async (item: Participant) => {
   }
   const requests = {
     activityId: ACTIVITY.value?.id,
-    type: 'guest',
+    type: 'org',
     title: item.title,
     name: item.name,
     url: item.url
@@ -178,7 +178,7 @@ definePageMeta({
           <div class="tw-flex tw-items-center tw-cursor-pointer" @click="router.push('/admin/activity')">
             <PhArrowLeft size="24" class="tw-mr-2" />
             <div class="tw-font-medium tw-text-base">
-              活動來賓
+              活動單位
             </div>
           </div>
         </template>
@@ -217,7 +217,7 @@ definePageMeta({
       <div class="tw-flex tw-w-full tw-gap-6 tw-p-10">
         <v-form ref="refForm" class="tw-w-full">
           <div class="tw-font-medium tw-text-xl tw-mb-6 tw-flex tw-items-center">
-            新增來賓或參與者
+            新增參與單位
             <v-btn
               rounded
               :loading="isLoading"
@@ -227,7 +227,7 @@ definePageMeta({
               size="small"
               @click="addLink"
             >
-              活動來賓
+              參與單位
               <PhPlus size="16" class="tw-ml-1" />
             </v-btn>
           </div>
@@ -288,12 +288,12 @@ definePageMeta({
                   </template>
                 </div>
                 <div class="tw-flex-1">
-                  <span class="tw-font-medium tw-text-sm">頭銜 *</span>
+                  <span class="tw-font-medium tw-text-sm">單位類別 *</span>
                   <v-text-field
                     v-model="item.title"
                     class="tw-mt-[-8px]"
                     variant="underlined"
-                    placeholder="請輸入頭銜"
+                    placeholder="指導單位 / 主辦單位 / 協辦單位 等"
                     :rules="[
                       (v: string) => !!v || '必填',
                     ]"
@@ -302,12 +302,12 @@ definePageMeta({
                   </v-text-field>
                 </div>
                 <div class="tw-flex-1">
-                  <span class="tw-font-medium tw-text-sm">名稱 *</span>
+                  <span class="tw-font-medium tw-text-sm">單位名稱 *</span>
                   <v-text-field
                     v-model="item.name"
                     class="tw-mt-[-8px]"
                     variant="underlined"
-                    placeholder="請輸入名稱"
+                    placeholder="請輸入單位名稱"
                     :rules="[
                       (v: string) => !!v || '必填',
                     ]"
