@@ -17,5 +17,5 @@ export const getUserAlbumsAPI = (userId: number, params: any) => {
  * @param { type String } userId 使用者ID
  */
 export const getAlbumPicturesAPI = (albumId: number, params: ApiRequestListMedia) => {
-  return useFetchData.get<ApiResponseList<Media[]>>(`/v1/albums/${albumId}/media`, params, 'album')
+  return useFetchData.get<ApiResponseList<Media[]>>(`/v1/albums/${albumId}/media/search`, params, 'album')
 }

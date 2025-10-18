@@ -85,8 +85,8 @@ onMounted(() => {
                   </template>
                 </v-list-item>
                 <v-list-item
-                  key="unit"
-                  value="unit"
+                  key="organization"
+                  value="organization"
                   :active="route.name === 'admin-activity-eventID-participant-org'"
                   :to="`/admin/activity/${ACTIVITY?.eventId}/participantOrg`"
                 >
@@ -97,11 +97,10 @@ onMounted(() => {
                   </template>
                 </v-list-item>
                 <v-list-item
-                  key="unit"
-                  value="unit"
-                  :active="false"
-                  :to="`/admin/activity/${ACTIVITY?.eventId}/unit`"
-                  disabled
+                  key="linkAlbum"
+                  value="linkAlbum"
+                  :active="route.name === 'admin-activity-eventID-linkAlbum'"
+                  :to="`/admin/activity/${ACTIVITY?.eventId}/linkAlbum`"
                 >
                   <template #prepend>
                     <div class="tw-py-2 tw-ml-[-20px] tw-font-semibold tw-text-gray-600">
