@@ -26,8 +26,17 @@ export const createAlbumAPI = (data: ApiRequestCreateAlbum) => {
  * @param params
  * @param { type String } userId 使用者ID
  */
-export const patchAlbumByIdAPI = (albumId: number, params: Partial<Album>) => {
+export const putAlbumByIdAPI = (albumId: number, params: Partial<Album>) => {
   return useFetchData.put<Album>(`/v1/albums/${albumId}`, params, 'album')
+}
+
+/**
+ * 更新相簿 by id
+ * @param params
+ * @param { type String } userId 使用者ID
+ */
+export const patchAlbumByIdAPI = (albumId: number, params: Partial<Album>) => {
+  return useFetchData.patch<Album>(`/v1/albums/${albumId}`, params, 'album')
 }
 
 /**

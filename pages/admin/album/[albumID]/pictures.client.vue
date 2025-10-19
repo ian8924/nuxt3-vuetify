@@ -46,9 +46,9 @@ const fetchAlbumPictures = async () => {
   const { success, data } = await getAlbumPicturesAPI(ALBUM.value?.id, request)
   isLoading.value = false
   if (success) {
-    totalMedias.value = data?.totalElements || 0
-    totalPages.value = data?.totalPages || 0
-    list.value = data?.content || []
+    totalMedias.value = data?.data.totalElements || 0
+    totalPages.value = data?.data.totalPages || 0
+    list.value = data?.data.content || []
   }
 }
 
@@ -63,9 +63,9 @@ const fetchMorePictures = async () => {
   const { success, data } = await getAlbumPicturesAPI(ALBUM.value?.id, request)
   isLoadingMore.value = false
   if (success) {
-    totalMedias.value = data?.totalElements || 0
-    totalPages.value = data?.totalPages || 0
-    list.value = [...list.value, ...(data?.content || [])]
+    totalMedias.value = data?.data.totalElements || 0
+    totalPages.value = data?.data.totalPages || 0
+    list.value = [...list.value, ...(data?.data.content || [])]
   }
 }
 

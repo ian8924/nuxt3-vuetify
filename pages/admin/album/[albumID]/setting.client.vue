@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { patchAlbumByIdAPI } from '@/api/album/info.api'
+import { putAlbumByIdAPI } from '@/api/album/info.api'
 import { PhArrowLeft, PhArrowSquareOut, PhCopy, PhFloppyDisk, PhQuestion } from '@phosphor-icons/vue'
 import copy from 'copy-to-clipboard'
 
@@ -33,7 +33,7 @@ const fetchAlbumInfo = async () => {
 
 const patchAlbum = async () => {
   isLoading.value = true
-  const { success } = await patchAlbumByIdAPI(ALBUM.value?.id as number, {
+  const { success } = await putAlbumByIdAPI(ALBUM.value?.id as number, {
     visibility: form.value.visibility,
     sharedPassword: form.value.sharedPassword
   })

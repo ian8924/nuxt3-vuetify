@@ -1,5 +1,5 @@
 import type { Album } from '@/types/interface/album.interface'
-import type { ApiResponseList } from '@/types/interface/api.interface'
+import type { ApiResponseList, ApiResponseSingle } from '@/types/interface/api.interface'
 import type { ApiRequestListMedia, Media } from '@/types/interface/media.interface'
 
 /**
@@ -17,5 +17,5 @@ export const getUserAlbumsAPI = (userId: number, params: any) => {
  * @param { type String } userId 使用者ID
  */
 export const getAlbumPicturesAPI = (albumId: number, params: ApiRequestListMedia) => {
-  return useFetchData.get<ApiResponseList<Media[]>>(`/v1/albums/${albumId}/media/search`, params, 'album')
+  return useFetchData.get<ApiResponseSingle<ApiResponseList<Media[]>>>(`/v1/albums/${albumId}/media/search`, params, 'album')
 }

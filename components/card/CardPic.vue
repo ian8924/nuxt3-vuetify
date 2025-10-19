@@ -72,7 +72,7 @@ const clickItem = () => {
             v-bind="tooltipProps"
             class="tw-font-medium tw-text-base tw-line-clamp-2 tw-break-words tw-h-[48px]"
           >
-            {{ props.item.fileName }}
+            {{ props.item.title || props.item.fileName }}
           </div>
         </template>
       </v-tooltip>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { patchAlbumByIdAPI, postAlbumCoverAPI } from '@/api/album/info.api'
+import { postAlbumCoverAPI, putAlbumByIdAPI } from '@/api/album/info.api'
 import { PhArrowLeft, PhFloppyDisk, PhImage } from '@phosphor-icons/vue'
 import dayjs from 'dayjs'
 
@@ -42,7 +42,7 @@ const changeFile = (event: Event) => {
 }
 
 const patchAlbum = async () => {
-  const { success } = await patchAlbumByIdAPI(ALBUM.value?.id as number, {
+  const { success } = await putAlbumByIdAPI(ALBUM.value?.id as number, {
     name: form.value.name,
     description: form.value.description,
     location: form.value.location,
