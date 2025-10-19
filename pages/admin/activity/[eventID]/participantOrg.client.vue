@@ -241,7 +241,7 @@ definePageMeta({
             >
               <template #title>
                 <div class="tw-flex tw-items-center tw-justify-between">
-                  <span class="font-weight-black">來賓 </span>
+                  <span class="font-weight-black tw-text-base">單位 </span>
                   <v-icon-btn color="transparent" size="small" @click="removeLink(item.id)">
                     <PhX weight="bold" :size="16" />
                   </v-icon-btn>

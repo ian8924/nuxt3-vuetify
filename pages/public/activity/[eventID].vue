@@ -52,8 +52,8 @@ definePageMeta({
           <div class="tw-full tw-flex tw-justify-between tw-items-center tw-mb-4">
             <h1 class="tw-text-3xl tw-font-bold">{{ activityInfo?.name }}</h1>
             <div class="tw-flex tw-items-center tw-gap-2 tw-text-xl tw-font-medium tw-px-6 tw-py-2">
-              <NuxtImg class="tw-w-6 tw-h-6" :src="activityInfo?.theme.iconUrl" />
-              {{ activityInfo?.theme.name }}
+              <NuxtImg v-if="activityInfo?.theme" class="tw-w-6 tw-h-6" :src="activityInfo?.theme.iconUrl" />
+              {{ activityInfo?.theme?.name }}
             </div>
           </div>
           <!-- 地點 -->
@@ -63,11 +63,11 @@ definePageMeta({
           </div>
           <!-- 日期時間 -->
           <div class="tw-flex tw-items-center tw-mb-4 tw-gap-6 tw-font-medium">
-            <div class="tw-flex tw-items-center tw-mb-4 tw-gap-2">
+            <div v-if="activityInfo?.startedAt && activityInfo?.endedAt" class="tw-flex tw-items-center tw-mb-4 tw-gap-2">
               <PhCalendarDots size="22" class="tw-mr-2 tw-text-gray-600" />
               {{ dayjs(activityInfo?.startedAt).format('YYYY-MM-DD HH:mm') }} - {{ dayjs(activityInfo?.endedAt).format('YYYY-MM-DD HH:mm') }}
             </div>
-            <div class="tw-flex tw-items-center tw-mb-4 tw-gap-2">
+            <div v-if="activityInfo?.activityTime" class="tw-flex tw-items-center tw-mb-4 tw-gap-2">
               <PhCalendarDots size="22" class="tw-mr-2 tw-text-gray-600" />
               {{ activityInfo?.activityTime }}
             </div>
@@ -102,7 +102,7 @@ definePageMeta({
             <div class="tw-flex tw-items-center tw-text-xl tw-font-bold tw-gap-2">
               <PhCube size="24px" />  活動簡介
             </div>
-            <div class="tw-my-3" v-html="activityInfo?.description.replaceAll('\n', '<br/>')">
+            <div class="tw-my-3" v-html="activityInfo?.description?.replaceAll('\n', '<br/>')">
             </div>
           </div>
           <!-- 精選照片 -->
