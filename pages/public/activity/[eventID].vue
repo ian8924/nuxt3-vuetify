@@ -9,6 +9,14 @@ const eventID = route.params.eventID as string
 
 const activityInfo: Ref<Activity | null> = ref(null)
 
+const guests = computed(() => {
+  return activityInfo.value?.participants.filter(participant => participant.type === 'guest').reverse() || []
+})
+
+const organizers = computed(() => {
+  return activityInfo.value?.participants.filter(participant => participant.type === 'org').reverse() || []
+})
+
 const getActivityInfo = async () => {
   if (!eventID)
     return
@@ -123,20 +131,48 @@ definePageMeta({
           </div>
         </div>
       </div>
-      <div class="tw-flex tw-flex-col tw-items-center tw-w-full tw-justify-center tw-mt-10">
-        <div class="tw-w-full tw-py-10 tw-flex tw-justify-center tw-px-6 tw-border-b tw-border-outline-variant tw-border-dashed">
-          <div class="tw-mx-auto tw-font-bold">活動來賓</div>
+      <div v-if="guests.length" class="tw-flex tw-flex-col tw-items-center tw-w-full tw-justify-center tw-mt-10">
+        <div class="tw-w-full  tw-py-10 tw-px-6 tw-flex tw-flex-col tw-items-center tw-border-b tw-border-outline-variant tw-border-dashed">
+          <div class="tw-mx-auto tw-font-bold tw-mb-8">活動來賓</div>
+          <div class="tw-flex tw-gap-5">
+            <div
+              v-for="guest in guests"
+              :key="guest.id"
+              :class="[guest.url ? 'tw-cursor-pointer' : '']"
+              class="tw-mb-4 tw-flex tw-flex-col tw-items-center tw-px-4 tw-gap-1"
+              @click="guest.url ? openLink(guest.url) : null"
+            >
+              <NuxtImg
+                v-if="guest.avatarUrl"
+                :src="guest.avatarUrl"
+                class="tw-w-[100px] tw-h-[100px] tw-rounded-full tw-object-cover tw-mb-2 tw-shadow-lg"
+              />
+              <div class="tw-font-semibold tw-text-md">{{ guest.title }}</div>
+              <div class="tw-text-xl tw-font-bold">{{ guest.name }}</div>
+            </div>
+          </div>
         </div>
-        <div class="tw-w-full tw-py-10 tw-flex tw-justify-center tw-px-6">
-          <div class="tw-mx-auto tw-font-bold">活動單位</div>
-          <v-card>
-            <v-card-title class="tw-font-bold">主辦單位</v-card-title>
-            <v-card-text>
-              <div v-for="organizer in activityInfo?.participants" :key="organizer.id" class="tw-mb-4">
-                <div class="tw-font-semibold">{{ organizer.name }}</div>
+        <div v-if="organizers.length" class="tw-w-full tw-py-10 tw-flex tw-flex-col tw-justify-center tw-px-6">
+          <div class="tw-mx-auto tw-font-bold tw-mb-8">活動單位</div>
+          <div class="tw-flex tw-flex-wrap tw-flex tw-justify-center">
+            <div
+              v-for="organizer in organizers"
+              :key="organizer.id"
+              :class="[organizer.url ? 'tw-cursor-pointer hover:tw-shadow-lg' : '']"
+              class="tw-mb-4 tw-flex tw-items-center tw-p-4 tw-gap-1 tw-bg-white tw-rounded-sm tw-shadow-md tw-w-[300px] tw-mr-6 tw-mb-6"
+              @click="organizer.url ? openLink(organizer.url) : null"
+            >
+              <NuxtImg
+                v-if="organizer.avatarUrl"
+                :src="organizer.avatarUrl"
+                class="tw-w-[120px] tw-h-[60px] tw-object-cover tw-mr-2"
+              />
+              <div class="tw-flex-1">
+                <div class="tw-font-semibold tw-text-md">{{ organizer.title }}</div>
+                <div class="tw-text-xl tw-font-bold tw-mt-1">{{ organizer.name }}</div>
               </div>
-            </v-card-text>
-          </v-card>
+            </div>
+          </div>
         </div>
       </div>
     </v-container>
