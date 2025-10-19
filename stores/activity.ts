@@ -11,7 +11,7 @@ export const useActivityStore = defineStore('activity', () => {
   const ACTIVITY: Ref<Activity | null> = ref(null)
 
   const ACTIVITY_PUBLIC_LINK_WEBSITE = computed(() =>
-    `${baseURL}/public/activity/${ACTIVITY?.value?.id}`
+    `${baseURL}/public/activity/${ACTIVITY?.value?.eventId}`
   )
 
   const GET_ACTIVITY_INFO = async (eventID: string) => {
