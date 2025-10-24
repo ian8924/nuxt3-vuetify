@@ -1,4 +1,5 @@
 import type { Album, ApiRequestCreateAlbum } from '@/types/interface/album.interface'
+import type { ApiResponseSingle } from '~/types/interface/api.interface'
 
 /**
  * 取得相簿 by id
@@ -46,4 +47,13 @@ export const patchAlbumByIdAPI = (albumId: number, params: Partial<Album>) => {
  */
 export const postAlbumCoverAPI = (albumId: number, params: { cover: File }) => {
   return useFetchData.post(`/v1/albums/${albumId}/cover`, params, 'album', true)
+}
+
+/**
+ * 取得相簿照片數量
+ * @param albumId
+ */
+
+export const getAlbumMediaCountAPI = (albumId: number) => {
+  return useFetchData.get<ApiResponseSingle<number>>(`/v1/albums/${albumId}/media/count`, {}, 'album')
 }

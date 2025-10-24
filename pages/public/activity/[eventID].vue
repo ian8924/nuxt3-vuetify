@@ -178,16 +178,19 @@ definePageMeta({
               {{ item.text }}
             </v-btn>
           </div>
-          <!-- 活動簡介 -->
-          <div v-if="activityInfo?.description" id="activity-intro" class="tw-py-10">
-            <div class="tw-flex tw-items-center tw-text-xl tw-font-bold tw-gap-2">
-              <PhCube size="24px" />  活動簡介
-            </div>
-            <div class="tw-my-3 " :class="[showMoreDescription ? 'tw-line-clamp-none' : 'tw-line-clamp-3']" v-html="activityInfo?.description?.replaceAll('\n', '<br/>')">
-            </div>
-            <div class="tw-text-sm cursor-pointer tw-justify-center tw-items-center tw-mx-auto tw-flex tw-gap-2" @click="showMoreDescription = !showMoreDescription">
-              <span>{{ showMoreDescription ? '收起' : '展開更多' }}</span>
-              <PhCaretDown size="14px" class="tw-transition-transform" :class="{ 'tw-rotate-180': showMoreDescription }" />
+
+          <div class="tw-py-10">
+            <!-- 活動簡介 -->
+            <div v-if="activityInfo?.description" id="activity-intro">
+              <div class="tw-flex tw-items-center tw-text-xl tw-font-bold tw-gap-2">
+                <PhCube size="24px" />  活動簡介
+              </div>
+              <div class="tw-my-3 " :class="[showMoreDescription ? 'tw-line-clamp-none' : 'tw-line-clamp-3']" v-html="activityInfo?.description?.replaceAll('\n', '<br/>')">
+              </div>
+              <div class="tw-text-sm cursor-pointer tw-justify-center tw-items-center tw-mx-auto tw-flex tw-gap-2" @click="showMoreDescription = !showMoreDescription">
+                <span>{{ showMoreDescription ? '收起' : '展開更多' }}</span>
+                <PhCaretDown size="14px" class="tw-transition-transform" :class="{ 'tw-rotate-180': showMoreDescription }" />
+              </div>
             </div>
             <!-- 精選照片 -->
             <div v-if="false" class="tw-py-10">
@@ -218,7 +221,7 @@ definePageMeta({
                       class="tw-h-full tw-object-cover tw-mb-3"
                     />
                   </div>
-                  <div class="tw-text-lg tw-font-bold tw-p-3 tw-">{{ album.name }}</div>
+                  <div class="tw-text-lg tw-font-bold tw-p-3 tw-line-clamp-2">{{ album.name }}</div>
                 </div>
               </div>
             </div>
@@ -227,7 +230,9 @@ definePageMeta({
       </div>
       <div v-if="guests.length" id="activity-guests" class="tw-flex tw-flex-col tw-items-center tw-w-full tw-justify-center tw-mt-10">
         <div class="tw-w-full  tw-py-10 tw-px-6 tw-flex tw-flex-col tw-items-center tw-border-b tw-border-outline-variant tw-border-dashed">
-          <div class="tw-mx-auto tw-font-bold tw-mb-8">活動來賓</div>
+          <div class="tw-mx-auto tw-font-bold tw-mb-8">
+            活動來賓
+          </div>
           <div class="tw-flex tw-gap-5">
             <div
               v-for="guest in guests"

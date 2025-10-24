@@ -7,7 +7,7 @@ const router = useRouter()
 const route = useRoute()
 
 const albumStore = useAlbumStore()
-const { ALBUM } = storeToRefs(albumStore)
+const { ALBUM, TOTAL_MEDIA_COUNT } = storeToRefs(albumStore)
 const notifyStore = useNotifyStore()
 
 const refForm = ref()
@@ -134,7 +134,7 @@ definePageMeta({
         <template #right>
           <div class="tw-flex tw-gap-3 tw-text-sm tw-text-on-background">
             <span>
-              相簿容量 ？ / 1500 張
+              相簿容量 {{ TOTAL_MEDIA_COUNT }} / 1500 張
             </span>
             <v-divider class="tw-my-auto" vertical length="10px" />
             <span>
