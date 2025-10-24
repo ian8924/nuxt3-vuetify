@@ -5,7 +5,9 @@ import { VisibilityEnum } from '@/types/enum/visibility.enum'
 import type { Activity } from '@/types/interface/activity.interface'
 import { PhCalendarDots, PhCaretDown, PhCube, PhMapPinLine } from '@phosphor-icons/vue'
 import dayjs from 'dayjs'
+import { getAlbumLinkByActivityId } from '~/api/activity/linkAlbum.api'
 import { getEventVisibilityAPI } from '~/api/public/activity.api'
+import type { Album } from '~/types/interface/album.interface'
 
 const route = useRoute()
 const eventID = route.params.eventID as string
@@ -16,6 +18,7 @@ const notifyStore = useNotifyStore()
 const { IS_LOGIN } = storeToRefs(userStore)
 
 const activityInfo: Ref<Activity | null> = ref(null)
+const albumLinks: Ref<Album[]> = ref([])
 const showMoreDescription = ref(false)
 
 const activityVisibility = ref<VisibilityEnum | null>(null)
@@ -64,9 +67,19 @@ const verifyPassword = async (password: string = '') => {
     activityVisibility.value = VisibilityEnum.Shared
     showPasswordDialog.value = false
     activityInfo.value = activityDataRes?.data || null
+    getAlbumList()
   } else {
     // 密碼錯誤，顯示錯誤訊息
     notifyStore.SHOW_NOTIFY({ message: '密碼錯誤，請重新輸入', type: 'error' })
+  }
+}
+
+const getAlbumList = async () => {
+  if (!activityInfo.value?.id)
+    return
+  const { data, success } = await getAlbumLinkByActivityId(activityInfo.value?.id, { page: 0, size: 1000 })
+  if (success) {
+    albumLinks.value = data?.content || []
   }
 }
 
@@ -164,7 +177,7 @@ definePageMeta({
             </v-btn>
           </div>
           <!-- 活動簡介 -->
-          <div class="tw-py-10">
+          <div id="activity-intro" class="tw-py-10">
             <div class="tw-flex tw-items-center tw-text-xl tw-font-bold tw-gap-2">
               <PhCube size="24px" />  活動簡介
             </div>
@@ -175,7 +188,7 @@ definePageMeta({
               <PhCaretDown size="14px" class="tw-transition-transform" :class="{ 'tw-rotate-180': showMoreDescription }" />
             </div>
             <!-- 精選照片 -->
-            <div class="tw-py-10">
+            <div v-if="false" class="tw-py-10">
               <div class="tw-flex tw-items-center tw-text-xl tw-font-bold tw-gap-2">
                 <PhCube size="24px" />  精選照片
               </div>
@@ -183,17 +196,34 @@ definePageMeta({
               </div>
             </div>
             <!-- 活動相簿 -->
-            <div class="tw-py-10">
-              <div class="tw-flex tw-items-center tw-text-xl tw-font-bold tw-gap-2">
+            <div v-if="albumLinks.length > 0" id="activity-album" class="tw-pt-10">
+              <div class="tw-flex tw-items-center tw-text-xl tw-font-bold tw-gap-2 tw-mb-5">
                 <PhCube size="24px" />  活動相簿
               </div>
-              <div class="tw-my-3 tw-line-clamp-3" v-html="activityInfo?.description">
+              <div class="tw-flex tw-overflow-scroll tw-gap-6">
+                <div
+                  v-for="album in albumLinks"
+                  :key="album.id"
+                  class="tw-rounded-lg hover:tw-shadow-lg tw-mb-3 tw-bg-white tw-shadow-md tw-min-w-[250px] tw-cursor-pointer"
+                  @click="$router.push(`/public/album/${album.folderId}`)"
+                >
+                  <div
+                    class="tw-w-full tw-h-[180px] tw-flex tw-items-center tw-justify-center "
+                  >
+                    <NuxtImg
+                      v-if="album.coverPhotoUrl"
+                      :src="album.coverPhotoUrl"
+                      class="tw-h-full tw-object-cover tw-mb-3"
+                    />
+                  </div>
+                  <div class="tw-text-lg tw-font-bold tw-p-3 tw-">{{ album.name }}</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div v-if="guests.length" class="tw-flex tw-flex-col tw-items-center tw-w-full tw-justify-center tw-mt-10">
+      <div v-if="guests.length" id="activity-guests" class="tw-flex tw-flex-col tw-items-center tw-w-full tw-justify-center tw-mt-10">
         <div class="tw-w-full  tw-py-10 tw-px-6 tw-flex tw-flex-col tw-items-center tw-border-b tw-border-outline-variant tw-border-dashed">
           <div class="tw-mx-auto tw-font-bold tw-mb-8">活動來賓</div>
           <div class="tw-flex tw-gap-5">
@@ -215,7 +245,7 @@ definePageMeta({
           </div>
         </div>
       </div>
-      <div v-if="organizers.length" class="tw-w-full tw-py-10 tw-flex tw-flex-col tw-justify-center tw-px-6">
+      <div v-if="organizers.length" id="activity-organizers" class="tw-w-full tw-py-10 tw-flex tw-flex-col tw-justify-center tw-px-6">
         <div class="tw-mx-auto tw-font-bold tw-mb-8">活動單位</div>
         <div class="tw-flex tw-flex-wrap tw-flex tw-justify-center">
           <div

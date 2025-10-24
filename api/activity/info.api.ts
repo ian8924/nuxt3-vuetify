@@ -35,10 +35,10 @@ export const deleteActivityByIdAPI = (eventId: string) => {
  * 透過 ID 取得活動資訊
  * @param eventID
  */
-export const getActivityByIdAPI = (eventID: string) => {
+export const getActivityByIdAPI = (eventID: string, password: string) => {
   return useFetchData.get<ApiResponseSingle<Activity>>(
     `/v1/activities/${eventID}`,
-    {},
+    { sharedPassword: password },
     'activity'
   )
 }

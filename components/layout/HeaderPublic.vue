@@ -1,5 +1,8 @@
 <script setup lang="ts">
-
+const windowUrl = computed(() => window.location.href)
+const getUrl = (id: string) => {
+  return `${windowUrl.value}#${id}`
+}
 </script>
 
 <template>
@@ -9,16 +12,16 @@
         <NuxtImg src="/images/web/logo.png" :width="71" class="tw-cursor-pointer" />
       </a>
       <div class="tw-flex tw-gap-6 tw-text-lg tw-font-medium tw-items-center">
-        <a href="/">
+        <a :href="getUrl('activity-intro')">
           活動簡介
         </a>
-        <a href="/">
+        <a :href="getUrl('activity-album')">
           活動相簿
         </a>
-        <a href="/">
+        <a :href="getUrl('activity-guests')">
           活動來賓
         </a>
-        <a href="/">
+        <a :href="getUrl('activity-organizers')">
           活動單位
         </a>
       </div>
