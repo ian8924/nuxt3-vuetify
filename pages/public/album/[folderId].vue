@@ -7,6 +7,8 @@ import type { Album } from '@/types/interface/album.interface'
 import type { Media } from '@/types/interface/media.interface'
 import { PhCalendarDots, PhEyes, PhMapPinLine, PhShareNetwork } from '@phosphor-icons/vue'
 
+const token = useCookie('token').value || ''
+
 const route = useRoute()
 const notifyStore = useNotifyStore()
 const folderID = String(route.params.folderId)
@@ -29,6 +31,15 @@ const { data: albumVisibilityData, success } = await getFolderVisibilityAPI(fold
 
 // 確認可見性
 const checkVisibility = () => {
+  // 已登入使用者，視為公開相簿
+  if (token) {
+    albumVisibility.value = VisibilityEnum.Public
+    // eslint-disable-next-line ts/no-use-before-define
+    verifyPassword()
+    return
+  }
+
+  // 未登入使用者，設為隱私
   if (!success) {
     albumVisibility.value = VisibilityEnum.Private
   }
@@ -39,8 +50,8 @@ const checkVisibility = () => {
     showPasswordDialog.value = true
   }
 
-  if (albumVisibilityData?.data?.visibility === VisibilityEnum.Public) {
   // 公開相簿
+  if (albumVisibilityData?.data?.visibility === VisibilityEnum.Public) {
     albumVisibility.value = VisibilityEnum.Public
     verifyPassword()
   }
