@@ -7,10 +7,10 @@ import type { Album } from '@/types/interface/album.interface'
 import type { Media } from '@/types/interface/media.interface'
 import { PhCalendarDots, PhEyes, PhMapPinLine, PhShareNetwork } from '@phosphor-icons/vue'
 
-const token = useCookie('token').value || ''
-
 const route = useRoute()
 const notifyStore = useNotifyStore()
+const userStore = useUserStore()
+const { IS_LOGIN } = storeToRefs(userStore)
 const folderID = String(route.params.folderId)
 
 const albumData = ref<Album | null>(null)
@@ -32,7 +32,7 @@ const { data: albumVisibilityData, success } = await getFolderVisibilityAPI(fold
 // 確認可見性
 const checkVisibility = () => {
   // 已登入使用者，視為公開相簿
-  if (token) {
+  if (IS_LOGIN.value) {
     albumVisibility.value = VisibilityEnum.Public
     // eslint-disable-next-line ts/no-use-before-define
     verifyPassword()
@@ -152,7 +152,8 @@ onMounted(() => {
 })
 
 definePageMeta({
-  layout: 'layout-public-no-header'
+  layout: 'layout-public-no-header',
+  middleware: 'check-auth'
 })
 </script>
 
