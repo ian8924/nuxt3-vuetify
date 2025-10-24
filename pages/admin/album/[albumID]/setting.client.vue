@@ -2,6 +2,7 @@
 import { putAlbumByIdAPI } from '@/api/album/info.api'
 import { PhArrowLeft, PhArrowSquareOut, PhCopy, PhFloppyDisk, PhQuestion } from '@phosphor-icons/vue'
 import copy from 'copy-to-clipboard'
+import { VisibilityEnum } from '~/types/enum/visibility.enum'
 
 const router = useRouter()
 const route = useRoute()
@@ -17,6 +18,21 @@ const form = ref({
   visibility: ALBUM.value?.visibility || 0,
   sharedPassword: ALBUM.value?.sharedPassword || ''
 })
+
+const visibilityOptions = [
+  {
+    value: VisibilityEnum.Public,
+    text: '公開'
+  },
+  {
+    value: VisibilityEnum.Private,
+    text: '隱私'
+  },
+  {
+    value: VisibilityEnum.Shared,
+    text: '不公開（密碼保護）'
+  }
+]
 
 const fetchAlbumInfo = async () => {
   const albumID = Number(route.params.albumID)
@@ -150,17 +166,7 @@ definePageMeta({
                 item-title="text"
                 item-value="value"
                 :return-object="false"
-                :items="[
-                  {
-                    value: 1, text: '公開',
-                  },
-                  {
-                    value: 0, text: '隱私',
-                  },
-                  {
-                    value: 2, text: '不公開（密碼保護）',
-                  },
-                ]"
+                :items="visibilityOptions"
               >
                 <template #message>
                   <div class="tw-flex tw-text-xs tw-items-center tw-gap-1">

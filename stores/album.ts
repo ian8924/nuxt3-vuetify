@@ -11,7 +11,7 @@ export const useAlbumStore = defineStore('album', () => {
   const ALBUM: Ref<Album | null> = ref(null)
 
   const ALBUM_PUBLIC_LINK_WEBSITE = computed(() =>
-    `${baseURL}/public/album/${ALBUM?.value?.id}`
+    `${baseURL}/public/album/${ALBUM?.value?.folderId}`
   )
 
   const GET_ALBUM_INFO = async (albumId: number) => {

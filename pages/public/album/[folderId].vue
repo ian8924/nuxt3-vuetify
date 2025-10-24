@@ -1,12 +1,17 @@
+<!-- eslint-disable ts/no-use-before-define -->
 <script setup lang="ts">
-import { getAlbumByIdAPI } from '@/api/album/info.api'
 import { getAlbumPicturesAPI } from '@/api/album/list.api'
+import { getAlbumPublicByFolderIdAPI, getFolderVisibilityAPI } from '@/api/public/album.api'
+import { VisibilityEnum } from '@/types/enum/visibility.enum'
+import type { Album } from '@/types/interface/album.interface'
 import type { Media } from '@/types/interface/media.interface'
 import { PhCalendarDots, PhEyes, PhMapPinLine, PhShareNetwork } from '@phosphor-icons/vue'
 
 const route = useRoute()
-const albumID = Number(route.params.albumID)
+const notifyStore = useNotifyStore()
+const folderID = String(route.params.folderId)
 
+const albumData = ref<Album | null>(null)
 const pictureData = ref<Media[]>([])
 const totalMedias: Ref<number> = ref(0)
 const currentPage = ref(1)
@@ -16,13 +21,55 @@ const isLoadingMore = ref(false)
 const showOverlay = ref(false)
 const currentImageUrl = ref('')
 
-const { data: albumData } = await getAlbumByIdAPI(albumID)
+const albumVisibility = ref<VisibilityEnum | null>(null)
+const showPasswordDialog = ref(false)
 
+// 取得相簿可見性
+const { data: albumVisibilityData, success } = await getFolderVisibilityAPI(folderID)
+
+// 確認可見性
+const checkVisibility = () => {
+  if (!success) {
+    albumVisibility.value = VisibilityEnum.Private
+  }
+
+  // 需要密碼保護
+  if (albumVisibilityData?.data?.visibility === VisibilityEnum.Shared) {
+    albumVisibility.value = VisibilityEnum.Shared
+    showPasswordDialog.value = true
+  }
+
+  if (albumVisibilityData?.data?.visibility === VisibilityEnum.Public) {
+  // 公開相簿
+    albumVisibility.value = VisibilityEnum.Public
+    verifyPassword()
+  }
+}
+
+// 驗證密碼
+const verifyPassword = async (password: string = '') => {
+  // 驗證密碼
+  const { data: albumDataRes, success: verifySuccess } = await getAlbumPublicByFolderIdAPI(folderID, password)
+
+  if (verifySuccess) {
+    // 密碼正確，顯示相簿內容
+    albumVisibility.value = VisibilityEnum.Shared
+    showPasswordDialog.value = false
+    albumData.value = albumDataRes || null
+    // eslint-disable-next-line ts/no-use-before-define
+    getMedias()
+  } else {
+    // 密碼錯誤，顯示錯誤訊息
+    notifyStore.SHOW_NOTIFY({ message: '密碼錯誤，請重新輸入', type: 'error' })
+  }
+}
+
+// 取得照片
 const getMedias = async () => {
-  if (!albumID)
+  if (!albumData.value)
     return
 
-  const { data: pictureResponse, success: successPicture } = await getAlbumPicturesAPI(albumID, {
+  const { data: pictureResponse, success: successPicture } = await getAlbumPicturesAPI(albumData.value?.id, {
     page: currentPage.value - 1,
     size: 12
   })
@@ -33,14 +80,15 @@ const getMedias = async () => {
   }
 }
 
+// 載入更多照片
 const fetchMorePictures = async () => {
-  if (!albumID)
+  if (!albumData.value?.id)
     return
   if (totalPages.value === currentPage.value)
     return
   currentPage.value += 1
   isLoadingMore.value = true
-  const { data: pictureResponse, success: successPicture } = await getAlbumPicturesAPI(albumID, {
+  const { data: pictureResponse, success: successPicture } = await getAlbumPicturesAPI(albumData.value?.id, {
     page: currentPage.value - 1,
     size: 12
   })
@@ -78,27 +126,42 @@ const clickNext = () => {
   }
 }
 
+const shareAlbum = () => {
+  // 分享相簿連結
+  const albumLink = `${window.location.origin}/public/album/${folderID}`
+  navigator.clipboard.writeText(albumLink).then(() => {
+    notifyStore.SHOW_NOTIFY({ message: '已複製相簿連結到剪貼簿', type: 'success' })
+  }).catch(() => {
+    notifyStore.SHOW_NOTIFY({ message: '複製相簿連結失敗，請稍後再試', type: 'error' })
+  })
+}
+
 onMounted(() => {
-  getMedias()
+  checkVisibility()
 })
 
 definePageMeta({
-  layout: 'layout-public',
-  middleware: 'check-auth'
+  layout: 'layout-public-no-header'
 })
 </script>
 
 <template>
-  <v-main>
+  <div
+    v-if="albumVisibility === VisibilityEnum.Private"
+    class="tw-w-full tw-h-[100vh] tw-flex tw-justify-center tw-items-center tw-text-2xl tw-font-bold"
+  >
+    找不到此頁面
+  </div>
+  <v-main v-else>
     <div :style="{ backgroundImage: `url(${albumData?.coverPhotoUrl})`, filter: 'blur(10px)' } " class="tw-hidden sm:tw-block tw-absolute tw-bg-cover tw-bg-center tw-h-[600px] tw-w-full tw-mb-20" />
     <v-container class="tw-z-10 tw-relative tw-bg-white tw-p-[0px] tw-rounded-lg tw-shadow-lg tw-max-w-3xl tw-p-[0px]!">
       <!-- 相簿資訊 -->
-      <div class="tw-flex-col sm:tw-flex-row tw-flex tw-gap-6 sm:tw-py-6">
+      <div class="tw-flex-col sm:tw-flex-row tw-flex tw-gap-6 sm:tw-pb-6">
         <div class="tw-w-full sm:tw-w-[40%] tw-rounded-lg tw-aspect-[4/3] tw-object-cover tw-relative">
           <nuxt-img
             v-if="albumData?.coverPhotoUrl"
             :src="albumData?.coverPhotoUrl"
-            class="tw-w-full tw-h-full tw-rounded-lg tw-object-cover"
+            class="tw-w-full tw-h-full tw-object-cover"
           />
           <div class="tw-absolute tw-bottom-[-1px] tw-right-3 tw-font-bold tw-flex tw-items-center tw-text-sm tw-text-white tw-mb-3">
             <PhCalendarDots size="14" class="tw-mr-2 tw-text-gray-600" />
@@ -133,12 +196,12 @@ definePageMeta({
       </div>
       <div class="tw-hidden sm:tw-block tw-w-full tw-border-b tw-border-outline-variant tw-mt-4 tw-border-dashed "></div>
       <!-- 照片 -->
-      <div class="tw-flex tw-justify-between tw-items-center tw-mt-0 sm:tw-mt-4">
-        <div class="tw-px-6 tw-pt-6 tw-pb-3 tw-text-xl tw-font-bold tw-text-gray-700 tw-flex tw-items-center tw-gap-3">
+      <div class="tw-flex tw-justify-between tw-items-center tw-mt-0 sm:tw-mt-4 tw-px-4">
+        <div class="tw-pt-6 tw-pb-3 tw-text-xl tw-font-bold tw-text-gray-700 tw-flex tw-items-center tw-gap-3">
           照片 <span class="tw-text-primary tw-text-base">{{ pictureData?.length }} 張</span>
         </div>
         <div>
-          <v-btn color="white"> <PhShareNetwork size="16" class="tw-mr-1" />分享連結</v-btn>
+          <v-btn color="white" @click="shareAlbum"> <PhShareNetwork size="16" class="tw-mr-1" />分享連結</v-btn>
         </div>
       </div>
       <div class="tw-my-2 sm:tw-my-5 tw-min-h-[80vh] tw-min-h-[200px]">
@@ -187,6 +250,10 @@ definePageMeta({
     :img-url="currentImageUrl"
     @click-previous="clickPrevious"
     @click-next="clickNext"
+  />
+  <DialogInputSharedPassword
+    v-model="showPasswordDialog"
+    @confirm="verifyPassword"
   />
 </template>
 

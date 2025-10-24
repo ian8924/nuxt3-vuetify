@@ -23,7 +23,8 @@ const fetchData = async <TData = unknown>(
   data?: any,
   apiService?: 'user' | 'album' | 'activity',
   isUpload = false,
-  returnError = false
+  returnError = false,
+  checkErrorStatus = true
 ): Promise<BaseApiResponse<TData>> => {
   const runtimeConfig = useRuntimeConfig()
   const notifyStore = useNotifyStore()
@@ -72,7 +73,7 @@ const fetchData = async <TData = unknown>(
       onResponse({ request, response }) {
         console.log('[fetch response]', request, response.status)
 
-        if (response.status === 403) {
+        if (response.status === 403 && checkErrorStatus) {
           notifyStore.SHOW_NOTIFY({ message: '請重新登入', type: 'error' })
           router.push('/auth/login')
         }
@@ -121,23 +122,23 @@ const fetchData = async <TData = unknown>(
 }
 
 export const useFetchData = new (class getData {
-  get<TData = any>(url: string, params?: any, apiService: 'user' | 'album' | 'activity' = 'user', isUpload: boolean = false, returnError: boolean = false) {
-    return fetchData<TData>(url, AsyncApiMethod.get, params, apiService, isUpload, returnError)
+  get<TData = any>(url: string, params?: any, apiService: 'user' | 'album' | 'activity' = 'user', isUpload: boolean = false, returnError: boolean = false, checkErrorStatus: boolean = true) {
+    return fetchData<TData>(url, AsyncApiMethod.get, params, apiService, isUpload, returnError, checkErrorStatus)
   }
 
-  post<TData = any>(url: string, body?: any, apiService: 'user' | 'album' | 'activity' = 'user', isUpload: boolean = false, returnError: boolean = false) {
-    return fetchData<TData>(url, AsyncApiMethod.post, body, apiService, isUpload, returnError)
+  post<TData = any>(url: string, body?: any, apiService: 'user' | 'album' | 'activity' = 'user', isUpload: boolean = false, returnError: boolean = false, checkErrorStatus: boolean = true) {
+    return fetchData<TData>(url, AsyncApiMethod.post, body, apiService, isUpload, returnError, checkErrorStatus)
   }
 
-  put<TData = any>(url: string, body?: any, apiService: 'user' | 'album' | 'activity' = 'user', isUpload: boolean = false, returnError: boolean = false) {
-    return fetchData<TData>(url, AsyncApiMethod.put, body, apiService, isUpload, returnError)
+  put<TData = any>(url: string, body?: any, apiService: 'user' | 'album' | 'activity' = 'user', isUpload: boolean = false, returnError: boolean = false, checkErrorStatus: boolean = true) {
+    return fetchData<TData>(url, AsyncApiMethod.put, body, apiService, isUpload, returnError, checkErrorStatus)
   }
 
-  patch<TData = any>(url: string, body?: any, apiService: 'user' | 'album' | 'activity' = 'user', isUpload: boolean = false, returnError: boolean = false) {
-    return fetchData<TData>(url, AsyncApiMethod.patch, body, apiService, isUpload, returnError)
+  patch<TData = any>(url: string, body?: any, apiService: 'user' | 'album' | 'activity' = 'user', isUpload: boolean = false, returnError: boolean = false, checkErrorStatus: boolean = true) {
+    return fetchData<TData>(url, AsyncApiMethod.patch, body, apiService, isUpload, returnError, checkErrorStatus)
   }
 
-  delete<TData = any>(url: string, body?: any, apiService: 'user' | 'album' | 'activity' = 'user', isUpload: boolean = false, returnError: boolean = false) {
-    return fetchData<TData>(url, AsyncApiMethod.delete, body, apiService, isUpload, returnError)
+  delete<TData = any>(url: string, body?: any, apiService: 'user' | 'album' | 'activity' = 'user', isUpload: boolean = false, returnError: boolean = false, checkErrorStatus: boolean = true) {
+    return fetchData<TData>(url, AsyncApiMethod.delete, body, apiService, isUpload, returnError, checkErrorStatus)
   }
 })()
