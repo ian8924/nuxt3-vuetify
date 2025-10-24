@@ -1,6 +1,7 @@
 import type { VisibilityEnum } from '@/types/enum/visibility.enum'
 import type { Album } from '@/types/interface/album.interface'
-import type { ApiResponseSingle } from '@/types/interface/api.interface'
+import type { ApiResponseList, ApiResponseSingle } from '@/types/interface/api.interface'
+import type { ApiRequestListMedia, Media } from '~/types/interface/media.interface'
 
 /**
  * 取得相簿 visibility
@@ -18,4 +19,13 @@ export const getFolderVisibilityAPI = (folderId: string) => {
 
 export const getAlbumPublicByFolderIdAPI = (folderId: string, sharedPassword: string) => {
   return useFetchData.get<Album>(`/v1/albums/folder/${folderId}`, { sharedPassword }, 'album', false, false, false)
+}
+
+/**
+ * 取得相簿內的照片
+ * @param params
+ * @param { type String } userId 使用者ID
+ */
+export const getAlbumPicturesPublicAPI = (albumId: number, params: ApiRequestListMedia) => {
+  return useFetchData.get<ApiResponseSingle<ApiResponseList<Media[]>>>(`/v1/albums/${albumId}/media/search`, params, 'album', false, false, false)
 }

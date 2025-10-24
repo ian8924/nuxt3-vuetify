@@ -1,7 +1,7 @@
 <!-- eslint-disable ts/no-use-before-define -->
 <script setup lang="ts">
 import { getAlbumPicturesAPI } from '@/api/album/list.api'
-import { getAlbumPublicByFolderIdAPI, getFolderVisibilityAPI } from '@/api/public/album.api'
+import { getAlbumPicturesPublicAPI, getAlbumPublicByFolderIdAPI, getFolderVisibilityAPI } from '@/api/public/album.api'
 import { VisibilityEnum } from '@/types/enum/visibility.enum'
 import type { Album } from '@/types/interface/album.interface'
 import type { Media } from '@/types/interface/media.interface'
@@ -25,6 +25,7 @@ const currentImageUrl = ref('')
 
 const albumVisibility = ref<VisibilityEnum | null>(null)
 const showPasswordDialog = ref(false)
+const inputPassword = ref('')
 
 // 取得相簿可見性
 const { data: albumVisibilityData, success } = await getFolderVisibilityAPI(folderID)
@@ -59,6 +60,7 @@ const checkVisibility = () => {
 
 // 驗證密碼
 const verifyPassword = async (password: string = '') => {
+  inputPassword.value = password
   // 驗證密碼
   const { data: albumDataRes, success: verifySuccess } = await getAlbumPublicByFolderIdAPI(folderID, password)
 
@@ -80,9 +82,10 @@ const getMedias = async () => {
   if (!albumData.value)
     return
 
-  const { data: pictureResponse, success: successPicture } = await getAlbumPicturesAPI(albumData.value?.id, {
+  const { data: pictureResponse, success: successPicture } = await getAlbumPicturesPublicAPI(albumData.value?.id, {
     page: currentPage.value - 1,
-    size: 12
+    size: 12,
+    sharedPassword: inputPassword.value
   })
   if (successPicture && pictureResponse) {
     pictureData.value = pictureResponse.data.content

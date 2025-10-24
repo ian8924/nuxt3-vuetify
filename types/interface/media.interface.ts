@@ -50,4 +50,4 @@ export interface MediaMetadata {
   description: string | null
 }
 
-export interface ApiRequestListMedia extends ApiRequestPagination { keyword?: string }
+export interface ApiRequestListMedia extends ApiRequestPagination { keyword?: string, sharedPassword?: string }

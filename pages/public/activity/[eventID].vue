@@ -1,6 +1,6 @@
 <!-- eslint-disable ts/no-use-before-define -->
 <script setup lang="ts">
-import { getActivityByIdAPI } from '@/api/activity/info.api'
+import { getActivityPublicByIdAPI } from '@/api/public/activity.api'
 import { VisibilityEnum } from '@/types/enum/visibility.enum'
 import type { Activity } from '@/types/interface/activity.interface'
 import { PhCalendarDots, PhCaretDown, PhCube, PhMapPinLine } from '@phosphor-icons/vue'
@@ -21,6 +21,7 @@ const activityInfo: Ref<Activity | null> = ref(null)
 const albumLinks: Ref<Album[]> = ref([])
 const showMoreDescription = ref(false)
 
+const inputVisiblePassword = ref<string | null>(null)
 const activityVisibility = ref<VisibilityEnum | null>(null)
 const showPasswordDialog = ref(false)
 
@@ -56,11 +57,12 @@ const checkVisibility = () => {
 
 // 驗證密碼
 const verifyPassword = async (password: string = '') => {
+  inputVisiblePassword.value = password
   if (!eventID)
     return
 
   // 驗證密碼
-  const { data: activityDataRes, success: verifySuccess } = await getActivityByIdAPI(eventID, password)
+  const { data: activityDataRes, success: verifySuccess } = await getActivityPublicByIdAPI(eventID, password)
 
   if (verifySuccess) {
     // 密碼正確，顯示相簿內容
@@ -77,7 +79,7 @@ const verifyPassword = async (password: string = '') => {
 const getAlbumList = async () => {
   if (!activityInfo.value?.id)
     return
-  const { data, success } = await getAlbumLinkByActivityId(activityInfo.value?.id, { page: 0, size: 1000 })
+  const { data, success } = await getAlbumLinkByActivityId(activityInfo.value?.id, { page: 0, size: 1000, sharedPassword: inputVisiblePassword.value })
   if (success) {
     albumLinks.value = data?.content || []
   }
@@ -144,7 +146,7 @@ definePageMeta({
           <div class="tw-flex tw-items-center tw-mb-4 tw-gap-6 tw-font-medium">
             <div v-if="activityInfo?.startedAt && activityInfo?.endedAt" class="tw-flex tw-items-center tw-mb-4 tw-gap-2">
               <PhCalendarDots size="22" class="tw-mr-2 tw-text-gray-600" />
-              {{ dayjs(activityInfo?.startedAt).format('YYYY-MM-DD HH:mm') }} - {{ dayjs(activityInfo?.endedAt).format('YYYY-MM-DD HH:mm') }}
+              {{ dayjs(activityInfo?.startedAt).format('YYYY/MM/DD') }} - {{ dayjs(activityInfo?.endedAt).format('YYYY/MM/DD') }}
             </div>
             <div v-if="activityInfo?.activityTime" class="tw-flex tw-items-center tw-mb-4 tw-gap-2">
               <PhCalendarDots size="22" class="tw-mr-2 tw-text-gray-600" />
@@ -177,7 +179,7 @@ definePageMeta({
             </v-btn>
           </div>
           <!-- 活動簡介 -->
-          <div id="activity-intro" class="tw-py-10">
+          <div v-if="activityInfo?.description" id="activity-intro" class="tw-py-10">
             <div class="tw-flex tw-items-center tw-text-xl tw-font-bold tw-gap-2">
               <PhCube size="24px" />  活動簡介
             </div>
