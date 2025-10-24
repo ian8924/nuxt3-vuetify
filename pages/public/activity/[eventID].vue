@@ -1,14 +1,75 @@
+<!-- eslint-disable ts/no-use-before-define -->
 <script setup lang="ts">
 import { getActivityByIdAPI } from '@/api/activity/info.api'
+import { VisibilityEnum } from '@/types/enum/visibility.enum'
 import type { Activity } from '@/types/interface/activity.interface'
 import { PhCalendarDots, PhCaretDown, PhCube, PhMapPinLine } from '@phosphor-icons/vue'
 import dayjs from 'dayjs'
+import { getEventVisibilityAPI } from '~/api/public/activity.api'
 
 const route = useRoute()
 const eventID = route.params.eventID as string
 
+const userStore = useUserStore()
+const notifyStore = useNotifyStore()
+
+const { IS_LOGIN } = storeToRefs(userStore)
+
 const activityInfo: Ref<Activity | null> = ref(null)
 const showMoreDescription = ref(false)
+
+const activityVisibility = ref<VisibilityEnum | null>(null)
+const showPasswordDialog = ref(false)
+
+// 取得活動可見性
+const { data: eventVisibilityData, success } = await getEventVisibilityAPI(eventID)
+
+// 確認可見性
+const checkVisibility = () => {
+  // 已登入使用者，視為公開相簿
+  if (IS_LOGIN.value) {
+    activityVisibility.value = VisibilityEnum.Public
+    verifyPassword()
+    return
+  }
+
+  // 未登入使用者，設為隱私
+  if (!success) {
+    activityVisibility.value = VisibilityEnum.Private
+  }
+
+  // 需要密碼保護
+  if (eventVisibilityData?.data?.visibility === VisibilityEnum.Shared) {
+    activityVisibility.value = VisibilityEnum.Shared
+    showPasswordDialog.value = true
+  }
+
+  // 公開相簿
+  if (eventVisibilityData?.data?.visibility === VisibilityEnum.Public) {
+    activityVisibility.value = VisibilityEnum.Public
+    verifyPassword()
+  }
+}
+
+// 驗證密碼
+const verifyPassword = async (password: string = '') => {
+  if (!eventID)
+    return
+
+  // 驗證密碼
+  const { data: activityDataRes, success: verifySuccess } = await getActivityByIdAPI(eventID, password)
+
+  if (verifySuccess) {
+    // 密碼正確，顯示相簿內容
+    activityVisibility.value = VisibilityEnum.Shared
+    showPasswordDialog.value = false
+    activityInfo.value = activityDataRes?.data || null
+  } else {
+    // 密碼錯誤，顯示錯誤訊息
+    notifyStore.SHOW_NOTIFY({ message: '密碼錯誤，請重新輸入', type: 'error' })
+  }
+}
+
 const guests = computed(() => {
   return activityInfo.value?.participants.filter(participant => participant.type === 'guest').reverse() || []
 })
@@ -17,31 +78,28 @@ const organizers = computed(() => {
   return activityInfo.value?.participants.filter(participant => participant.type === 'org').reverse() || []
 })
 
-const getActivityInfo = async () => {
-  if (!eventID)
-    return
-
-  const { data, success } = await getActivityByIdAPI(eventID)
-  if (success && data) {
-    activityInfo.value = data.data
-  }
-}
-
 const openLink = (url: string) => {
   window.open(url, '_blank')
 }
 
 onMounted(() => {
-  getActivityInfo()
+  checkVisibility()
 })
 
 definePageMeta({
-  layout: 'layout-public'
+  layout: 'layout-public',
+  middleware: 'check-auth'
 })
 </script>
 
 <template>
-  <v-main class="tw-bg-background">
+  <div
+    v-if="activityVisibility === VisibilityEnum.Private"
+    class="tw-w-full tw-h-[100vh] tw-flex tw-justify-center tw-items-center tw-text-2xl tw-font-bold"
+  >
+    找不到此頁面
+  </div>
+  <v-main v-else class="tw-bg-background">
     <div :style="{ backgroundImage: `url(${activityInfo?.coverPhotoUrl})`, filter: 'blur(10px)' } " class="tw-hidden sm:tw-block tw-absolute tw-bg-cover tw-bg-center tw-h-[600px] tw-w-full tw-mb-20" />
     <v-container class="tw-z-10 tw-relative tw-bg-white tw-rounded-lg  tw-max-w-3xl tw-p-[0px]!">
       <div class="tw-w-full tw-shadow-lg">
@@ -181,6 +239,10 @@ definePageMeta({
       </div>
     </v-container>
   </v-main>
+  <DialogInputSharedPassword
+    v-model="showPasswordDialog"
+    @confirm="verifyPassword"
+  />
 </template>
 
 <style>
