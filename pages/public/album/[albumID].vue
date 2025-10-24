@@ -27,9 +27,9 @@ const getMedias = async () => {
     size: 12
   })
   if (successPicture && pictureResponse) {
-    pictureData.value = pictureResponse.content
-    totalMedias.value = pictureResponse.totalElements
-    totalPages.value = pictureResponse.totalPages
+    pictureData.value = pictureResponse.data.content
+    totalMedias.value = pictureResponse.data.totalElements
+    totalPages.value = pictureResponse.data.totalPages
   }
 }
 
@@ -46,9 +46,9 @@ const fetchMorePictures = async () => {
   })
   isLoadingMore.value = false
   if (successPicture && pictureResponse) {
-    pictureData.value = pictureData.value.concat(pictureResponse.content)
-    totalMedias.value = pictureResponse.totalElements
-    totalPages.value = pictureResponse.totalPages
+    pictureData.value = pictureData.value.concat(pictureResponse.data.content)
+    totalMedias.value = pictureResponse.data.totalElements
+    totalPages.value = pictureResponse.data.totalPages
   }
 }
 
