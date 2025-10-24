@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { createActivityParticipantsAPI, deleteParticipantAPI, getActivityParticipantsAPI, putParticipantAPI, uploadParticipantAvatarAPI } from '@/api/activity/participant.api'
 import type { Participant } from '@/types/interface/activity.interface'
-import { PhArrowLeft, PhArrowSquareOut, PhFloppyDisk, PhPlus, PhX } from '@phosphor-icons/vue'
+import { PhArrowLeft, PhArrowSquareOut, PhFloppyDisk, PhImage, PhPlus, PhX } from '@phosphor-icons/vue'
 
 const router = useRouter()
 
@@ -252,11 +252,14 @@ definePageMeta({
                 <div class="flex-1">
                   <template v-if="item.avatarUrl">
                     <div class="tw-relative">
-                      <NuxtImg
-                        :src="item.avatarUrl"
-                        class="tw-border tw-rounded-md tw-min-w-[150px] tw-min-h-[150px] tw-h-[150px] tw-w-[150px]"
-                        alt="Cover Image"
-                      />
+                      <div class="tw-flex tw-justify-center tw-items-center tw-min-w-[150px] tw-min-h-[150px] tw-h-[150px] tw-w-[150px] tw-rounded-md">
+                        <NuxtImg
+                          :src="item.avatarUrl"
+                          class="tw-w-full"
+                          alt="Cover Image"
+                        />
+                      </div>
+
                       <div class="tw-absolute tw-top-2 tw-right-2">
                         <v-icon-btn
                           color="surface-50"
