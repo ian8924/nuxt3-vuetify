@@ -57,7 +57,17 @@ export default defineNuxtConfig({
     },
     preset: mode === 'prod' ? 'vercel' : undefined,
     prerender: {
-      routes: ['/auth/login']
+      routes: ['/auth/login', '/', '/dashboard'],
+      crawlLinks: false
+    },
+    routeRules: {
+      // Static pages
+      '/': { prerender: true },
+      '/auth/**': { prerender: true },
+      // Dynamic pages with ISR
+      '/public/**': { isr: 60 }, // 60 seconds cache
+      // Admin pages as SPA (no SSR)
+      '/admin/**': { ssr: false }
     }
   },
 
