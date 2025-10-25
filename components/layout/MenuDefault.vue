@@ -17,7 +17,7 @@ const mainMenu = [
   { title: '活動', icon: PhTicket, path: '/admin/activity', enable: true },
   { title: '錢包', icon: PhWallet, path: '/admin/wallet', enable: false },
   { title: '設定', icon: PhSlidersHorizontal, path: '/admin/setting', enable: false },
-  { title: '會員', icon: PhUser, path: '/admin/profile', enable: false }
+  { title: '會員', icon: PhUser, path: '/admin/member/setting', enable: true }
 ]
 
 const toggleDrawer = () => {

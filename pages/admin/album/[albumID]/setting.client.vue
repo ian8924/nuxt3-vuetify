@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { putAlbumByIdAPI } from '@/api/album/info.api'
+import { VisibilityEnum } from '@/types/enum/visibility.enum'
 import { PhArrowLeft, PhArrowSquareOut, PhCopy, PhFloppyDisk, PhQuestion } from '@phosphor-icons/vue'
 import copy from 'copy-to-clipboard'
-import { VisibilityEnum } from '~/types/enum/visibility.enum'
 
 const router = useRouter()
 const route = useRoute()

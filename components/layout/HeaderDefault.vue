@@ -4,7 +4,7 @@ import { PhSignOut, PhUser } from '@phosphor-icons/vue'
 const userStore = useUserStore()
 const notifyStore = useNotifyStore()
 
-const { IS_LOGIN } = storeToRefs(userStore)
+const { IS_LOGIN, USER } = storeToRefs(userStore)
 
 const logout = () => {
   userStore.LOGOUT()
@@ -38,9 +38,8 @@ const logout = () => {
               <template #activator="{ props }">
                 <NuxtImg
                   v-bind="props"
-                  src="/images/web/avator.png"
-                  width="40px"
-                  class="tw-cursor-pointer"
+                  :src="USER?.avatarUrl || '/images/web/avatar.png'"
+                  class="tw-w-10 tw-h-10 tw-cursor-pointer tw-rounded-full"
                 />
               </template>
               <v-list width="150px" bg-color="white">
