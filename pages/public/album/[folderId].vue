@@ -230,14 +230,15 @@ definePageMeta({
             >
               <v-card
                 color="white"
-                class="sm:tw-rounded-lg tw-cursor-pointer tw-aspect-[1/1] sm:tw-aspect-[4/3] tw-flex tw-items-center tw-justify-center"
+                class="sm:tw-rounded-lg tw-cursor-pointer  tw-flex tw-items-center tw-justify-center"
                 @click="clickItem(item)"
               >
-                <nuxt-img
-                  :src="item.cdnUrl"
-                  fit="fill"
-                  class="tw-h-full tw-mx-auto tw-absolute tw-inset-0"
-                />
+                <div class="tw-aspect-[4/3] tw-overflow-hidden tw-rounded tw-bg-surface tw-flex tw-items-center tw-justify-center">
+                  <nuxt-img
+                    :src="item.cdnUrl"
+                    class="tw-object-cover tw-h-full"
+                  />
+                </div>
               </v-card>
             </v-col>
           </v-row>

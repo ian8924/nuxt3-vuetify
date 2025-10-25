@@ -43,7 +43,7 @@ const clickItem = () => {
     >
       <PhCircle
         v-if="props.selectMediaIDs.includes(props.item.id)"
-        class="tw-text-white "
+        class="tw-text-white"
         :size="28"
         weight="fill"
       />
