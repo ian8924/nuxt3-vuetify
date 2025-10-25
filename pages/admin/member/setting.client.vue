@@ -295,7 +295,7 @@ definePageMeta({
                 </div>
               </template>
             </v-file-upload>
-            <div class="tw-mt-2 tw-text-sm tw-text-on-surface-60">* 最佳封面比例 4:3</div>
+            <div class="tw-mt-2 tw-text-sm tw-text-on-surface-60">* 最佳比例 1:1</div>
           </template>
         </div>
       </div>
