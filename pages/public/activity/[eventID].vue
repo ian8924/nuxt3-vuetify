@@ -85,6 +85,10 @@ const getAlbumList = async () => {
   }
 }
 
+const albumLinksFiltered = computed(() => {
+  return albumLinks.value.filter(i => i.visibility !== VisibilityEnum.Private)
+})
+
 const guests = computed(() => {
   return activityInfo.value?.participants.filter(participant => participant.type === 'guest').reverse() || []
 })
@@ -201,23 +205,22 @@ definePageMeta({
               </div>
             </div>
             <!-- 活動相簿 -->
-            <div v-if="albumLinks.length > 0" id="activity-album" class="tw-pt-10">
+            <div v-if="albumLinksFiltered.length > 0" id="activity-album" class="tw-pt-10">
               <div class="tw-flex tw-items-center tw-text-xl tw-font-bold tw-gap-2 tw-mb-5">
                 <PhCube size="24px" />  活動相簿
               </div>
               <div class="tw-flex tw-overflow-scroll tw-gap-6">
                 <div
-                  v-for="album in albumLinks"
+                  v-for="album in albumLinksFiltered"
                   :key="album.id"
-                  class="tw-rounded-lg hover:tw-shadow-lg tw-mb-3 tw-bg-white tw-shadow-md tw-min-w-[250px] tw-cursor-pointer"
+                  class="tw-rounded-lg hover:tw-shadow-lg tw-mb-3 tw-bg-white tw-shadow-md tw-max-w-[250px] tw-min-w-[250px] tw-cursor-pointer"
                   @click="$router.push(`/public/album/${album.folderId}`)"
                 >
                   <div
                     class="tw-w-full tw-h-[180px] tw-flex tw-items-center tw-justify-center "
                   >
                     <NuxtImg
-                      v-if="album.coverPhotoUrl"
-                      :src="album.coverPhotoUrl"
+                      :src="album.coverPhotoUrl ? album.coverPhotoUrl : '/images/web/no-data.png'"
                       class="tw-h-full tw-object-cover tw-mb-3"
                     />
                   </div>

@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { createAlbumAPI } from '@/api/album/info.api'
 import { getUserAlbumsAPI } from '@/api/album/list.api'
+import type { Album, ApiRequestCreateAlbum } from '@/types/interface/album.interface'
 import { PhImages, PhPlus } from '@phosphor-icons/vue'
 import dayjs from 'dayjs'
-import type { Album, ApiRequestCreateAlbum } from '~/types/interface/album.interface'
+
+// import ImgNoData from '@/assets/img/no-data.png'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -168,12 +170,11 @@ definePageMeta({
               <div class="tw-aspect-[2/1] tw-overflow-hidden tw-rounded tw-bg-surface tw-flex tw-items-center tw-justify-center">
                 <NuxtImg
                   class="tw-object-cover tw-h-full"
-                  :src="item.coverPhotoUrl"
-                  fit="contain"
+                  :src="item.coverPhotoUrl ? item.coverPhotoUrl : '/images/web/no-data.png'"
+                  :alt="item.name"
                   loading="lazy"
                 />
               </div>
-
               <div class="tw-p-4">
                 <v-tooltip :text="item.name" location="bottom">
                   <template #activator="{ props }">

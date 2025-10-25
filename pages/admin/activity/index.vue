@@ -173,7 +173,8 @@ definePageMeta({
               <div class="tw-aspect-[2/1] tw-overflow-hidden tw-rounded tw-bg-surface tw-flex tw-items-center tw-justify-center">
                 <NuxtImg
                   class="tw-object-cover tw-h-full"
-                  :src="item.coverPhotoUrl"
+                  :src="item.coverPhotoUrl ? item.coverPhotoUrl : '/images/web/no-data.png'"
+                  :alt="item.name"
                   fit="contain"
                   loading="lazy"
                 />

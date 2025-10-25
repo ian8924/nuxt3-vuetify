@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const windowUrl = computed(() => window.location.href)
+const windowUrl = computed(() => window?.location.href)
 const getUrl = (id: string) => {
   return `${windowUrl.value}#${id}`
 }
