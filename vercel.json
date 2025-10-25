@@ -4,11 +4,6 @@
   "installCommand": "npm install",
   "outputDirectory": ".output",
   "framework": "nuxtjs",
-  "functions": {
-    "server/api/**": {
-      "maxDuration": 30
-    }
-  },
   "headers": [
     {
       "source": "/(.*)",
