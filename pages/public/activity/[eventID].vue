@@ -121,10 +121,10 @@ definePageMeta({
   <v-main v-else class="tw-bg-background">
     <div :style="{ backgroundImage: `url(${activityInfo?.coverPhotoUrl})`, filter: 'blur(10px)' } " class="tw-hidden sm:tw-block tw-absolute tw-bg-cover tw-bg-center tw-h-[600px] tw-w-full tw-mb-20" />
     <v-container class="tw-z-10 tw-relative tw-bg-white tw-rounded-lg  tw-max-w-3xl tw-p-[0px]!">
-      <div class="tw-w-full tw-shadow-lg">
+      <div class="tw-w-full tw-shadow-lg tw-p-3 sm:tw-p-0 tw-relative">
         <!-- 相簿資訊 -->
         <div class="tw-flex-col sm:tw-flex-row tw-flex tw-gap-6 sm:tw-py-6">
-          <div class="tw-w-full tw-rounded-lg tw-aspect-[4/3] tw-object-cover tw-relative">
+          <div class="tw-w-full tw-aspect-[4/3] tw-object-cover tw-relative">
             <nuxt-img
               v-if="activityInfo?.coverPhotoUrl"
               :src="activityInfo?.coverPhotoUrl"
@@ -132,28 +132,28 @@ definePageMeta({
             />
           </div>
         </div>
-        <div class="tw-py-4 tw-px-6">
+        <div class="tw-py-3 sm:tw-py-4 sm:tw-px-6">
           <!-- 標頭 -->
           <div class="tw-full tw-flex tw-justify-between tw-items-center tw-mb-4">
-            <h1 class="tw-text-3xl tw-font-bold">{{ activityInfo?.name }}</h1>
-            <div class="tw-flex tw-items-center tw-gap-2 tw-text-xl tw-font-medium tw-px-6 tw-py-2">
+            <h1 class="tw-text-2xl sm:tw-text-3xl tw-font-bold">{{ activityInfo?.name }}</h1>
+            <div class="tw-absolute sm:tw-relative tw-top-2 tw-right-1 tw-flex tw-items-center tw-gap-2 tw-text-lg sm:tw-text-xl tw-font-medium tw-px-6 tw-py-2">
               <NuxtImg v-if="activityInfo?.theme" class="tw-w-6 tw-h-6" :src="activityInfo?.theme.iconUrl" />
               {{ activityInfo?.theme?.name }}
             </div>
           </div>
           <!-- 地點 -->
-          <div v-if="activityInfo?.location" class="tw-flex tw-items-center tw-my-4 tw-mt-8 tw-gap-2">
-            <PhMapPinLine size="22" class="tw-mr-2 tw-text-gray-600" />
+          <div v-if="activityInfo?.location" class="tw-flex tw-items-center tw-my-4 tw-mt-2 sm:tw-mt-8 tw-gap-1">
+            <PhMapPinLine size="22" class="tw-mr-1 sm:tw-mr-2 tw-text-gray-600" />
             {{ activityInfo?.location }}
           </div>
           <!-- 日期時間 -->
           <div class="tw-flex tw-items-center tw-mb-4 tw-gap-6 tw-font-medium">
-            <div v-if="activityInfo?.startedAt && activityInfo?.endedAt" class="tw-flex tw-items-center tw-mb-4 tw-gap-2">
-              <PhCalendarDots size="22" class="tw-mr-2 tw-text-gray-600" />
+            <div v-if="activityInfo?.startedAt && activityInfo?.endedAt" class="tw-flex tw-items-center tw-gap-1 sm:tw-gap-2">
+              <PhCalendarDots size="22" class="tw-text-gray-600" />
               {{ dayjs(activityInfo?.startedAt).format('YYYY/MM/DD') }} - {{ dayjs(activityInfo?.endedAt).format('YYYY/MM/DD') }}
             </div>
-            <div v-if="activityInfo?.activityTime" class="tw-flex tw-items-center tw-mb-4 tw-gap-2">
-              <PhCalendarDots size="22" class="tw-mr-2 tw-text-gray-600" />
+            <div v-if="activityInfo?.activityTime" class="tw-flex tw-items-center tw-gap-1 sm:tw-gap-2">
+              <PhCalendarDots size="22" class="tw-text-gray-600" />
               {{ activityInfo?.activityTime }}
             </div>
           </div>
@@ -183,7 +183,7 @@ definePageMeta({
             </v-btn>
           </div>
 
-          <div class="tw-py-10">
+          <div class="tw-py-5 sm:tw-py-10">
             <!-- 活動簡介 -->
             <div v-if="activityInfo?.description" id="activity-intro">
               <div class="tw-flex tw-items-center tw-text-xl tw-font-bold tw-gap-2">
@@ -205,7 +205,7 @@ definePageMeta({
               </div>
             </div>
             <!-- 活動相簿 -->
-            <div v-if="albumLinksFiltered.length > 0" id="activity-album" class="tw-pt-10">
+            <div v-if="albumLinksFiltered.length > 0" id="activity-album" class="tw-pt-5 sm:tw-pt-10">
               <div class="tw-flex tw-items-center tw-text-xl tw-font-bold tw-gap-2 tw-mb-5">
                 <PhCube size="24px" />  活動相簿
               </div>
@@ -231,12 +231,12 @@ definePageMeta({
           </div>
         </div>
       </div>
-      <div v-if="guests.length" id="activity-guests" class="tw-flex tw-flex-col tw-items-center tw-w-full tw-justify-center tw-mt-10">
+      <div v-if="guests.length" id="activity-guests" class="tw-flex tw-flex-col tw-items-center tw-w-full tw-justify-center tw-mt-5 sm:tw-mt-10">
         <div class="tw-w-full  tw-py-10 tw-px-6 tw-flex tw-flex-col tw-items-center tw-border-b tw-border-outline-variant tw-border-dashed">
           <div class="tw-mx-auto tw-font-bold tw-mb-8">
             活動來賓
           </div>
-          <div class="tw-flex tw-gap-5">
+          <div class="tw-flex tw-gap-5 tw-flex-wrap tw-justify-center">
             <div
               v-for="guest in guests"
               :key="guest.id"
@@ -262,7 +262,7 @@ definePageMeta({
             v-for="organizer in organizers"
             :key="organizer.id"
             :class="[organizer.url ? 'tw-cursor-pointer hover:tw-shadow-lg' : '']"
-            class="tw-mb-4 tw-flex tw-items-center tw-p-4 tw-gap-1 tw-bg-white tw-rounded-sm tw-shadow-md tw-w-[300px] tw-mr-6 tw-mb-6"
+            class="tw-flex tw-items-center tw-p-4 tw-gap-1 tw-bg-white tw-rounded-sm tw-shadow-md tw-w-[300px] sm:tw-mr-6 tw-mb-6"
             @click="organizer.url ? openLink(organizer.url) : null"
           >
             <NuxtImg

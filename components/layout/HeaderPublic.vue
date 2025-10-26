@@ -6,7 +6,7 @@ const getUrl = (id: string) => {
 </script>
 
 <template>
-  <div class="tw-fixed tw-top-0 tw-left-0 tw-right-0 tw-z-[1500]">
+  <div class="tw-fixed tw-top-0 tw-left-0 tw-right-0 tw-z-[1500] tw-hidden sm:tw-block">
     <div class="tw-px-10 tw-py-3 tw-flex tw-items-center tw-justify-between tw-border-b tw-border-surface tw-bg-white">
       <a href="/dashboard">
         <NuxtImg src="/images/web/logo.png" :width="71" class="tw-cursor-pointer" />
