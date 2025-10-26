@@ -4,8 +4,6 @@ import { getInvoiceSettingsAPI, postMemberAvatarAPI, putMemberInfoAPI } from '@/
 import { PhCopy, PhFloppyDisk, PhImage } from '@phosphor-icons/vue'
 import copy from 'copy-to-clipboard'
 
-const albumStore = useAlbumStore()
-const { ALBUM } = storeToRefs(albumStore)
 const userStore = useUserStore()
 const { USER } = storeToRefs(userStore)
 const notifyStore = useNotifyStore()
@@ -13,13 +11,17 @@ const notifyStore = useNotifyStore()
 const refForm = ref()
 const isLoading = ref(false)
 
+// 裁切對話框相關
+const showCropDialog = ref(false)
+const selectedFile = ref<File | null>(null)
+
 const form = ref({
   firstName: '',
   mobilePhone: ''
 })
 
 const coverImageFile: Ref<File | File[]> = ref([])
-const localCoverImage = ref(ALBUM.value?.coverPhotoUrl || '')
+const localCoverImage = ref('')
 
 const changeFile = (event: Event) => {
   if (!event.target) {
@@ -30,12 +32,31 @@ const changeFile = (event: Event) => {
 
   const file = (event.target as HTMLInputElement)?.files?.[0]
   if (file) {
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      localCoverImage.value = e.target?.result as string
-    }
-    reader.readAsDataURL(file)
+    selectedFile.value = file
+    showCropDialog.value = true
   }
+}
+
+// 處理裁切完成
+const handleCropComplete = (croppedFile: File) => {
+  coverImageFile.value = [croppedFile]
+
+  // 顯示預覽圖片
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    localCoverImage.value = e.target?.result as string
+  }
+  reader.readAsDataURL(croppedFile)
+
+  showCropDialog.value = false
+  selectedFile.value = null
+}
+
+// 處理裁切取消
+const handleCropCancel = () => {
+  showCropDialog.value = false
+  selectedFile.value = null
+  coverImageFile.value = []
 }
 
 const putMemberInfo = async () => {
@@ -259,11 +280,11 @@ definePageMeta({
         <div class="tw-w-[50%] tw-px-2">
           <div class="tw-font-medium tw-text-xl tw-mb-6">會員頭像</div>
           <template v-if="localCoverImage">
-            <div class="tw-relotive">
+            <div class="tw-relative">
               <NuxtImg
                 v-if="localCoverImage"
                 :src="localCoverImage"
-                class="tw-border tw-rounded-md tw-w-full"
+                class="tw-border tw-rounded-md tw-w-[300px]"
                 alt="Cover Image"
               />
               <v-btn
@@ -300,5 +321,14 @@ definePageMeta({
         </div>
       </div>
     </v-card>
+
+    <!-- 裁切對話框 -->
+    <DialogImageCrop
+      v-model="showCropDialog"
+      :file="selectedFile"
+      :aspect-ratio="{ width: 1, height: 1 }"
+      @crop="handleCropComplete"
+      @cancel="handleCropCancel"
+    />
   </v-main>
 </template>

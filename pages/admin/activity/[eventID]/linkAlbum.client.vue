@@ -138,7 +138,7 @@ definePageMeta({
                     class="tw-flex tw-items-center tw-gap-3 tw-p-4 tw-cursor-pointer hover:tw-opacity-50"
                     @click="() => linkToAlbum(item)"
                   >
-                    <div class="tw-w-[153px] tw-h-[80px] tw-rounded-md tw-flex tw-items-center tw-justify-center tw-overflow-hidden tw-bg-surface">
+                    <div class="tw-w-[153px] tw-aspect-[4/3] tw-rounded-md tw-flex tw-items-center tw-justify-center tw-overflow-hidden tw-bg-surface">
                       <NuxtImg
                         class="tw-object-cover tw-h-full"
                         :src="item.raw.coverPhotoUrl ? item.raw.coverPhotoUrl : '/images/web/no-data.png'"
@@ -213,7 +213,7 @@ definePageMeta({
               class="tw-p-6 tw-rounded-lg tw-mb-6 tw-min-h-[240px] tw-cursor-pointer hover:tw-shadow-lg"
               @click="router.push(`/admin/album/${item.id}/pictures`)"
             >
-              <div class="tw-aspect-[2/1] tw-overflow-hidden tw-rounded tw-bg-surface tw-flex tw-items-center tw-justify-center">
+              <div class="tw-aspect-[4/3] tw-overflow-hidden tw-rounded tw-bg-surface tw-flex tw-items-center tw-justify-center">
                 <NuxtImg
                   class="tw-object-cover tw-h-full"
                   :src="item.coverPhotoUrl ? item.coverPhotoUrl : '/images/web/no-data.png'"

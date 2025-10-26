@@ -170,7 +170,7 @@ definePageMeta({
               class="tw-p-6 tw-rounded-lg tw-mb-6 tw-min-h-[240px] tw-cursor-pointer hover:tw-shadow-lg"
               :to="`/admin/activity/${item.eventId}/info`"
             >
-              <div class="tw-aspect-[2/1] tw-overflow-hidden tw-rounded tw-bg-surface tw-flex tw-items-center tw-justify-center">
+              <div class="tw-aspect-[4/3] tw-overflow-hidden tw-rounded tw-bg-surface tw-flex tw-items-center tw-justify-center">
                 <NuxtImg
                   class="tw-object-cover tw-h-full"
                   :src="item.coverPhotoUrl ? item.coverPhotoUrl : '/images/web/no-data.png'"

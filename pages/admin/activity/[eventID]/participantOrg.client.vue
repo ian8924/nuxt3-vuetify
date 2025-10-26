@@ -12,6 +12,11 @@ const notifyStore = useNotifyStore()
 const refForm = ref()
 const isLoading = ref(false)
 
+// 裁切對話框相關
+const showCropDialog = ref(false)
+const selectedFile = ref<File | null>(null)
+const currentParticipant = ref<Participant | null>(null)
+
 const defaultParticipantClient: Participant = {
   id: 0,
   activityId: ACTIVITY.value?.id || 0,
@@ -151,13 +156,52 @@ const changeFile = (event: Event, item: Participant) => {
 
   const file = (event.target as HTMLInputElement)?.files?.[0]
   if (file) {
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      console.log('reader result', e.target?.result)
-      item.avatarUrl = e.target?.result as string
-    }
-    reader.readAsDataURL(file)
+    // 顯示裁切對話框
+    selectedFile.value = file
+    currentParticipant.value = item
+    showCropDialog.value = true
   }
+}
+
+// 處理裁切完成
+const handleCropComplete = (croppedFile: File) => {
+  if (!currentParticipant.value) {
+    return
+  }
+
+  // 更新檔案引用
+  currentParticipant.value.tempFile = croppedFile
+
+  // 生成預覽
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    if (currentParticipant.value) {
+      currentParticipant.value.avatarUrl = e.target?.result as string
+    }
+  }
+  reader.readAsDataURL(croppedFile)
+
+  showCropDialog.value = false
+}
+
+// 處理裁切取消
+const handleCropCancel = () => {
+  // 清空當前參與者的 tempFile
+  if (currentParticipant.value) {
+    currentParticipant.value.tempFile = null
+  }
+
+  selectedFile.value = null
+  currentParticipant.value = null
+  showCropDialog.value = false
+
+  // 重置檔案輸入
+  const fileInputs = document.querySelectorAll('input[type="file"]')
+  fileInputs.forEach((input) => {
+    if (input instanceof HTMLInputElement) {
+      input.value = ''
+    }
+  })
 }
 
 onMounted(() => {
@@ -252,7 +296,7 @@ definePageMeta({
                 <div class="flex-1">
                   <template v-if="item.avatarUrl">
                     <div class="tw-relative">
-                      <div class="tw-flex tw-justify-center tw-items-center tw-min-w-[150px] tw-min-h-[150px] tw-h-[150px] tw-w-[150px] tw-rounded-md">
+                      <div class="tw-flex tw-justify-center tw-items-center tw-aspect-[4/3]  tw-w-[150px] tw-rounded-md">
                         <NuxtImg
                           :src="item.avatarUrl"
                           class="tw-w-full"
@@ -285,6 +329,9 @@ definePageMeta({
                       <template #title>
                         <div class="tw-text-sm tw-flex tw-flex-col tw-items-center tw-justify-center tw-cursor-pointer">
                           上傳圖片
+                          <div class="tw-text-xs tw-text-on-surface-60 tw-mt-1">
+                            支援 JPG、PNG，上傳後可裁切為 4:3 比例
+                          </div>
                         </div>
                       </template>
                     </v-file-upload>
@@ -337,5 +384,14 @@ definePageMeta({
         </v-form>
       </div>
     </v-card>
+
+    <!-- 裁切對話框 -->
+    <DialogImageCrop
+      v-model="showCropDialog"
+      :file="selectedFile"
+      :aspect-ratio="{ width: 4, height: 3 }"
+      @crop="handleCropComplete"
+      @cancel="handleCropCancel"
+    />
   </v-main>
 </template>

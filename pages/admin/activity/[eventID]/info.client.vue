@@ -87,6 +87,7 @@ const handleCropComplete = (croppedFile: File) => {
 const handleCropCancel = () => {
   selectedFile.value = null
   showCropDialog.value = false
+  coverImageFile.value = [] // 清空封面檔案
 
   // 重置檔案輸入
   const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement
