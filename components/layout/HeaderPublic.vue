@@ -1,7 +1,19 @@
 <script setup lang="ts">
-const windowUrl = computed(() => window?.location.href)
-const getUrl = (id: string) => {
-  return `${windowUrl.value}#${id}`
+const scrollToSection = (id: string) => {
+  if (process.client) {
+    const element = document.getElementById(id)
+    if (element) {
+      const elementPosition = element.offsetTop
+      const offsetPosition = elementPosition - 70
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      })
+      // 更新 URL hash 但不跳轉
+      history.pushState(null, '', `#${id}`)
+    }
+  }
 }
 </script>
 
@@ -12,16 +24,16 @@ const getUrl = (id: string) => {
         <NuxtImg src="/images/web/logo.png" :width="71" class="tw-cursor-pointer" />
       </a>
       <div class="tw-flex tw-gap-6 tw-text-lg tw-font-medium tw-items-center">
-        <a :href="getUrl('activity-intro')">
+        <a href="#activity-intro" class="tw-cursor-pointer" @click.prevent="scrollToSection('activity-intro')">
           活動簡介
         </a>
-        <a :href="getUrl('activity-album')">
+        <a href="#activity-album" class="tw-cursor-pointer" @click.prevent="scrollToSection('activity-album')">
           活動相簿
         </a>
-        <a :href="getUrl('activity-guests')">
+        <a href="#activity-guests" class="tw-cursor-pointer" @click.prevent="scrollToSection('activity-guests')">
           活動來賓
         </a>
-        <a :href="getUrl('activity-organizers')">
+        <a href="#activity-organizers" class="tw-cursor-pointer" @click.prevent="scrollToSection('activity-organizers')">
           活動單位
         </a>
       </div>
