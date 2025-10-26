@@ -14,10 +14,13 @@ const route = useRoute()
 const activityStore = useActivityStore()
 const { ACTIVITY, ACTIVITY_PUBLIC_LINK_WEBSITE } = storeToRefs(activityStore)
 const notifyStore = useNotifyStore()
-const { compressImage } = useImageCompress()
 
 const refForm = ref()
 const isLoading = ref(false)
+
+// 裁切對話框相關
+const showCropDialog = ref(false)
+const selectedFile = ref<File | null>(null)
 
 const form = ref({
   name: ACTIVITY.value?.name || '',
@@ -59,35 +62,36 @@ const changeFile = async (event: Event) => {
 
   const file = (event.target as HTMLInputElement)?.files?.[0]
   if (file) {
-    try {
-      // 壓縮圖片
-      const compressedFile = await compressImage(file, {
-        quality: 0.8,
-        maxWidth: 1200, // 封面圖較小，用 1200px
-        maxHeight: 900,
-        format: 'image/jpeg'
-      })
+    // 顯示裁切對話框
+    selectedFile.value = file
+    showCropDialog.value = true
+  }
+}
 
-      // 更新檔案引用
-      coverImageFile.value = [compressedFile]
+// 處理裁切完成
+const handleCropComplete = (croppedFile: File) => {
+  // 更新檔案引用
+  coverImageFile.value = [croppedFile]
 
-      // 生成預覽
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        localCoverImage.value = e.target?.result as string
-      }
-      reader.readAsDataURL(compressedFile)
-    } catch (error) {
-      console.error('封面圖片壓縮失敗:', error)
+  // 生成預覽
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    localCoverImage.value = e.target?.result as string
+  }
+  reader.readAsDataURL(croppedFile)
 
-      // 如果壓縮失敗，使用原始檔案
-      coverImageFile.value = [file]
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        localCoverImage.value = e.target?.result as string
-      }
-      reader.readAsDataURL(file)
-    }
+  showCropDialog.value = false
+}
+
+// 處理裁切取消
+const handleCropCancel = () => {
+  selectedFile.value = null
+  showCropDialog.value = false
+
+  // 重置檔案輸入
+  const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement
+  if (fileInput) {
+    fileInput.value = ''
   }
 }
 
@@ -421,15 +425,24 @@ definePageMeta({
                 <div class="tw-pb-8">
                   拖曳圖片到此處上傳
                   <div class="tw-text-sm tw-text-on-surface-60 tw-mt-1">
-                    支援 JPG、PNG 檔案
+                    支援 JPG、PNG 檔案，上傳後可以裁切為 4:3 比例
                   </div>
                 </div>
               </template>
             </v-file-upload>
-            <div class="tw-mt-2 tw-text-sm tw-text-on-surface-60">* 最佳封面比例 4:3</div>
+            <div class="tw-mt-2 tw-text-sm tw-text-on-surface-60">* 上傳後可自由裁切為 4:3 比例封面</div>
           </template>
         </div>
       </div>
     </v-card>
+
+    <!-- 裁切對話框 -->
+    <DialogImageCrop
+      v-model="showCropDialog"
+      :file="selectedFile"
+      :aspect-ratio="{ width: 4, height: 3 }"
+      @crop="handleCropComplete"
+      @cancel="handleCropCancel"
+    />
   </v-main>
 </template>
