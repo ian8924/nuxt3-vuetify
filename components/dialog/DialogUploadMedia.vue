@@ -11,6 +11,7 @@ const props = defineProps({
 const emits = defineEmits(['success'])
 
 const notifyStore = useNotifyStore()
+const { compressImages, formatFileSize } = useImageCompress()
 
 // const emit = defineEmits(['confirm'])
 const isLoadingUpload = ref(false)
@@ -21,7 +22,55 @@ const dialog = defineModel('modelValue', {
   default: false
 })
 
-const files = ref([])
+const files = ref<File[]>([])
+const originalSizes = ref<Record<string, number>>({})
+const compressedSizes = ref<Record<string, number>>({})
+
+// 簡化的檔案處理 - 移除壓縮提示，直接背景壓縮
+const compressFiles = async () => {
+  if (files.value.length === 0) {
+    return
+  }
+
+  try {
+    const processedFiles: File[] = []
+
+    for (const file of files.value) {
+      // 記錄原始檔案大小
+      originalSizes.value[file.name] = file.size
+
+      if (file.type.startsWith('image/')) {
+        // 壓縮圖片
+        const [compressedFile] = await compressImages([file], {
+          quality: 0.8,
+          maxWidth: 1920,
+          maxHeight: 1080,
+          format: 'image/jpeg'
+        })
+
+        if (compressedFile) {
+          // 保持原始檔案名但更新內容
+          const finalFile = new File([compressedFile], file.name, {
+            type: compressedFile.type,
+            lastModified: Date.now()
+          })
+
+          compressedSizes.value[file.name] = finalFile.size
+          processedFiles.push(finalFile)
+        }
+      } else {
+        // 非圖片檔案直接添加
+        compressedSizes.value[file.name] = file.size
+        processedFiles.push(file)
+      }
+    }
+
+    files.value = processedFiles
+  } catch (error) {
+    console.error('圖片壓縮失敗:', error)
+    notifyStore.SHOW_NOTIFY({ message: '圖片壓縮失敗', type: 'error' })
+  }
+}
 
 const uploadMediaToAlbumSingle = async (file: File) => {
   const formData = new FormData()
@@ -41,6 +90,9 @@ const confirm = async () => {
   isLoadingUpload.value = true
 
   try {
+    // 先壓縮檔案
+    await compressFiles()
+
     // 使用 Promise.all 並行上傳所有檔案
     const uploadPromises = files.value.map(file => uploadMediaToAlbumSingle(file))
     await Promise.all(uploadPromises)
@@ -48,12 +100,26 @@ const confirm = async () => {
     emits('success')
     // 所有檔案上傳完成後清空已選擇的檔案並關閉對話框
     files.value = []
+    originalSizes.value = {}
+    compressedSizes.value = {}
     dialog.value = false
   } catch (error) {
     console.error('上傳失敗:', error)
+    notifyStore.SHOW_NOTIFY({ message: '上傳失敗', type: 'error' })
   } finally {
     isLoadingUpload.value = false
   }
+}
+
+// 計算壓縮率
+const getCompressionRatio = (fileName: string) => {
+  const original = originalSizes.value[fileName]
+  const compressed = compressedSizes.value[fileName]
+  if (original && compressed) {
+    const ratio = ((original - compressed) / original * 100).toFixed(1)
+    return `${ratio}%`
+  }
+  return ''
 }
 </script>
 
@@ -82,10 +148,18 @@ const confirm = async () => {
           <template #item="{ props: itemProps, file }">
             <v-file-upload-item
               v-bind="itemProps"
-              lines="one"
+              lines="two"
             >
               <template #prepend>
                 <v-avatar size="100" rounded></v-avatar>
+              </template>
+
+              <template #subtitle>
+                <div v-if="originalSizes[file.name] && compressedSizes[file.name]" class="tw-text-sm tw-text-gray-600">
+                  原始: {{ formatFileSize(originalSizes[file.name] || 0) }} →
+                  壓縮後: {{ formatFileSize(compressedSizes[file.name] || 0) }}
+                  <span class="tw-text-green-600">(減少 {{ getCompressionRatio(file.name) }})</span>
+                </div>
               </template>
 
               <template #clear="{ props: clearProps }">

@@ -14,6 +14,7 @@ const route = useRoute()
 const activityStore = useActivityStore()
 const { ACTIVITY, ACTIVITY_PUBLIC_LINK_WEBSITE } = storeToRefs(activityStore)
 const notifyStore = useNotifyStore()
+const { compressImage } = useImageCompress()
 
 const refForm = ref()
 const isLoading = ref(false)
@@ -49,7 +50,7 @@ const optionThemes = computed(() => {
   }))
 })
 
-const changeFile = (event: Event) => {
+const changeFile = async (event: Event) => {
   if (!event.target) {
     localCoverImage.value = ''
     coverImageFile.value = []
@@ -58,11 +59,35 @@ const changeFile = (event: Event) => {
 
   const file = (event.target as HTMLInputElement)?.files?.[0]
   if (file) {
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      localCoverImage.value = e.target?.result as string
+    try {
+      // 壓縮圖片
+      const compressedFile = await compressImage(file, {
+        quality: 0.8,
+        maxWidth: 1200, // 封面圖較小，用 1200px
+        maxHeight: 900,
+        format: 'image/jpeg'
+      })
+
+      // 更新檔案引用
+      coverImageFile.value = [compressedFile]
+
+      // 生成預覽
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        localCoverImage.value = e.target?.result as string
+      }
+      reader.readAsDataURL(compressedFile)
+    } catch (error) {
+      console.error('封面圖片壓縮失敗:', error)
+
+      // 如果壓縮失敗，使用原始檔案
+      coverImageFile.value = [file]
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        localCoverImage.value = e.target?.result as string
+      }
+      reader.readAsDataURL(file)
     }
-    reader.readAsDataURL(file)
   }
 }
 
